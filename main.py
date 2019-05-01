@@ -32,9 +32,10 @@ class Game:
 
                 if(len(self.joystick_list) != 0):
                     if(event.type == pygame.JOYBUTTONDOWN):
-                        u = 0;
-                        #if(self.joystick_list[event.joy].get_id() == 0):
-                        #joystick_list[event.joy].get_id().controller_action(event.button);
+                        if(self.joystick_list[event.joy].get_id() == 0):
+                            print('Player one pressed ' + str(event.button));
+                        elif(self.joystick_list[event.joy].get_id() == 1):
+                            print('Player two pressed ' + str(event.button));
 
                     if(event.type == pygame.JOYAXISMOTION):
                         axis = self.joystick_list[event.joy].get_axis(event.axis);
