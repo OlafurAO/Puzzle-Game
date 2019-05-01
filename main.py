@@ -10,14 +10,16 @@ clock = pygame.time.Clock();
 
 FPS = 50;
 
+
 class Game:
     def __init__(self):
-        self.load_resources();
-
         self.level_number = 1;
 
         self.player_one = Player(game_display, 100, 200);
         self.player_two = Player(game_display, 200, 200);
+
+        self.joystick_list = None;
+        self.load_resources();
 
 
     def main_loop(self):
@@ -27,6 +29,49 @@ class Game:
             for event in pygame.event.get():
                 if(event.type == pygame.QUIT):
                     game_running = False;
+
+                if(len(self.joystick_list) != 0):
+                    if(event.type == pygame.JOYBUTTONDOWN):
+                        u = 0;
+                        #if(self.joystick_list[event.joy].get_id() == 0):
+                        #joystick_list[event.joy].get_id().controller_action(event.button);
+
+                    if(event.type == pygame.JOYAXISMOTION):
+                        axis = self.joystick_list[event.joy].get_axis(event.axis);
+
+                        if(self.joystick_list[event.joy].get_id() == 0):
+                            if(event.axis == 1):
+                                if(axis == 0.999969482421875):
+                                    self.player_one.move_controller_y(1);
+                                elif(axis == -1.0):
+                                    self.player_one.move_controller_y(-1);
+                                else:
+                                    self.player_one.move_controller_y(0);
+                            else:
+                                if(axis == 0.999969482421875):
+                                    self.player_one.move_controller_x(1);
+                                elif(axis == -1.0):
+                                    self.player_one.move_controller_x(-1);
+                                else:
+                                    self.player_one.move_controller_x(0);
+
+                        elif(self.joystick_list[event.joy].get_id() == 1):
+                            if(event.axis == 1):
+                                if(axis == 0.999969482421875):
+                                    self.player_two.move_controller_y(1);
+                                elif(axis == -1.0):
+                                    self.player_two.move_controller_y(-1);
+                                else:
+                                    self.player_two.move_controller_y(0);
+                            else:
+                                if (axis == 0.999969482421875):
+                                    self.player_two.move_controller_x(1);
+                                elif (axis == -1.0):
+                                    self.player_two.move_controller_x(-1);
+                                else:
+                                    self.player_two.move_controller_x(0);
+
+                        #player_list[joystick_list[event.joy].get_id()].controller_movement(axis, event.axis, True);
 
                 if(event.type == pygame.KEYDOWN):
                     if(event.key == pygame.K_w):
@@ -66,7 +111,6 @@ class Game:
                     if(event.key == pygame.K_LEFT):
                         self.player_two.move_controller_x(0);
 
-
             self.render_screen();
 
 
@@ -82,7 +126,20 @@ class Game:
 
 
     def load_resources(self):
-        u = 0;
+        self.setup_joysticks();
+
+
+    def setup_joysticks(self):
+        joystick_list = [];
+        for i in range(0, pygame.joystick.get_count()):
+            joystick_list.append(pygame.joystick.Joystick(i));
+
+        for i in joystick_list:
+            i.init();
+            print('Detected gamepad: ' + i.get_name(), i.get_id());
+            print('Initializing ' + i.get_name());
+
+        self.joystick_list = joystick_list;
 
 
 def main():
