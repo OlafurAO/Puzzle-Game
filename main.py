@@ -1,5 +1,4 @@
 from player import Player;
-
 import pygame;
 
 pygame.init();
@@ -15,8 +14,8 @@ class Game:
     def __init__(self):
         self.level_number = 1;
 
-        self.player_one = Player(game_display, 100, 200);
-        self.player_two = Player(game_display, 200, 200);
+        self.player_one = Player(game_display, 'resources/art/players/player_1.png', 100, 200);
+        self.player_two = Player(game_display, 'resources/art/players/player_2.png',  200, 200);
 
         self.joystick_list = None;
         self.load_resources();
@@ -77,20 +76,20 @@ class Game:
                 if(event.type == pygame.KEYDOWN):
                     if(event.key == pygame.K_w):
                         self.player_one.move_controller_y(-1);
-                    if(event.key == pygame.K_s):
+                    elif(event.key == pygame.K_s):
                         self.player_one.move_controller_y(1);
                     if(event.key == pygame.K_d):
                         self.player_one.move_controller_x(1);
-                    if(event.key == pygame.K_a):
+                    elif(event.key == pygame.K_a):
                         self.player_one.move_controller_x(-1);
 
                     if(event.key == pygame.K_UP):
                         self.player_two.move_controller_y(-1);
-                    if(event.key == pygame.K_DOWN):
+                    elif(event.key == pygame.K_DOWN):
                         self.player_two.move_controller_y(1);
                     if(event.key == pygame.K_RIGHT):
                         self.player_two.move_controller_x(1);
-                    if(event.key == pygame.K_LEFT):
+                    elif(event.key == pygame.K_LEFT):
                         self.player_two.move_controller_x(-1);
 
                 elif(event.type == pygame.KEYUP):
