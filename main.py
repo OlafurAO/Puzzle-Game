@@ -1,11 +1,14 @@
 from player import Player;
-from box import Box;
-
+from box import Box
 import pygame;
 
 pygame.init();
 
-screen_size = (1400, 700);
+#size of the screen when you initialize game_display 
+X_size = 1400 
+Y_size = 700
+
+screen_size = (X_size, Y_size);
 game_display = pygame.display.set_mode(screen_size);
 clock = pygame.time.Clock();
 
@@ -13,6 +16,13 @@ FPS = 50;
 
 class Game:
     def __init__(self):
+        self.level_number = 1;
+
+        self.player_one = Player(game_display, 'resources/art/players/player_1.png', 100, 200);
+        self.player_two = Player(game_display, 'resources/art/players/player_2.png',  200, 200);
+        self.box = Box( 700, 350,game_display);
+
+        self.joystick_list = None;
         self.load_resources();
 
         self.level_number = 1;
@@ -28,6 +38,46 @@ class Game:
             for event in pygame.event.get():
                 if(event.type == pygame.QUIT):
                     game_running = False;
+                if(len(self.joystick_list) != 0):
+                    if(event.type == pygame.JOYBUTTONDOWN):
+                        if(self.joystick_list[event.joy].get_id() == 0):
+                            print('Player one pressed ' + str(event.button));
+                        elif(self.joystick_list[event.joy].get_id() == 1):
+                            print('Player two pressed ' + str(event.button));
+                    if(event.type == pygame.JOYAXISMOTION):
+                        axis = self.joystick_list[event.joy].get_axis(event.axis);
+                        if(self.joystick_list[event.joy].get_id() == 0):
+                            if(event.axis == 1):
+                                if(axis == 0.999969482421875):
+                                    self.player_one.move_controller_y(1);
+                                elif(axis == -1.0):
+                                    self.player_one.move_controller_y(-1);
+                                else:
+                                    self.player_one.move_controller_y(0);
+                            else:
+                                if(axis == 0.999969482421875):
+                                    self.player_one.move_controller_x(1);
+                                elif(axis == -1.0):
+                                    self.player_one.move_controller_x(-1);
+                                else:
+                                    self.player_one.move_controller_x(0);
+                        elif(self.joystick_list[event.joy].get_id() == 1):
+                            if(event.axis == 1):
+                                if(axis == 0.999969482421875):
+                                    self.player_two.move_controller_y(1);
+                                elif(axis == -1.0):
+                                    self.player_two.move_controller_y(-1);
+                                else:
+                                    self.player_two.move_controller_y(0);
+                            else:
+                                if (axis == 0.999969482421875):
+                                    self.player_two.move_controller_x(1);
+                                elif (axis == -1.0):
+                                    self.player_two.move_controller_x(-1);
+                                else:
+                                    self.player_two.move_controller_x(0);
+
+                        #player_list[joystick_list[event.joy].get_id()].controller_movement(axis, event.axis, True);
 
                 if(event.type == pygame.KEYDOWN):
                     if(event.key == pygame.K_w):
@@ -39,7 +89,6 @@ class Game:
                     if(event.key == pygame.K_a):
                         self.player_one.move_controller_x(-1);
                     if(event.key == pygame.K_p):
-                        print(self.player_one.location[1])
                         self.box.move(self.player_one.location)
 
                     if(event.key == pygame.K_UP):
