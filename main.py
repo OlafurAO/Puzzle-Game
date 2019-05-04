@@ -4,7 +4,10 @@ import pygame;
 
 pygame.init();
 
-screen_size = (1400, 700);
+X_size = 1400 
+Y_size = 700
+
+screen_size = (X_size, Y_size);
 game_display = pygame.display.set_mode(screen_size);
 clock = pygame.time.Clock();
 
@@ -30,17 +33,14 @@ class Game:
             for event in pygame.event.get():
                 if(event.type == pygame.QUIT):
                     game_running = False;
-
                 if(len(self.joystick_list) != 0):
                     if(event.type == pygame.JOYBUTTONDOWN):
                         if(self.joystick_list[event.joy].get_id() == 0):
                             print('Player one pressed ' + str(event.button));
                         elif(self.joystick_list[event.joy].get_id() == 1):
                             print('Player two pressed ' + str(event.button));
-
                     if(event.type == pygame.JOYAXISMOTION):
                         axis = self.joystick_list[event.joy].get_axis(event.axis);
-
                         if(self.joystick_list[event.joy].get_id() == 0):
                             if(event.axis == 1):
                                 if(axis == 0.999969482421875):
@@ -56,7 +56,6 @@ class Game:
                                     self.player_one.move_controller_x(-1);
                                 else:
                                     self.player_one.move_controller_x(0);
-
                         elif(self.joystick_list[event.joy].get_id() == 1):
                             if(event.axis == 1):
                                 if(axis == 0.999969482421875):
