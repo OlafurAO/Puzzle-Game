@@ -4,11 +4,7 @@ import pygame;
 
 pygame.init();
 
-
-X_size = 1400 
-Y_size = 700
-
-screen_size = (X_size, Y_size);
+screen_size = (1400, 700);
 game_display = pygame.display.set_mode(screen_size);
 clock = pygame.time.Clock();
 
@@ -18,6 +14,8 @@ FPS = 50;
 
 class Game:
     def __init__(self):
+        #the size of grid (1400, 700 at the moment)
+        self.gridSize = pygame.display.get_surface().get_size()
         self.level_number = 1;
 
         self.player_one = Player(game_display, 'resources/art/players/player_1.png', 100, 200);
@@ -141,7 +139,7 @@ class Game:
 
         self.player_one.update_player();
         self.player_two.update_player();
-        pygame.draw.rect(game_display, (0, 0, 128), [1250, 100, 50, 50]);
+        pygame.draw.rect(game_display, (0, 0, 128), [self.gridSize[0]-100, 100, 50, 50]);
         self.box.update();
 
         pygame.display.update();

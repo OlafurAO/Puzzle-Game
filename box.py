@@ -8,10 +8,11 @@ pygame.mixer.set_num_channels(10);
 box_push_sfx = pygame.mixer.Sound('resources/sfx/box_push_01.wav');
 box_stop_sfx = pygame.mixer.Sound('resources/sfx/box_stop_01.wav')
 
-
-#instance of a box,   
+  
 class Box:
   def __init__(self, X_location, Y_location, game_display):
+    #get the size of the gamedisplay
+    self.gridSize = pygame.display.get_surface().get_size()
     #the locantion of the box element 
     self.X_location = X_location
     self.Y_location = Y_location
@@ -62,16 +63,16 @@ class Box:
 
 #updates the location of the box every second and moves it
   def update(self): 
-    if(self.X_location == 1250 and self.Y_location == 100):
+    if(self.X_location == 1250 and self.Y_location == 50):
       print('congratz')
     if(self.isMoving):
-      if(self.direction == 'Right' and self.X_location < 1250):
+      if(self.direction == 'Right' and self.X_location < self.gridSize[0] -100):
         self.X_location += self.speed
       elif(self.direction == 'UP' and self.Y_location > 100 ):
         self.Y_location -= self.speed
       elif(self.direction == 'LEFT' and self.X_location > 100):
         self.X_location -= self.speed
-      elif(self.direction == 'DOWN' and self.Y_location < 550):
+      elif(self.direction == 'DOWN' and self.Y_location < self.gridSize[1]-100):
         self.Y_location += self.speed
       else:
         self.isMoving = False;
