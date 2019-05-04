@@ -11,7 +11,7 @@ box_stop_sfx = pygame.mixer.Sound('resources/sfx/box_stop_01.wav')
 
 #instance of a box, 
 class Box:
-  def __init__(self, X_location, Y_location, game_display):
+  def __init__(self, X_location, Y_location, game_display, box_art):
     #the locantion of the box element 
     self.X_location = X_location
     self.Y_location = Y_location
@@ -23,6 +23,10 @@ class Box:
     self.isMoving = False
     #when supposed to be moveing, what direction
     self.direction = 'Right'
+
+    self.box_art = pygame.image.load(box_art).convert_alpha()
+    self.box_art = pygame.transform.scale(self.box_art, (70, 70));
+
     #the box itself, should probably be moved to a seprate def 
     pygame.draw.rect(self.game_display, (255,0,0), [0,0,self.size,self.size])
   
@@ -76,3 +80,4 @@ class Box:
         pygame.mixer.Channel(1).play(box_stop_sfx);
 
     pygame.draw.rect(self.game_display, (255, 0, 0), [self.X_location, self.Y_location, 50, 50]);
+    self.game_display.blit(self.box_art, (self.X_location - 10, self.Y_location - 10));
