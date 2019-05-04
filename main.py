@@ -1,4 +1,5 @@
 from player import Player;
+from box import Box
 import pygame;
 
 pygame.init();
@@ -16,6 +17,7 @@ class Game:
 
         self.player_one = Player(game_display, 'resources/art/players/player_1.png', 100, 200);
         self.player_two = Player(game_display, 'resources/art/players/player_2.png',  200, 200);
+        self.box = Box( 700, 350,game_display);
 
         self.joystick_list = None;
         self.load_resources();
@@ -82,6 +84,8 @@ class Game:
                         self.player_one.move_controller_x(1);
                     elif(event.key == pygame.K_a):
                         self.player_one.move_controller_x(-1);
+                    if(event.key == pygame.K_p):
+                        self.box.move(self.player_one.location)
 
                     if(event.key == pygame.K_UP):
                         self.player_two.move_controller_y(-1);
@@ -119,6 +123,7 @@ class Game:
 
         self.player_one.update_player();
         self.player_two.update_player();
+        self.box.update();
 
         pygame.display.update();
 
