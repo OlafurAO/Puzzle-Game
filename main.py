@@ -33,14 +33,23 @@ class Game:
             for event in pygame.event.get():
                 if(event.type == pygame.QUIT):
                     game_running = False;
+
+                ################################################################################################
+                #############Gamepad controls
                 if(len(self.joystick_list) != 0):
+
+                    #Button input
                     if(event.type == pygame.JOYBUTTONDOWN):
                         if(self.joystick_list[event.joy].get_id() == 0):
                             print('Player one pressed ' + str(event.button));
                         elif(self.joystick_list[event.joy].get_id() == 1):
                             print('Player two pressed ' + str(event.button));
+
+                    #D-pad movement
                     if(event.type == pygame.JOYAXISMOTION):
                         axis = self.joystick_list[event.joy].get_axis(event.axis);
+
+                        #Player 1 gamepad controls
                         if(self.joystick_list[event.joy].get_id() == 0):
                             if(event.axis == 1):
                                 if(axis == 0.999969482421875):
@@ -56,6 +65,8 @@ class Game:
                                     self.player_one.move_controller_x(-1);
                                 else:
                                     self.player_one.move_controller_x(0);
+
+                        #Player 2 gamepad controls
                         elif(self.joystick_list[event.joy].get_id() == 1):
                             if(event.axis == 1):
                                 if(axis == 0.999969482421875):
@@ -73,7 +84,8 @@ class Game:
                                     self.player_two.move_controller_x(0);
 
                         #player_list[joystick_list[event.joy].get_id()].controller_movement(axis, event.axis, True);
-
+                ##################################################################################################
+                ##############Keyboard controls
                 if(event.type == pygame.KEYDOWN):
                     if(event.key == pygame.K_w):
                         self.player_one.move_controller_y(-1);
@@ -113,6 +125,7 @@ class Game:
                         self.player_two.move_controller_x(0);
                     if(event.key == pygame.K_LEFT):
                         self.player_two.move_controller_x(0);
+                #############################################################################
 
             self.render_screen();
 
