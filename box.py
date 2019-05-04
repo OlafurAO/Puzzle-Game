@@ -1,4 +1,12 @@
-import pygame 
+import pygame
+
+pygame.mixer.pre_init(44100, 16, 2, 4096);
+pygame.init();
+pygame.mixer.set_num_channels(10);
+
+
+box_push_sfx = pygame.mixer.Sound('resources/sfx/box_push_01.wav');
+box_stop_sfx = pygame.mixer.Sound('resources/sfx/box_stop_01.wav')
 
 
 #instance of a box, 
@@ -50,7 +58,9 @@ class Box:
       self.isMoving = True
       self.direction = 'LEFT'
 
-#updates the location of the box every second and moves it, checks the 'direction' and moves accordingly 
+    pygame.mixer.Channel(1).play(box_push_sfx)
+
+#updates the location of the box every second and moves it
   def update(self): 
     if(self.isMoving):
       if(self.direction == 'Right' and self.X_location < 1350):
@@ -61,4 +71,8 @@ class Box:
         self.X_location -= self.speed
       elif(self.direction == 'DOWN' and self.Y_location < 650):
         self.Y_location += self.speed
+      else:
+        self.isMoving = False;
+        pygame.mixer.Channel(1).play(box_stop_sfx);
+
     pygame.draw.rect(self.game_display, (255, 0, 0), [self.X_location, self.Y_location, 50, 50]);
