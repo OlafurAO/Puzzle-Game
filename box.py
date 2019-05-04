@@ -10,13 +10,9 @@ box_stop_sfx = pygame.mixer.Sound('resources/sfx/box_stop_01.wav')
 
   
 class Box:
-<<<<<<< HEAD
-  def __init__(self, X_location, Y_location, game_display):
+  def __init__(self, X_location, Y_location, game_display, box_art):
     #get the size of the gamedisplay
     self.gridSize = pygame.display.get_surface().get_size()
-=======
-  def __init__(self, X_location, Y_location, game_display, box_art):
->>>>>>> 76e737990ef6c7c2ecaf7e2b83d931d38c1bca5d
     #the locantion of the box element 
     self.X_location = X_location
     self.Y_location = Y_location
@@ -87,7 +83,4 @@ class Box:
         pygame.mixer.Channel(1).play(box_stop_sfx);
 
     pygame.draw.rect(self.game_display, (255, 0, 0), [self.X_location, self.Y_location, 50, 50]);
-<<<<<<< HEAD
-=======
     self.game_display.blit(self.box_art, (self.X_location - 10, self.Y_location - 10));
->>>>>>> 76e737990ef6c7c2ecaf7e2b83d931d38c1bca5d
