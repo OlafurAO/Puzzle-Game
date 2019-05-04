@@ -20,7 +20,7 @@ class Game:
 
         self.player_one = Player(game_display, 'resources/art/players/player_1.png', 100, 200);
         self.player_two = Player(game_display, 'resources/art/players/player_2.png',  200, 200);
-        self.box = Box( 700, 350,game_display);
+        self.box = Box(700, 350, game_display, 'resources/art/boxes/box_01.png');
 
         self.joystick_list = None;
         self.load_resources();

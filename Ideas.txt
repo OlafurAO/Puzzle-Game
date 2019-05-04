@@ -1,0 +1,9 @@
+-collect 5 meddalions/gems/whatever to open boss door
+-box puzzles
+-combat puzzles?
+
+
+Maybe cool ideas:
+-some rooms are dark and require a torch or a light source
+-find out how to do cool lighting effect
+
