@@ -4,6 +4,7 @@ import pygame;
 
 pygame.init();
 
+
 X_size = 1400 
 Y_size = 700
 
@@ -12,6 +13,7 @@ game_display = pygame.display.set_mode(screen_size);
 clock = pygame.time.Clock();
 
 FPS = 50;
+
 
 
 class Game:
@@ -27,6 +29,7 @@ class Game:
 
 
     def main_loop(self):
+
         game_running = True;
 
         while game_running:
@@ -96,6 +99,7 @@ class Game:
                     elif(event.key == pygame.K_a):
                         self.player_one.move_controller_x(-1);
                     if(event.key == pygame.K_p):
+                        print(self.player_one.location)
                         self.box.move(self.player_one.location)
 
                     if(event.key == pygame.K_UP):
@@ -116,6 +120,9 @@ class Game:
                         self.player_one.move_controller_x(0);
                     if(event.key == pygame.K_a):
                         self.player_one.move_controller_x(0);
+                    if(event.key == pygame.K_r):
+                        if (self.player_one.location[0] > 400 and self.player_one.location[0] < 700 and self.player_one.location[1] == 10):
+                            print('Restart') 
 
                     if(event.key == pygame.K_UP):
                         self.player_two.move_controller_y(0);
@@ -129,12 +136,12 @@ class Game:
 
             self.render_screen();
 
-
     def render_screen(self):
         game_display.fill((0, 0, 0));
 
         self.player_one.update_player();
         self.player_two.update_player();
+        pygame.draw.rect(game_display, (0, 0, 128), [1250, 100, 50, 50]);
         self.box.update();
 
         pygame.display.update();

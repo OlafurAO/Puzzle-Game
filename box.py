@@ -9,7 +9,7 @@ box_push_sfx = pygame.mixer.Sound('resources/sfx/box_push_01.wav');
 box_stop_sfx = pygame.mixer.Sound('resources/sfx/box_stop_01.wav')
 
 
-#instance of a box, 
+#instance of a box,   
 class Box:
   def __init__(self, X_location, Y_location, game_display):
     #the locantion of the box element 
@@ -35,7 +35,7 @@ class Box:
     (playerLocation[1]  <  self.Y_location + 50) and (playerLocation[1] > self.Y_location))):
       print('a')
       self.isMoving = True
-      self.direction == 'Right'
+      self.direction = 'Right'
     #checks if box is on top of player/ should be moved up 
     elif (playerLocation[1] > self.Y_location and playerLocation[1] < self.Y_location + 60 and 
     ((playerLocation[0] + 25 > self.X_location) and
@@ -62,14 +62,16 @@ class Box:
 
 #updates the location of the box every second and moves it
   def update(self): 
+    if(self.X_location == 1250 and self.Y_location == 100):
+      print('congratz')
     if(self.isMoving):
-      if(self.direction == 'Right' and self.X_location < 1350):
+      if(self.direction == 'Right' and self.X_location < 1250):
         self.X_location += self.speed
-      elif(self.direction == 'UP' and self.Y_location > 0 ):
+      elif(self.direction == 'UP' and self.Y_location > 100 ):
         self.Y_location -= self.speed
-      elif(self.direction == 'LEFT' and self.X_location > 0):
+      elif(self.direction == 'LEFT' and self.X_location > 100):
         self.X_location -= self.speed
-      elif(self.direction == 'DOWN' and self.Y_location < 650):
+      elif(self.direction == 'DOWN' and self.Y_location < 550):
         self.Y_location += self.speed
       else:
         self.isMoving = False;
