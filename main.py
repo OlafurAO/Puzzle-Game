@@ -21,10 +21,13 @@ class Game:
 
         self.player_one = Player(game_display, 'resources/art/players/player_1.png', 100, 200);
         self.player_two = Player(game_display, 'resources/art/players/player_2.png',  200, 200);
+
         self.box = Box(700, 350, game_display, 'resources/art/boxes/box_01.png');
 
-        self.enemy = Slime_Enemy(game_display, self.player_one, self.player_two,
-                                 500, 500, 3, 200, 200, 'resources/art/enemies/blob_01_spritesheet.png', 2, 2, 0);
+        self.enemy_list = [];
+        self.enemy_list.append(Slime_Enemy(game_display, self.player_one, self.player_two, self.enemy_list,
+                                 500, 500, 15, 200, 200, 'resources/art/enemies/blob_01_spritesheet.png',
+                                 'resources/art/enemies/blob_01_hit_spritesheet.png',2, 2, 0));
 
         self.joystick_list = None;
         self.load_resources();
@@ -44,10 +47,29 @@ class Game:
 
                     #Button input
                     if(event.type == pygame.JOYBUTTONDOWN):
+                        #Player one gamepad controls
                         if(self.joystick_list[event.joy].get_id() == 0):
-                            print('Player one pressed ' + str(event.button));
+                            if(event.button == 0):
+                                print('B');
+                            elif(event.button == 1):
+                                self.box.move(self.player_one.location);
+                                print('A');
+                            elif(event.button == 9):
+                                print('start');
+                            elif(event.button == 8):
+                                print('select');
+
+                        #Player two gamepad controls
                         elif(self.joystick_list[event.joy].get_id() == 1):
-                            print('Player two pressed ' + str(event.button));
+                            if(event.button == 0):
+                                print('B');
+                            elif(event.button == 1):
+                                self.box.move(self.player_one.location);
+                                print('A');
+                            elif(event.button == 9):
+                                print('start');
+                            elif(event.button == 8):
+                                print('select');
 
                     #D-pad movement
                     if(event.type == pygame.JOYAXISMOTION):
@@ -114,7 +136,7 @@ class Game:
 
                     ####################ENEMY DAMAGE TEST
                     if(event.key == pygame.K_k):
-                        self.enemy.damage_enemy(1);
+                        self.enemy_list[0].damage_enemy(1);
 
                 elif(event.type == pygame.KEYUP):
                     if(event.key == pygame.K_w):
@@ -145,7 +167,9 @@ class Game:
         self.player_one.update_player();
         self.player_two.update_player();
         self.box.update();
-        self.enemy.update_enemy();
+
+        for enemy in self.enemy_list:
+            enemy.update_enemy();
 
         pygame.display.update();
 

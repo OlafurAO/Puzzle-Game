@@ -7,3 +7,5 @@ Maybe cool ideas:
 -some rooms are dark and require a torch or a light source
 -find out how to do cool lighting effect
 
+-recap at the end of level who did the most, damage, collected the most coins etc.
+
