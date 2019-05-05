@@ -1,6 +1,6 @@
 from player import Player;
 from box import Box;
-from enemy import Enemy;
+from slime_enemy import Slime_Enemy;
 import pygame;
 
 pygame.init();
@@ -22,7 +22,9 @@ class Game:
         self.player_one = Player(game_display, 'resources/art/players/player_1.png', 100, 200);
         self.player_two = Player(game_display, 'resources/art/players/player_2.png',  200, 200);
         self.box = Box(700, 350, game_display, 'resources/art/boxes/box_01.png');
-        self.enemy = Enemy(game_display, 500, 500, 'resources/art/enemies/blob_01_spritesheet.png', 2, 2);
+
+        self.enemy = Slime_Enemy(game_display, self.player_one, self.player_two,
+                                 500, 500, 3, 200, 200, 'resources/art/enemies/blob_01_spritesheet.png', 2, 2, 0);
 
         self.joystick_list = None;
         self.load_resources();
@@ -108,6 +110,11 @@ class Game:
                         self.player_two.move_controller_x(1);
                     elif(event.key == pygame.K_LEFT):
                         self.player_two.move_controller_x(-1);
+
+
+                    ####################ENEMY DAMAGE TEST
+                    if(event.key == pygame.K_k):
+                        self.enemy.damage_enemy(1);
 
                 elif(event.type == pygame.KEYUP):
                     if(event.key == pygame.K_w):
