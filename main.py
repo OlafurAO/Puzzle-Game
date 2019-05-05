@@ -1,5 +1,6 @@
 from player import Player;
-from box import Box
+from box import Box;
+from enemy import Enemy;
 import pygame;
 
 pygame.init();
@@ -21,6 +22,7 @@ class Game:
         self.player_one = Player(game_display, 'resources/art/players/player_1.png', 100, 200);
         self.player_two = Player(game_display, 'resources/art/players/player_2.png',  200, 200);
         self.box = Box(700, 350, game_display, 'resources/art/boxes/box_01.png');
+        self.enemy = Enemy(game_display, 500, 500, 'resources/art/enemies/blob_01_spritesheet.png', 2, 2);
 
         self.joystick_list = None;
         self.load_resources();
@@ -131,11 +133,12 @@ class Game:
 
 
     def render_screen(self):
-        game_display.fill((0, 0, 0));
+        game_display.fill((0, 0, 100));
 
         self.player_one.update_player();
         self.player_two.update_player();
         self.box.update();
+        self.enemy.update_enemy();
 
         pygame.display.update();
 
