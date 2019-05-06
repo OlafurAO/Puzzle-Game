@@ -19,8 +19,8 @@ class Game:
     def __init__(self):
         self.level_number = 1;
 
-        self.player_one = Player(game_display, 'resources/art/players/player_1.png', 100, 200);
-        self.player_two = Player(game_display, 'resources/art/players/player_2.png',  200, 200);
+        self.player_one = Player(game_display, screen_size, 'resources/art/players/player_1.png', 100, 200);
+        self.player_two = Player(game_display, screen_size, 'resources/art/players/player_2.png',  200, 200);
 
         self.box = Box(700, 350, game_display, 'resources/art/boxes/box_01.png');
 
@@ -41,7 +41,7 @@ class Game:
                 if(event.type == pygame.QUIT):
                     game_running = False;
 
-                ################################################################################################
+                ###########################################
                 #############Gamepad controls
                 if(len(self.joystick_list) != 0):
 
@@ -50,6 +50,7 @@ class Game:
                         #Player one gamepad controls
                         if(self.joystick_list[event.joy].get_id() == 0):
                             if(event.button == 0):
+                                self.player_one.player_attack();
                                 print('B');
                             elif(event.button == 1):
                                 self.box.move(self.player_one.location);
@@ -62,9 +63,10 @@ class Game:
                         #Player two gamepad controls
                         elif(self.joystick_list[event.joy].get_id() == 1):
                             if(event.button == 0):
+                                self.player_two.player_attack();
                                 print('B');
                             elif(event.button == 1):
-                                self.box.move(self.player_one.location);
+                                self.box.move(self.player_two.location);
                                 print('A');
                             elif(event.button == 9):
                                 print('start');
@@ -109,8 +111,7 @@ class Game:
                                 else:
                                     self.player_two.move_controller_x(0);
 
-                        #player_list[joystick_list[event.joy].get_id()].controller_movement(axis, event.axis, True);
-                ##################################################################################################
+                ###########################################
                 ##############Keyboard controls
                 if(event.type == pygame.KEYDOWN):
                     if(event.key == pygame.K_w):
@@ -133,10 +134,9 @@ class Game:
                     elif(event.key == pygame.K_LEFT):
                         self.player_two.move_controller_x(-1);
 
-
-                    ####################ENEMY DAMAGE TEST
                     if(event.key == pygame.K_k):
-                        self.enemy_list[0].damage_enemy(1);
+                        self.player_one.player_attack();
+
 
                 elif(event.type == pygame.KEYUP):
                     if(event.key == pygame.K_w):
@@ -156,7 +156,7 @@ class Game:
                         self.player_two.move_controller_x(0);
                     if(event.key == pygame.K_LEFT):
                         self.player_two.move_controller_x(0);
-                #############################################################################
+                ###############################################
 
             self.render_screen();
 
