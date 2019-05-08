@@ -63,7 +63,8 @@ class Box:
       self.isMoving = True
       self.direction = 'LEFT'
 
-    pygame.mixer.Channel(1).play(box_push_sfx)
+    if(self.isMoving):
+      pygame.mixer.Channel(1).play(box_push_sfx)
 
 #updates the location of the box every second and moves it
   def update(self): 

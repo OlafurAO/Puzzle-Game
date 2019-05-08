@@ -7,3 +7,8 @@ Maybe cool ideas:
 -some rooms are dark and require a torch or a light source
 -find out how to do cool lighting effect
 
+-recap at the end of level who did the most, damage, collected the most coins etc.
+
+-3-4 player competitive mode þar sem 2 auka playerarnir geta stjórnað óvinum 
+ og bosses og reyna að drepa player 1-2
+

@@ -1,5 +1,6 @@
 from player import Player;
-from box import Box
+from box import Box;
+from slime_enemy import Slime_Enemy;
 import pygame;
 
 pygame.init();
@@ -18,9 +19,15 @@ class Game:
         self.gridSize = pygame.display.get_surface().get_size()
         self.level_number = 1;
 
-        self.player_one = Player(game_display, 'resources/art/players/player_1.png', 100, 200);
-        self.player_two = Player(game_display, 'resources/art/players/player_2.png',  200, 200);
+        self.player_one = Player(game_display, screen_size, 'resources/art/players/player_1.png', 100, 200);
+        self.player_two = Player(game_display, screen_size, 'resources/art/players/player_2.png',  200, 200);
+
         self.box = Box(700, 350, game_display, 'resources/art/boxes/box_01.png');
+
+        self.enemy_list = [];
+        self.enemy_list.append(Slime_Enemy(game_display, self.player_one, self.player_two, self.enemy_list,
+                                 500, 500, 15, 200, 200, 'resources/art/enemies/blob_01_spritesheet.png',
+                                 'resources/art/enemies/blob_01_hit_spritesheet.png',2, 2, 0));
 
         self.joystick_list = None;
         self.load_resources();
@@ -35,16 +42,37 @@ class Game:
                 if(event.type == pygame.QUIT):
                     game_running = False;
 
-                ################################################################################################
+                ###########################################
                 #############Gamepad controls
                 if(len(self.joystick_list) != 0):
 
                     #Button input
                     if(event.type == pygame.JOYBUTTONDOWN):
+                        #Player one gamepad controls
                         if(self.joystick_list[event.joy].get_id() == 0):
-                            print('Player one pressed ' + str(event.button));
+                            if(event.button == 0):
+                                self.player_one.player_attack();
+                                print('B');
+                            elif(event.button == 1):
+                                self.box.move(self.player_one.location);
+                                print('A');
+                            elif(event.button == 9):
+                                print('start');
+                            elif(event.button == 8):
+                                print('select');
+
+                        #Player two gamepad controls
                         elif(self.joystick_list[event.joy].get_id() == 1):
-                            print('Player two pressed ' + str(event.button));
+                            if(event.button == 0):
+                                self.player_two.player_attack();
+                                print('B');
+                            elif(event.button == 1):
+                                self.box.move(self.player_two.location);
+                                print('A');
+                            elif(event.button == 9):
+                                print('start');
+                            elif(event.button == 8):
+                                print('select');
 
                     #D-pad movement
                     if(event.type == pygame.JOYAXISMOTION):
@@ -84,8 +112,7 @@ class Game:
                                 else:
                                     self.player_two.move_controller_x(0);
 
-                        #player_list[joystick_list[event.joy].get_id()].controller_movement(axis, event.axis, True);
-                ##################################################################################################
+                ###########################################
                 ##############Keyboard controls
                 if(event.type == pygame.KEYDOWN):
                     if(event.key == pygame.K_w):
@@ -109,6 +136,10 @@ class Game:
                     elif(event.key == pygame.K_LEFT):
                         self.player_two.move_controller_x(-1);
 
+                    if(event.key == pygame.K_k):
+                        self.player_one.player_attack();
+
+
                 elif(event.type == pygame.KEYUP):
                     if(event.key == pygame.K_w):
                         self.player_one.move_controller_y(0);
@@ -130,17 +161,20 @@ class Game:
                         self.player_two.move_controller_x(0);
                     if(event.key == pygame.K_LEFT):
                         self.player_two.move_controller_x(0);
-                #############################################################################
+                ###############################################
 
             self.render_screen();
 
     def render_screen(self):
-        game_display.fill((0, 0, 0));
+        game_display.fill((0, 0, 100));
 
         self.player_one.update_player();
         self.player_two.update_player();
         pygame.draw.rect(game_display, (0, 0, 128), [self.gridSize[0]-100, 100, 50, 50]);
         self.box.update();
+
+        for enemy in self.enemy_list:
+            enemy.update_enemy();
 
         pygame.display.update();
 
