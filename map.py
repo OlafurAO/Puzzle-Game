@@ -49,3 +49,23 @@ class Map:
         self.draw_map(temp_surface);
 
         return temp_surface;
+
+
+class Obstacle(pygame.sprite.Sprite):
+    def __init__(self, game, x, y, w, h):
+        self.groups = game.walls;
+
+        pygame.sprite.Sprite.__init__(self, self.groups);
+
+        self.game = game;
+        self.rect = pygame.Rect(x, y, w, h);
+        self.hit_rect = self.rect;
+
+        self.x = x;
+        self.y = y;
+
+        self.width = w;
+        self.height = h;
+
+        self.rect.x = x;
+        self.rect.y = y;
