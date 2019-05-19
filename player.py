@@ -9,11 +9,12 @@ player_hit_02_sfx = pygame.mixer.Sound('resources/sfx/player_hit_02.wav');
 player_bullet_sfx = pygame.mixer.Sound('resources/sfx/player_bullet_01.wav');
 
 class Player:
-    def __init__(self, game_display, screen_size, player_img, location_x, location_y):
+    def __init__(self, game_display, screen_size, player_img, location_x, location_y, wall_list):
         self.game_display = game_display;
         self.screen_size = screen_size;
         self.player_sprite_right = pygame.image.load(player_img).convert_alpha();
         self.player_sprite_left = pygame.transform.flip(self.player_sprite_right, True, False).convert_alpha();
+        self.level_wall_list = wall_list;
 
         self.player_sprite_right = pygame.transform.scale(self.player_sprite_right, (70, 70));
         self.player_sprite_left = pygame.transform.scale(self.player_sprite_left, (70, 70));
@@ -63,8 +64,32 @@ class Player:
 
     def move_player(self):
         if(self.player_damage_cooldown < 30):
-            self.location[0] += self.speed * self.move_direction_x;
-            self.location[1] += self.speed * self.move_direction_y;
+            if not(self.player_obstacle_collision_x()):
+                self.location[0] += self.speed * self.move_direction_x;
+
+            if not(self.player_obstacle_collision_y()):
+                self.location[1] += self.speed * self.move_direction_y;
+
+
+    def player_obstacle_collision_x(self):
+        for wall in self.level_wall_list:
+            if(self.move_direction_x == 1):
+                if(self.location[0] < wall.x):
+                    if(self.location[0] >= wall.x - (wall.width / 2 + 10) and
+                       self.location[0] <= wall.x + (wall.width / 2)):
+                        if(wall.y <= self.location[1] <= wall.y + wall.height):
+                            return True;
+            elif(self.move_direction_x == -1):
+                if(self.location[0] > wall.x):
+                    if(self.location[0] <= wall.x + (wall.width + 10) and
+                       self.location[0] >= wall.x - (wall.width / 2 + 10)):
+                        if(wall.y <= self.location[1] <= wall.y + wall.height):
+                            return True;
+
+
+    def player_obstacle_collision_y(self):
+        return False;
+
 
 
     def move_controller_x(self, x_direction):

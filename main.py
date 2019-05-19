@@ -20,21 +20,30 @@ class Game:
     def __init__(self):
         self.level_number = 1;
 
-        self.player_one = Player(game_display, screen_size, 'resources/art/players/player_1.png', 100, 200);
-        self.player_two = Player(game_display, screen_size, 'resources/art/players/player_2.png',  200, 200);
+        self.joystick_list = None;
+        self.level_one = None;
+        self.level_one_walls = None;
+        self.camera = None;
+
+        self.player_one = None;
+        self.player_two = None;
+
+        self.walls = pygame.sprite.Group();
+        self.load_level_one_obstacles();
+
+        self.player_one = Player(game_display, screen_size, 'resources/art/players/player_1.png', 100, 200, self.walls);
+        self.player_two = Player(game_display, screen_size, 'resources/art/players/player_2.png', 200, 200, self.walls);
 
         self.box = Box(675, 290, game_display, 'resources/art/boxes/box_01.png');
 
         self.enemy_list = [];
-        #self.enemy_list.append(Slime_Enemy(game_display, self.player_one, self.player_two, self.enemy_list,
-         #                        500, 500, 15, 200, 200, 'resources/art/enemies/blob_01_spritesheet.png',
-          #                       'resources/art/enemies/blob_01_hit_spritesheet.png',2, 2, 0));
-
-        self.joystick_list = None;
-        self.level_one = None;
-        self.camera = None;
 
         self.load_resources();
+
+
+        # self.enemy_list.append(Slime_Enemy(game_display, self.player_one, self.player_two, self.enemy_list,
+        #                        500, 500, 15, 200, 200, 'resources/art/enemies/blob_01_spritesheet.png',
+        #                       'resources/art/enemies/blob_01_hit_spritesheet.png',2, 2, 0));
 
 
     def main_loop(self):
@@ -181,14 +190,23 @@ class Game:
         clock.tick(FPS);
 
 
-    def load_resources(self):
-        self.setup_joysticks();
-
-        self.level_one = Map('resources/art/levels/rooms/level_01/room_01.tmx');
+    def load_level_one_obstacles(self):
+        # self.level_one = Map('resources/art/levels/rooms/level_01/room_01.tmx');
+        self.level_one = Map('resources/art/levels/rooms/level_01/room_01_test.tmx');
+        self.level_one_img = self.level_one.make_map();
+        self.map_rect = self.level_one_img.get_rect();
 
         self.camera = Camera(game_display, screen_size, self.player_one, self.player_two,
                              self.level_one.make_map(), (0, 0));
 
+        for tile_object in self.level_one.tmxdata.objects:
+            if (tile_object.name == 'Wall'):
+                Obstacle(self, tile_object.x, tile_object.y,
+                         tile_object.width, tile_object.height);
+
+
+    def load_resources(self):
+        self.setup_joysticks();
 
     def setup_joysticks(self):
         joystick_list = [];
