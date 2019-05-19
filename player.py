@@ -42,7 +42,7 @@ class Player:
         if(len(self.bullet_list) != 0):
             for bullet in self.bullet_list:
                 if(bullet.location[0] > self.screen_size[0] or bullet.location[0] < 0):
-                    self.bullet_list = [];
+                    del self.bullet_list[self.bullet_list.index(bullet)];
                     break;
                 else:
                     bullet.update_bullet();
