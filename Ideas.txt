@@ -2,6 +2,11 @@
 -box puzzles
 -combat puzzles?
 
+Technical stuff:
+-Levels are classes?
+ -Rooms are classes as well (keep track of how many doors and on what side)
+ -Each level has a list of the room class
+
 
 Maybe cool ideas:
 -some rooms are dark and require a torch or a light source
@@ -11,4 +16,6 @@ Maybe cool ideas:
 
 -3-4 player competitive mode þar sem 2 auka playerarnir geta stjórnað óvinum 
  og bosses og reyna að drepa player 1-2
+
+-2D sidescroller segments. Boss sem getur flippað skjánum.
 

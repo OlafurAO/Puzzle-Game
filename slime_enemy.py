@@ -153,8 +153,8 @@ class Slime_Enemy:
 
 
     def find_player_distance(self):
-        player_one_distance_x = (self.player_one.location[0] - self.location[0])**2;
-        player_one_distance_y = (self.player_one.location[1] - self.location[1])**2;
+        player_one_distance_x = (self.player_one.location[0] - self.location[0]) ** 2;
+        player_one_distance_y = (self.player_one.location[1] - self.location[1]) ** 2;
         player_one_distance = sqrt((player_one_distance_x + player_one_distance_y));
 
         player_two_distance_x = (self.player_two.location[0] - self.location[0]) ** 2;
@@ -217,33 +217,33 @@ class Slime_Enemy:
 
         bullet_list_two = self.player_two.bullet_list;
 
-        if (len(bullet_list_two) > 0):
+        if(len(bullet_list_two) > 0):
             for i in range(0, len(bullet_list_two)):
-                if (bullet_list_two[i].direction == 1):
-                    if (bullet_list_two[i].location[0] > self.location[0] and
-                        bullet_list_two[i].location[0] < self.location[0] + self.size_x):
-                        if (self.enemy_health > 5):
-                            if (bullet_list_two[i].location[1] >= self.location[1] and
-                                bullet_list_two[i].location[1] <= self.location[1] + self.size_y - 110):
+                if(bullet_list_two[i].direction == 1):
+                    if(bullet_list_two[i].location[0] > self.location[0] and
+                       bullet_list_two[i].location[0] < self.location[0] + self.size_x):
+                        if(self.enemy_health > 5):
+                            if(bullet_list_two[i].location[1] >= self.location[1] and
+                               bullet_list_two[i].location[1] <= self.location[1] + self.size_y - 110):
                                 del bullet_list_two[i];
                                 self.damage_enemy(1, 1);
                         else:
-                            if (bullet_list_two[i].location[1] >= self.location[1] and
-                                bullet_list_two[i].location[1] <= self.location[1] + 50):
+                            if(bullet_list_two[i].location[1] >= self.location[1] and
+                               bullet_list_two[i].location[1] <= self.location[1] + 50):
                                 del bullet_list_two[i];
                                 self.damage_enemy(1, 1);
                 else:
-                    if (bullet_list_two[i].location[0] <= self.location[0] + 120 and
-                        bullet_list_two[i].location[0] >= self.location[0]):
-                        if (self.enemy_health > 5):
+                    if(bullet_list_two[i].location[0] <= self.location[0] + 120 and
+                       bullet_list_two[i].location[0] >= self.location[0]):
+                        if(self.enemy_health > 5):
 
-                            if (bullet_list_two[i].location[1] >= self.location[1] and
-                                bullet_list_two[i].location[1] <= self.location[1] + self.size_y - 110):
+                            if(bullet_list_two[i].location[1] >= self.location[1] and
+                               bullet_list_two[i].location[1] <= self.location[1] + self.size_y - 110):
                                 del bullet_list_two[i];
                                 self.damage_enemy(1, -1);
                         else:
-                            if (bullet_list_two[i].location[1] >= self.location[1] and
-                                bullet_list_two[i].location[1] <= self.location[1] + 40):
+                            if(bullet_list_two[i].location[1] >= self.location[1] and
+                               bullet_list_two[i].location[1] <= self.location[1] + 40):
                                 del bullet_list_two[i];
                                 self.damage_enemy(1, -1);
 
@@ -278,6 +278,7 @@ class Slime_Enemy:
             pygame.mixer.Channel(8).play(enemy_hit_sfx);
 
             if(self.enemy_health == 0):
+                pygame.mixer.Channel(6).play(enemy_multiply_sfx);
                 pygame.mixer.Channel(9).play(enemy_death_sfx);
                 self.enemy_dying = True;
                 self.enemy_death_counter = 5;
