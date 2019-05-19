@@ -64,21 +64,28 @@ class Player:
 
     def move_player(self):
         if(self.player_damage_cooldown < 30):
-            if not(self.player_obstacle_collision_x()):
-                self.location[0] += self.speed * self.move_direction_x;
+            if(self.move_direction_x != 0):
+                if not(self.player_obstacle_collision_x()):
+                    self.location[0] += self.speed * self.move_direction_x;
 
-            if not(self.player_obstacle_collision_y()):
-                self.location[1] += self.speed * self.move_direction_y;
+            if(self.move_direction_y != 0):
+                if not(self.player_obstacle_collision_y()):
+                    self.location[1] += self.speed * self.move_direction_y;
 
 
     def player_obstacle_collision_x(self):
+        if(self.location[0] >= self.screen_size[0] - 10 or
+           self.location[0] <= 10):
+            return True;
+
         for wall in self.level_wall_list:
             if(self.move_direction_x == 1):
                 if(self.location[0] < wall.x):
-                    if(self.location[0] >= wall.x - (wall.width / 2 + 10) and
+                    if(self.location[0] >= wall.x - 60 and
                        self.location[0] <= wall.x + (wall.width / 2)):
                         if(wall.y <= self.location[1] <= wall.y + wall.height):
                             return True;
+
             elif(self.move_direction_x == -1):
                 if(self.location[0] > wall.x):
                     if(self.location[0] <= wall.x + (wall.width + 10) and
@@ -88,7 +95,20 @@ class Player:
 
 
     def player_obstacle_collision_y(self):
-        return False;
+        if(self.move_direction_y == -1):
+            if(self.location[1] <= 10):
+                return True;
+        elif(self.move_direction_y == 1):
+            if(self.location[1] >= self.screen_size[1] - 30):
+                return True;
+
+
+        for wall in self.level_wall_list:
+            if(self.move_direction_y == -1):
+                if(self.location[1] <= wall.y + (wall.height + 10) and
+                   self.location[1] >= wall.y - (wall.width / 2 + 10)):
+                    if(wall.x - 50 <= self.location[0] <= wall.x + wall.width):
+                        return True;
 
 
 
