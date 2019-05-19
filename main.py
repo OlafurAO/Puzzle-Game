@@ -126,6 +126,9 @@ class Game:
                     if(event.key == pygame.K_p):
                         print(self.player_one.location)
                         self.box.move(self.player_one.location)
+                    if(event.key == pygame.K_i):
+                        print('restart')
+                        self.__init__()
 
                     if(event.key == pygame.K_UP):
                         self.player_two.move_controller_y(-1);
