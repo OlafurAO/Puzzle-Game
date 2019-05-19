@@ -1,6 +1,7 @@
 from player import Player;
 from box import Box;
 from slime_enemy import Slime_Enemy;
+from map import *;
 import pygame;
 
 pygame.init();
@@ -22,14 +23,17 @@ class Game:
         self.player_one = Player(game_display, screen_size, 'resources/art/players/player_1.png', 100, 200);
         self.player_two = Player(game_display, screen_size, 'resources/art/players/player_2.png',  200, 200);
 
-        self.box = Box(700, 350, game_display, 'resources/art/boxes/box_01.png');
+        self.box = Box(675, 290, game_display, 'resources/art/boxes/box_01.png');
 
         self.enemy_list = [];
-        self.enemy_list.append(Slime_Enemy(game_display, self.player_one, self.player_two, self.enemy_list,
-                                 500, 500, 15, 200, 200, 'resources/art/enemies/blob_01_spritesheet.png',
-                                 'resources/art/enemies/blob_01_hit_spritesheet.png',2, 2, 0));
+        #self.enemy_list.append(Slime_Enemy(game_display, self.player_one, self.player_two, self.enemy_list,
+         #                        500, 500, 15, 200, 200, 'resources/art/enemies/blob_01_spritesheet.png',
+          #                       'resources/art/enemies/blob_01_hit_spritesheet.png',2, 2, 0));
 
         self.joystick_list = None;
+        self.level_one = None;
+        self.camera = None;
+
         self.load_resources();
 
 
@@ -164,6 +168,7 @@ class Game:
     def render_screen(self):
         game_display.fill((0, 0, 100));
 
+        self.camera.update_map();
         self.player_one.update_player();
         self.player_two.update_player();
         self.box.update();
@@ -178,6 +183,11 @@ class Game:
 
     def load_resources(self):
         self.setup_joysticks();
+
+        self.level_one = Map('resources/art/levels/rooms/level_01/room_01.tmx');
+
+        self.camera = Camera(game_display, screen_size, self.player_one, self.player_two,
+                             self.level_one.make_map(), (0, 0));
 
 
     def setup_joysticks(self):
