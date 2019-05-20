@@ -6,7 +6,8 @@ import pygame;
 
 pygame.init();
 
-X_size = 1400 
+#X_size = 1400
+X_size = 960;
 Y_size = 700
 
 screen_size = (X_size, Y_size);
@@ -28,18 +29,23 @@ class Game:
         self.player_one = None;
         self.player_two = None;
 
-        self.walls = pygame.sprite.Group();
+        self.walls = [];
+        self.doors = [];
+
         self.load_level_one_obstacles();
 
-        self.player_one = Player(game_display, screen_size, 'resources/art/players/player_1.png', 100, 200, self.walls);
-        self.player_two = Player(game_display, screen_size, 'resources/art/players/player_2.png', 200, 200, self.walls);
+        self.player_one = Player(game_display, screen_size,
+                                 'resources/art/players/player_1.png',
+                                 100, 200, self.walls, self.doors);
+        self.player_two = Player(game_display, screen_size,
+                                 'resources/art/players/player_2.png',
+                                 200, 200, self.walls, self.doors);
 
         self.box = Box(675, 290, game_display, 'resources/art/boxes/box_01.png');
 
         self.enemy_list = [];
 
         self.load_resources();
-
 
         # self.enemy_list.append(Slime_Enemy(game_display, self.player_one, self.player_two, self.enemy_list,
         #                        500, 500, 15, 200, 200, 'resources/art/enemies/blob_01_spritesheet.png',
@@ -60,6 +66,7 @@ class Game:
 
                     #Button input
                     if(event.type == pygame.JOYBUTTONDOWN):
+
                         #Player one gamepad controls
                         if(self.joystick_list[event.joy].get_id() == 0):
                             if(event.button == 0):
@@ -90,7 +97,7 @@ class Game:
                     if(event.type == pygame.JOYAXISMOTION):
                         axis = self.joystick_list[event.joy].get_axis(event.axis);
 
-                        #Player 1 gamepad controls
+                        #Player 1 D-pad controls
                         if(self.joystick_list[event.joy].get_id() == 0):
                             if(event.axis == 1):
                                 if(axis == 0.999969482421875):
@@ -107,7 +114,7 @@ class Game:
                                 else:
                                     self.player_one.move_controller_x(0);
 
-                        #Player 2 gamepad controls
+                        #Player 2 D-pad controls
                         elif(self.joystick_list[event.joy].get_id() == 1):
                             if(event.axis == 1):
                                 if(axis == 0.999969482421875):
@@ -191,18 +198,28 @@ class Game:
 
 
     def load_level_one_obstacles(self):
-        # self.level_one = Map('resources/art/levels/rooms/level_01/room_01.tmx');
+        #Load the map file
         self.level_one = Map('resources/art/levels/rooms/level_01/room_01_test.tmx');
+
+        '''
         self.level_one_img = self.level_one.make_map();
         self.map_rect = self.level_one_img.get_rect();
+        '''
 
+        #Initialize a camera object, makes the level scroll
         self.camera = Camera(game_display, screen_size, self.player_one, self.player_two,
                              self.level_one.make_map(), (0, 0));
 
+
+        #Loops through the objects in the map and adds them to
+        #lists corresponding to their name
         for tile_object in self.level_one.tmxdata.objects:
-            if (tile_object.name == 'Wall'):
-                Obstacle(self, tile_object.x, tile_object.y,
-                         tile_object.width, tile_object.height);
+            if (tile_object.type == 'Wall'):
+                self.walls.append(Obstacle(self,  tile_object.name, tile_object.x, tile_object.y,
+                                  tile_object.width, tile_object.height));
+            if (tile_object.type == 'Doorway'):
+                self.doors.append(Obstacle(self, tile_object.name, tile_object.x, tile_object.y,
+                                  tile_object.width, tile_object.height));
 
 
     def load_resources(self):

@@ -52,12 +52,14 @@ class Map:
 
 
 class Obstacle(pygame.sprite.Sprite):
-    def __init__(self, game, x, y, w, h):
-        self.groups = game.walls;
+    def __init__(self, game, name, x, y, w, h):
+        #self.groups = game.walls;
 
-        pygame.sprite.Sprite.__init__(self, self.groups);
+        #pygame.sprite.Sprite.__init__(self, self.groups);
 
+        #self.name is the name and self.game is my game haha just a little programming joke
         self.game = game;
+        self.name = name;
         self.rect = pygame.Rect(x, y, w, h);
         self.hit_rect = self.rect;
 
