@@ -12,6 +12,7 @@ channels:
     -9: 
 '''
 
+#Load the sound effects used by this enemy
 enemy_hit_sfx = pygame.mixer.Sound('resources/sfx/enemy_hit_01.wav');
 enemy_multiply_sfx = pygame.mixer.Sound('resources/sfx/enemy_multiply_01.wav');
 enemy_death_sfx = pygame.mixer.Sound('resources/sfx/enemy_death_01.wav');
@@ -23,27 +24,41 @@ class Slime_Enemy:
         self.location = [x_location, y_location];
         self.player_one = player_one;
         self.player_two = player_two;
+
+        #When the slime multiplies he can add another slime to this list
         self.enemy_list = enemy_list;
 
+        #The enemy has a normal spritesheet and one for when he gets hit
         enemy_sprite = pygame.image.load(enemy_sprite);
         self.enemy_sprite = pygame.transform.scale(enemy_sprite, (size_x, size_y));
-
         enemy_hit_sprite = pygame.image.load(enemy_hit_sprite);
         self.enemy_hit_sprite = pygame.transform.scale(enemy_hit_sprite, (size_x, size_y));
 
         self.enemy_sheet = Sprite_Sheet(self.enemy_sprite, col, rows);
         self.enemy_hit_sheet = Sprite_Sheet(self.enemy_hit_sprite, col, rows);
 
+        #Determines the size of the slime. When he multiplies he creates a new slime and
+        #Can directly initialize the new slime to his size
         self.size_x = size_x;
         self.size_y = size_y;
+
+        #The number of columns and rows in the spritesheets
         self.col = col;
         self.rows = rows;
 
+        #The current index of the spritesheet frame the slime is supposed
+        #to display
         self.cell_index = cell_index;
+        #Used for calculating the rate of which the slime should switch frames
         self.cell_counter = 0;
+
+        #Used so the enemy as a bit of recovery time
         self.enemy_hurt_counter = 0;
+        #Determines for how long the enemy should chase the player
         self.target_player_counter = 50;
+        #Determines for how long the enemy should rest
         self.target_player_cooldown = 0;
+        #Used so the enemy can have a little animation before he dies
         self.enemy_death_counter = 0;
 
         self.enemy_moving = False;
@@ -53,6 +68,9 @@ class Slime_Enemy:
 
         self.enemy_health = health;
         self.enemy_speed = 5;
+
+        #The direction from which the slime gets hit so he knows
+        #which direction to get knocked back
         self.hit_direction = 0;
 
 
@@ -130,7 +148,6 @@ class Slime_Enemy:
                         if(target_player.location[1] - 50 <= self.location[1] and
                            target_player.location[1] + 20 >= self.location[1]):
                             target_player.take_damage(1);
-
 
                 if(self.enemy_health > 10):
                     if(target_player.location[1] - 25 < self.location[1]):
