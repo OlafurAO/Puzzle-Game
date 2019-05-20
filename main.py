@@ -37,13 +37,6 @@ class Game:
         self.box = Box(675, 290, game_display, 'resources/art/boxes/box_01.png');
 
         self.enemy_list = [];
-        self.enemy_list.append(Slime_Enemy(game_display, self.player_one, self.player_two, self.enemy_list,
-                                 500, 500, 15, 200, 200, 'resources/art/enemies/blob_01_spritesheet.png',
-                                 'resources/art/enemies/blob_01_hit_spritesheet.png',2, 2, 0));
-
-        self.joystick_list = None;
-        self.level_one = None;
-        self.camera = None;
 
         self.load_resources();
 
