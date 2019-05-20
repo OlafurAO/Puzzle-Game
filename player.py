@@ -129,14 +129,19 @@ class Player:
         #there is a collision and the function returns true
         for wall in self.level_wall_list:
             if(self.move_direction_y == -1):
-                if(self.location[1] <= wall.y + (wall.height + 10) and
-                   self.location[1] >= wall.y - (wall.width / 2 + 10)):
-                    if(wall.x - 50 <= self.location[0] <= wall.x + wall.width):
-                        print('wall loc: (' + str(wall.x) + ', ' + str(wall.y) + ')');
-                        print('play loc: ' + str(self.location))
-                        return True;
+                if(self.location[1] > wall.y):
+                    if(self.location[1] <= wall.y + (wall.height + 10) and
+                       self.location[1] >= wall.y - (wall.height / 2 + 10)):
+                        if(wall.x - 50 <= self.location[0] <= wall.x + wall.width):
+                            return True;
 
-            #TODO y == 1 collision
+            elif(self.move_direction_y == 1):
+                if(self.location[1] < wall.y):
+                    if(self.location[1] <= wall.y + (wall.height + 10) and
+                       self.location[1] >= wall.y - (wall.height / 2 + 10)):
+                        if(wall.x - 50 <= self.location[0] <= wall.x + wall.width):
+                            return True;
+
 
     def player_entered_door(self):
         #Detects if the player is in a doorway, returns true if so
