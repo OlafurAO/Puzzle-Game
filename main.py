@@ -3,6 +3,7 @@ from box import Box;
 from slime_enemy import Slime_Enemy;
 from map import *;
 import pygame;
+import os;
 
 pygame.init();
 
@@ -19,40 +20,37 @@ FPS = 50;
 
 class Game:
     def __init__(self):
-        self.level_number = 1;
+        self.level_number = 0;
+        self.current_room_number = 0;
 
-        self.joystick_list = None;
+        self.joystick_list = self.setup_joysticks();
         self.level_one = None;
-        self.level_one_walls = None;
         self.camera = None;
 
         self.player_one = None;
         self.player_two = None;
 
-        self.walls = [];
-        self.doors = [];
+        self.level_one_rooms = [];
+        self.level_one_doors = [];
 
-        self.load_level_one_obstacles();
+        self.load_resources();
+        self.load_levels();
 
         self.player_one = Player(game_display, screen_size,
                                  'resources/art/players/player_1.png',
-                                 100, 200, self.walls, self.doors);
+                                 screen_size[0]/2 + 60, screen_size[1]/2, self.current_room_number, self.level_one_walls, self.level_one_doors);
         self.player_two = Player(game_display, screen_size,
                                  'resources/art/players/player_2.png',
-                                 200, 200, self.walls, self.doors);
-
-        self.box = Box(675, 290, game_display, 'resources/art/boxes/box_01.png');
+                                 screen_size[0]/2 - 110, screen_size[1]/2, self.current_room_number, self.level_one_walls, self.level_one_doors);
 
         self.enemy_list = [];
-
-        self.joystick_list = None;
-        self.level_one = None;
-
-        self.load_resources();
+        self.box_list = [];
 
         # self.enemy_list.append(Slime_Enemy(game_display, self.player_one, self.player_two, self.enemy_list,
         #                        500, 500, 15, 200, 200, 'resources/art/enemies/blob_01_spritesheet.png',
         #                       'resources/art/enemies/blob_01_hit_spritesheet.png',2, 2, 0));
+
+        self.box = Box(675, 290, game_display, 'resources/art/boxes/box_01.png');
 
 
     def main_loop(self):
@@ -187,11 +185,14 @@ class Game:
     def render_screen(self):
         game_display.fill((0, 0, 100));
 
-        self.camera.update_map();
+        self.camera_list[self.current_room_number].update_map();
         self.player_one.update_player();
         self.player_two.update_player();
         self.box.update();
 
+        if(self.player_one.player_switch_rooms or
+           self.player_two.player_switch_rooms):
+            self.switch_rooms();
         for enemy in self.enemy_list:
             enemy.update_enemy();
 
@@ -199,34 +200,71 @@ class Game:
 
         clock.tick(FPS);
 
+    def switch_rooms(self):
+        self.player_one.player_switch_rooms = False;
+        self.player_two.player_switch_rooms = False;
+
+        ###########################################################
+        ######TEMPORARY HARD CODED BULLSHIT FIX THIS ABSOLUTE TRASH
+        ###########################################################
+        self.player_one.location[0] = self.level_one_doors[1][0].x + \
+                                      self.level_one_doors[1][0].width / 2 + 30;
+        self.player_one.location[1] = self.level_one_doors[1][0].y - 100;
+
+        self.player_two.location[0] = self.level_one_doors[1][0].x + 40;
+        self.player_two.location[1] = self.level_one_doors[1][0].y - 100;
+
+        self.current_room_number = 1;
+        ###########################################################
+
+        self.player_one.set_player_current_room(self.current_room_number);
+        self.player_two.set_player_current_room(self.current_room_number);
+
 
     def load_level_one_obstacles(self):
-        #Load the map file
-        self.level_one = Map('resources/art/levels/rooms/level_01/room_01_test.tmx');
-
-        '''
-        self.level_one_img = self.level_one.make_map();
-        self.map_rect = self.level_one_img.get_rect();
-        '''
-
-        #Initialize a camera object, makes the level scroll
-        self.camera = Camera(game_display, screen_size, self.player_one, self.player_two,
-                             self.level_one.make_map(), (0, 0));
-
+        self.level_one_walls = [[] for i in range(len(self.level_one))];
+        self.level_one_doors = [[] for i in range(len(self.level_one))];
 
         #Loops through the objects in the map and adds them to
         #lists corresponding to their name
-        for tile_object in self.level_one.tmxdata.objects:
-            if (tile_object.type == 'Wall'):
-                self.walls.append(Obstacle(self,  tile_object.name, tile_object.x, tile_object.y,
-                                  tile_object.width, tile_object.height));
-            if (tile_object.type == 'Doorway'):
-                self.doors.append(Obstacle(self, tile_object.name, tile_object.x, tile_object.y,
-                                  tile_object.width, tile_object.height));
+        #TODO: add more objects like boxes, coins or stuff like that
+        #TODO: also give the doors their own class so it's easier to connect them
+        for room in range(len(self.level_one)):
+            for tile_object in self.level_one[room].tmxdata.objects:
+                if (tile_object.type == 'Wall'):
+                    self.level_one_walls[room].append(
+                            Obstacle(self, tile_object.name, tile_object.x, tile_object.y,
+                                     tile_object.width, tile_object.height));
+
+                if (tile_object.type == 'Doorway'):
+                    self.level_one_doors[room].append(
+                            Obstacle(self, tile_object.name, tile_object.x, tile_object.y,
+                                     tile_object.width, tile_object.height));
 
 
     def load_resources(self):
-        self.setup_joysticks();
+        #self.setup_joysticks();
+        u = 0;
+
+
+    def load_levels(self):
+        self.level_one = []
+        self.camera_list = [];
+
+        #Load the files for the rooms in level 1
+        for filename in os.listdir('resources/art/levels/rooms/level_01'):
+            if('room' in filename):
+                self.level_one.append(Map('resources/art/levels/rooms/level_01/' + str(filename)));
+
+        #Initialize a camera object for each room, makes
+        #the level scroll if the room is big enough
+        for i in self.level_one:
+            self.camera_list.append(Camera(game_display, screen_size,
+                                           self.player_one, self.player_two,
+                                           i.make_map(), (0, 0)));
+
+        self.load_level_one_obstacles();
+
 
     def setup_joysticks(self):
         joystick_list = [];
@@ -238,7 +276,7 @@ class Game:
             print('Detected gamepad: ' + i.get_name(), i.get_id());
             print('Initializing ' + i.get_name());
 
-        self.joystick_list = joystick_list;
+        return joystick_list;
 
 
 def main():

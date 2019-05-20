@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="5" nextobjectid="10">
+ <tileset firstgid="1" source="level_01_final_test.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="20" height="20">
+  <data encoding="csv">
+5,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,8,
+23,66,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,63,26,
+23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
+23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
+23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
+23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
+23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
+23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
+23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
+23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
+23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,23,26,
+23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,23,26,
+23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,23,26,
+23,12,6,6,6,6,6,8,20,19,19,20,5,6,6,6,6,6,9,26,
+97,97,97,97,97,97,97,98,20,19,19,20,95,97,97,97,97,97,97,98,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="2" name="Wall">
+  <object id="1" name="Wall" type="Wall" x="576" y="624" width="384" height="94"/>
+  <object id="2" name="Wall" type="Wall" x="1" y="625" width="384" height="94"/>
+  <object id="3" name="Wall" type="Wall" x="-7" y="1" width="102" height="628"/>
+  <object id="5" name="Wall" type="Wall" x="865" y="1" width="102" height="628"/>
+  <object id="6" name="Wall" type="Wall" x="87" y="2" width="781" height="93"/>
+ </objectgroup>
+ <objectgroup id="3" name="Doorway">
+  <object id="7" name="Doorway_01" type="Doorway" x="363" y="712" width="230" height="5"/>
+ </objectgroup>
+ <objectgroup id="4" name="Box">
+  <object id="9" name="Box" type="Box" x="750" y="351" width="23" height="27"/>
+ </objectgroup>
+</map>

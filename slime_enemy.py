@@ -97,7 +97,6 @@ class Slime_Enemy:
                 self.enemy_dead = True;
 
 
-
     def draw_enemy(self):
         if(self.enemy_hurt_counter > 0):
             self.enemy_hit_sheet.draw(self.game_display, self.cell_index - 1, self.location[0], self.location[1], 1);

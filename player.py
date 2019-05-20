@@ -9,7 +9,7 @@ player_hit_02_sfx = pygame.mixer.Sound('resources/sfx/player_hit_02.wav');
 player_bullet_sfx = pygame.mixer.Sound('resources/sfx/player_bullet_01.wav');
 
 class Player:
-    def __init__(self, game_display, screen_size, player_img, location_x, location_y, wall_list, door_list):
+    def __init__(self, game_display, screen_size, player_img, location_x, location_y, current_room, wall_list, door_list):
         self.game_display = game_display;
         self.screen_size = screen_size;
 
@@ -20,6 +20,7 @@ class Player:
         self.player_sprite_left = pygame.transform.scale(self.player_sprite_left, (70, 70));
 
         self.location = [location_x, location_y];
+        self.current_room = current_room;
 
         #Lists of objects the player can collide with
         self.level_wall_list = wall_list;
@@ -34,6 +35,7 @@ class Player:
         self.speed = 10;
 
         self.player_moving = False;
+        self.player_switch_rooms = False;
 
         #Used so the player has recovery time when damaged
         self.player_damage_cooldown = 0;
@@ -45,8 +47,11 @@ class Player:
         if(self.player_moving):
             self.move_player();
 
-        if(self.player_entered_door()):
-            print('Entered Door');
+        doorway = self.player_entered_door();
+        if(doorway != None):
+            self.player_switch_rooms = True;
+
+            print(doorway);
 
         if(len(self.bullet_list) != 0):
             for bullet in self.bullet_list:
@@ -94,8 +99,8 @@ class Player:
            self.location[0] <= 10):
             return True;
 
-        for wall in self.level_wall_list:
-            #If the player is moving to the right and there is a wall to his right,
+        for wall in self.level_wall_list[self.current_room]:
+            #If the player is moving to the right and there is a wall in the way,
             #there is a collision and the function returns true
             #wall.x is in the center of the wall instead of the top left corner,
             #which is the reason for (wall.width / 2)
@@ -127,7 +132,7 @@ class Player:
 
         #If the player is moving up and there is a wall above him,
         #there is a collision and the function returns true
-        for wall in self.level_wall_list:
+        for wall in self.level_wall_list[self.current_room]:
             if(self.move_direction_y == -1):
                 if(self.location[1] > wall.y):
                     if(self.location[1] <= wall.y + (wall.height + 10) and
@@ -144,13 +149,20 @@ class Player:
 
 
     def player_entered_door(self):
-        #Detects if the player is in a doorway, returns true if so
-        for doorway in self.level_door_list:
+        #Detects if the player is in a doorway, returns the name
+        #of the door if so, else it return None
+        for doorway in self.level_door_list[self.current_room]:
             if(self.location[1] >= doorway.y - 20 and
                self.location[1] <= doorway.y + 20):
                 if(self.location[0] >= doorway.x and
                    self.location[0] <= doorway.x + doorway.width):
-                    return True;
+                    return doorway;
+            elif(self.location[1] >= doorway.y - 70 and
+                 self.location[1] <= doorway.y + 20):
+                if(self.location[0] >= doorway.x and
+                   self.location[0] <= doorway.x + doorway.width):
+                    return doorway;
+        return None;
 
 
     def move_controller_x(self, x_direction):
@@ -165,6 +177,7 @@ class Player:
         self.move_direction_y = y_direction;
 
         self.player_moving = True;
+
 
     def player_attack(self):
         if(len(self.bullet_list) == 0):
@@ -182,6 +195,10 @@ class Player:
 
             #pygame.mixer.Channel(1).play(player_hit_sfx);
             pygame.mixer.Channel(2).play(player_hit_02_sfx);
+
+
+    def set_player_current_room(self, room):
+        self.current_room = room;
 
 class Bullet:
     def __init__(self, game_display, screen_size, location_x, location_y, direction):
