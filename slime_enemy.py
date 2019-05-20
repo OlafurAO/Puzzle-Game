@@ -75,7 +75,11 @@ class Slime_Enemy:
 
 
     def update_enemy(self):
-        if not(self.enemy_dead or self.enemy_dying):
+        if(self.enemy_dead):
+            del self;
+            return;
+ 
+        if not(self.enemy_dying):
             self.check_for_player_bullets();
             self.enemy_controller();
 
@@ -85,16 +89,13 @@ class Slime_Enemy:
             self.draw_enemy();
             self.cell_counter += 1;
         else:
-            if(self.enemy_dying):
-                self.enemy_death_animation();
-                self.enemy_death_counter -= 1;
+            self.enemy_death_animation();
+            self.enemy_death_counter -= 1;
 
-                if(self.enemy_death_counter == 0):
-                    self.enemy_dying = False;
-                    self.enemy_dead = True;
+            if(self.enemy_death_counter == 0):
+                self.enemy_dying = False;
+                self.enemy_dead = True;
 
-        if(self.enemy_dead):
-            del self;
 
 
     def draw_enemy(self):
@@ -155,7 +156,7 @@ class Slime_Enemy:
                         self.location[1] += self.enemy_speed;
                     else:
                         if(target_player.location[0] + 35 > self.location[0] and
-                           target_player.location[0] - 80 > self.location[0]):
+                           target_player.location[0] - 80 < self.location[0]):
                             target_player.take_damage(1);
                 elif(self.enemy_health > 5):
                     if(target_player.location[1] < self.location[1]):
