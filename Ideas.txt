@@ -1,4 +1,6 @@
-﻿-collect 5 meddalions/gems/whatever to open boss door
+﻿WEEKLY GOALS LINK: https://docs.google.com/document/d/190f7qD39Ix92jLLfpFUXEQ-AiKm8LJUmuyIWYkunlwE/edit?usp=sharing
+
+-collect 5 meddalions/gems/whatever to open boss door
 -box puzzles
 -combat puzzles?
 
@@ -24,3 +26,39 @@ number blocks can be pushed "number" many times, puzzle mechanic
 Erum að nota:
 pyTMX
 Pygame 
+
+
+ACTUAL STUFF:
+    Inventory:
+	-1 item slot Passive/active
+  	
+    Player stats/info:
+	-Keep in player class
+
+    Slimes:
+	-DIfferent colors do different shit
+	-Mixed color bois
+		-When multiplying the colors split
+
+	-Green are basic
+
+	-Red shoots in one direction, high frequency
+
+	-Blue shoots in all directions at once, low frequency
+		-Mixed blue/red shoot in all directions high frequency
+
+	-Yellow 
+
+    
+
+NAMING CONVENTIONS:
+    Level = level (collection of rooms)
+    Room = room (basic box model)
+
+LEVELS:
+    All levels and level attributes should be in the Environment class/file (maybe sprites)
+    Environments are kept in a list e.g. level_one_list to determine, Environments
+    class should have a variable to determine which room/level is now. 
+
+
+
