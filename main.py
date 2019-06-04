@@ -267,16 +267,19 @@ class Game:
 
 
     def load_levels(self):
+        self.load_level_one();
+
+    def load_level_one(self):
         self.level_one = []
         self.camera_list = [];
 
-        #Load the files for the rooms in level 1
+        # Load the files for the rooms in level 1
         for filename in os.listdir('resources/art/levels/rooms/level_01'):
-            if('room' in filename):
+            if ('room' in filename):
                 self.level_one.append(Map('resources/art/levels/rooms/level_01/' + str(filename)));
 
-        #Initialize a camera object for each room, makes
-        #the level scroll if the room is big enough
+        # Initialize a camera object for each room, makes
+        # the level scroll if the room is big enough
         for i in self.level_one:
             self.camera_list.append(Camera(game_display, screen_size,
                                            self.player_one, self.player_two,
