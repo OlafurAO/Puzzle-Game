@@ -72,3 +72,26 @@ class Obstacle(pygame.sprite.Sprite):
 
         self.rect.x = x;
         self.rect.y = y;
+
+class Doorway:
+    def __init__(self, game, name, direction, x, y, w, h):
+        #self.groups = game.walls;
+        #pygame.sprite.Sprite.__init__(self, self.groups);
+
+        pygame.sprite.Sprite.__init__(self);
+
+        #self.name is the name and self.game is my game haha just a little programming joke
+        self.game = game;
+        self.name = name;
+        self.direction = direction;
+        self.rect = pygame.Rect(x, y, w, h);
+        self.hit_rect = self.rect;
+
+        self.x = x;
+        self.y = y;
+
+        self.width = w;
+        self.height = h;
+
+        self.rect.x = x;
+        self.rect.y = y;

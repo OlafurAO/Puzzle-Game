@@ -46,9 +46,9 @@ class Game:
         self.enemy_list = [];
         self.box_list = [];
 
-        # self.enemy_list.append(Slime_Enemy(game_display, self.player_one, self.player_two, self.enemy_list,
-        #                        500, 500, 15, 200, 200, 'resources/art/enemies/blob_01_spritesheet.png',
-        #                       'resources/art/enemies/blob_01_hit_spritesheet.png',2, 2, 0));
+        self.enemy_list.append(Slime_Enemy(game_display, self.player_one, self.player_two, self.enemy_list,
+                               500, 500, 15, 200, 200, 'resources/art/enemies/blob_01_spritesheet.png',
+                              'resources/art/enemies/blob_01_hit_spritesheet.png',2, 2, 0));
 
         self.box = Box(675, 290, game_display, 'resources/art/boxes/box_01.png');
 
@@ -185,20 +185,25 @@ class Game:
     def render_screen(self):
         game_display.fill((0, 0, 100));
 
+        if(self.player_one.player_switch_rooms or
+                self.player_two.player_switch_rooms):
+            self.switch_rooms();
+
         self.camera_list[self.current_room_number].update_map();
         self.player_one.update_player();
         self.player_two.update_player();
         self.box.update();
 
-        if(self.player_one.player_switch_rooms or
-           self.player_two.player_switch_rooms):
-            self.switch_rooms();
         for enemy in self.enemy_list:
             enemy.update_enemy();
 
         pygame.display.update();
 
         clock.tick(FPS);
+
+
+    #def loading_screen(self):
+
 
     def switch_rooms(self):
         self.player_one.player_switch_rooms = False;
@@ -237,8 +242,22 @@ class Game:
                                      tile_object.width, tile_object.height));
 
                 if (tile_object.type == 'Doorway'):
+                    direction = '';
+
+                    if(tile_object.x > screen_size[0]/2 + 200):
+                        direction = 'RIGHT';
+                    elif(tile_object.x < screen_size[0]/2 - 200):
+                        direction = 'LEFT';
+                    else:
+                        if(tile_object.y > screen_size[1]/2):
+                            direction = 'DOWN';
+                        elif(tile_object.y < screen_size[1]/2):
+                            direction = 'UP';
+
+                    print(direction);
+
                     self.level_one_doors[room].append(
-                            Obstacle(self, tile_object.name, tile_object.x, tile_object.y,
+                            Doorway(self, tile_object.name, direction, tile_object.x, tile_object.y,
                                      tile_object.width, tile_object.height));
 
 

@@ -1,4 +1,4 @@
--collect 5 meddalions/gems/whatever to open boss door
+﻿-collect 5 meddalions/gems/whatever to open boss door
 -box puzzles
 -combat puzzles?
 
@@ -14,10 +14,13 @@ Maybe cool ideas:
 
 -recap at the end of level who did the most, damage, collected the most coins etc.
 
--3-4 player competitive mode �ar sem 2 auka playerarnir geta stj�rna� �vinum 
+-3-4 player competitive mode �ar sem 2 auka playerarnir geta stj�rna� enemies
  og bosses og reyna a� drepa player 1-2
+
+number blocks can be pushed "number" many times, puzzle mechanic 
 
 -2D sidescroller segments. Boss sem getur flippa� skj�num.
 
+Erum að nota:
 pyTMX
 Pygame 

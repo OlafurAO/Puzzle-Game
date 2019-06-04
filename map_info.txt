@@ -1,0 +1,2 @@
+tile width/height: 48 px
+map size: 20
