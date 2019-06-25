@@ -1,7 +1,6 @@
 from player import Player;
 from environments import Environments;
 from box import Box;
-from slime_enemy import Slime_Enemy;
 import pygame;
 
 pygame.init();
@@ -27,11 +26,12 @@ class Game:
         self.player_two = None;
 
         self.environments = Environments(game_display, screen_size, self.player_one, self.player_two);
+        self.environments.load_levels();
 
         self.player_one = Player(
                             game_display, screen_size,
                             'resources/art/players/player_1.png',
-                            screen_size[0]/2 + 60, screen_size[1]/2,
+                            screen_size[0] / 2 + 60, screen_size[1]/2,
                             0, self.environments.get_level_wall_list(),
                             self.environments.get_level_door_list()
         );
@@ -39,28 +39,19 @@ class Game:
         self.player_two = Player(
                             game_display, screen_size,
                             'resources/art/players/player_2.png',
-                            screen_size[0]/2 - 110, screen_size[1]/2,
+                            screen_size[0] / 2 - 110, screen_size[1]/2,
                             0, self.environments.get_level_wall_list(),
                             self.environments.get_level_door_list()
         );
 
         self.environments.set_players(self.player_one, self.player_two);
+        self.environments.load_enemies();
 
         self.enemy_list = [];
         self.box_list = [];
 
-        '''
-        self.enemy_list.append(
-                    Slime_Enemy(
-                        game_display, self.player_one,
-                        self.player_two, self.enemy_list,
-                        500, 500, 15, 200, 200,
-                        'resources/art/enemies/blob_01_spritesheet.png',
-                        'resources/art/enemies/blob_01_hit_spritesheet.png',
-                        2, 2, 0
-                    )
-        );
 
+        '''
         self.box = Box(675, 290, game_display, 'resources/art/boxes/box_01.png');
         '''
 

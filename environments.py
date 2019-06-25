@@ -12,6 +12,7 @@ import pygame;
 import os;
 
 from map import *;
+from slime_enemy import Slime_Enemy;
 
 class Environments:
     def __init__(self, game_display, screen_size, player_one, player_two):
@@ -34,8 +35,6 @@ class Environments:
         self.current_room_number = 0;
         self.number_of_rooms = 0;
 
-        self.load_levels();
-
 
     def update_environment(self):
         if (self.player_one.player_switch_rooms or \
@@ -47,6 +46,9 @@ class Environments:
 
     def draw_environment(self):
         self.camera_list[self.current_room_number].update_map();
+
+        for enemy in self.enemy_list[self.current_room_number]:
+            enemy.update_enemy();
 
 
     def set_players(self, one, two):
@@ -75,8 +77,6 @@ class Environments:
                             if(self.level_one_doors[door][k].id == i[1]):
                                 self.current_room_number = door;
                                 self.change_room_and_player_position(self.level_one_doors[door][k]);
-
-                                print(doorway.id, self.level_one_doors[door][k].id);
                                 return;
 
                 else:
@@ -85,8 +85,6 @@ class Environments:
                             if(self.level_one_doors[door][k].id == i[0]):
                                 self.current_room_number = door;
                                 self.change_room_and_player_position(self.level_one_doors[door][k]);
-
-                                print(doorway.id, self.level_one_doors[door][k].id);
                                 return;
 
 
@@ -187,35 +185,6 @@ class Environments:
         return current_door.linked or next_door.linked;
 
 
-    def load_level_one_obstacles(self):
-        self.level_one_walls = [[] for i in range(len(self.level_one))];
-        self.level_one_doors = [[] for i in range(len(self.level_one))];
-
-        door_id = 0;
-
-        #Loops through the objects in the map and adds them to
-        #lists corresponding to their name
-        #TODO: add more objects like boxes, coins or stuff like that
-        #TODO: also give the doors their own class so it's easier to connect them
-        for room in range(len(self.level_one)):
-            for tile_object in self.level_one[room].tmxdata.objects:
-                if (tile_object.type == 'Wall'):
-                    self.level_one_walls[room].append(
-                            Obstacle(self, tile_object.name, tile_object.x, tile_object.y,
-                                     tile_object.width, tile_object.height));
-
-                if (tile_object.type == 'Doorway'):
-                    direction = self.get_door_direction(tile_object);
-                    #print(direction)
-
-                    self.level_one_doors[room].append(
-                            Doorway(self, door_id, tile_object.name, direction,
-                                    False, tile_object.x, tile_object.y,
-                                    tile_object.width, tile_object.height));
-
-                    door_id += 1;
-
-
     def load_levels(self):
         self.load_level_one();
         self.generate_level();
@@ -240,6 +209,58 @@ class Environments:
                                            i.make_map(), (0, 0)));
 
         self.load_level_one_obstacles();
+
+
+    def load_level_one_obstacles(self):
+        self.level_one_walls = [[] for i in range(len(self.level_one))];
+        self.level_one_doors = [[] for i in range(len(self.level_one))];
+
+        door_id = 0;
+
+        # Loops through the objects in the map and adds them by
+        # type corresponding to their names
+        #TODO: add more objects like boxes, coins or stuff like that
+        #TODO: also give the doors their own class so it's easier to connect them
+        for room in range(len(self.level_one)):
+            for tile_object in self.level_one[room].tmxdata.objects:
+                if(tile_object.type == 'Wall'):
+                    self.level_one_walls[room].append(
+                            Obstacle(self, tile_object.name, tile_object.x, tile_object.y,
+                                     tile_object.width, tile_object.height));
+
+                elif(tile_object.type == 'Doorway'):
+                    direction = self.get_door_direction(tile_object);
+                    #print(direction)
+
+                    self.level_one_doors[room].append(
+                            Doorway(self, door_id, tile_object.name, direction,
+                                    False, tile_object.x, tile_object.y,
+                                    tile_object.width, tile_object.height));
+
+                    door_id += 1;
+
+
+    def load_enemies(self):
+        self.enemy_list = [[] for i in range(len(self.level_one))];
+
+        for room in range(len(self.level_one)):
+            for tile_object in self.level_one[room].tmxdata.objects:
+                if(tile_object.type == 'Enemy'):
+                    self.spawn_enemy(tile_object, room);
+
+
+    def spawn_enemy(self, enemy, room):
+        if(enemy.name == 'Slime'):
+            self.enemy_list[room].append(
+                Slime_Enemy(
+                    self.game_display, self.player_one,
+                    self.player_two, self.enemy_list,
+                    enemy.x, enemy.y, 15, 200, 200,
+                    'resources/art/enemies/blob_01_spritesheet.png',
+                    'resources/art/enemies/blob_01_hit_spritesheet.png',
+                    2, 2, 0, room
+                )
+            );
 
 
     def get_door_direction(self, tile_object):

@@ -19,7 +19,7 @@ enemy_death_sfx = pygame.mixer.Sound('resources/sfx/enemy_death_01.wav');
 
 class Slime_Enemy:
     def __init__(self, game_display, player_one, player_two, enemy_list, x_location, y_location,
-                 health, size_x, size_y, enemy_sprite, enemy_hit_sprite, col, rows, cell_index):
+                 health, size_x, size_y, enemy_sprite, enemy_hit_sprite, col, rows, cell_index, room_number):
         self.game_display = game_display;
         self.location = [x_location, y_location];
         self.player_one = player_one;
@@ -69,6 +69,8 @@ class Slime_Enemy:
         self.enemy_health = health;
         self.enemy_speed = 5;
 
+        self.room_number = room_number;
+
         #The direction from which the slime gets hit so he knows
         #which direction to get knocked back
         self.hit_direction = 0;
@@ -110,6 +112,7 @@ class Slime_Enemy:
                     self.hit_direction = 0;
         else:
             self.enemy_sheet.draw(self.game_display, self.cell_index, self.location[0], self.location[1], 1);
+
 
     def enemy_controller(self):
         if(self.enemy_hurt_counter == 0):
@@ -198,6 +201,7 @@ class Slime_Enemy:
             return self.player_one;
         else:
             return self.player_two;
+
 
     def check_for_player_bullets(self):
         bullet_list_one = self.player_one.bullet_list;
@@ -311,12 +315,16 @@ class Slime_Enemy:
             self.location[0] -= 20;
             self.location[1] += 20;
 
-            self.enemy_list.append(Slime_Enemy(self.game_display, self.player_one, self.player_two, self.enemy_list,
-                                                   self.location[0] + 60, self.location[1], self.enemy_health,
-                                                   self.size_x, self.size_y,
-                                                   'resources/art/enemies/blob_01_spritesheet.png',
-                                                   'resources/art/enemies/blob_01_hit_spritesheet.png',
-                                                   self.col, self.rows, self.cell_index - 1));
+            self.enemy_list[self.room_number].append(
+                    Slime_Enemy(
+                        self.game_display, self.player_one, self.player_two, self.enemy_list,
+                        self.location[0] + 60, self.location[1], self.enemy_health,
+                        self.size_x, self.size_y,
+                        'resources/art/enemies/blob_01_spritesheet.png',
+                        'resources/art/enemies/blob_01_hit_spritesheet.png',
+                        self.col, self.rows, self.cell_index - 1, self.room_number
+                    )
+            );
 
         elif (self.enemy_health == 5):
             self.size_x = 100;
@@ -328,12 +336,16 @@ class Slime_Enemy:
             self.location[0] -= 20;
             self.location[1] += 20;
 
-            self.enemy_list.append(Slime_Enemy(self.game_display, self.player_one, self.player_two, self.enemy_list,
-                                                   self.location[0] + 60, self.location[1], self.enemy_health,
-                                                   self.size_x, self.size_y,
-                                                   'resources/art/enemies/blob_01_spritesheet.png',
-                                                   'resources/art/enemies/blob_01_hit_spritesheet.png',
-                                                   self.col, self.rows, self.cell_index - 1));
+            self.enemy_list[self.room_number].append(
+                    Slime_Enemy(
+                        self.game_display, self.player_one, self.player_two, self.enemy_list,
+                        self.location[0] + 60, self.location[1], self.enemy_health,
+                        self.size_x, self.size_y,
+                        'resources/art/enemies/blob_01_spritesheet.png',
+                        'resources/art/enemies/blob_01_hit_spritesheet.png',
+                        self.col, self.rows, self.cell_index - 1, self.room_number
+                    )
+            );
 
         self.enemy_hit_sprite = pygame.transform.scale(self.enemy_hit_sprite, (self.size_x, self.size_y));
         self.enemy_hit_sheet = Sprite_Sheet(self.enemy_hit_sprite, self.col, self.rows);
