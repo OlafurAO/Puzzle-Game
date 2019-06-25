@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="2" nextobjectid="1">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="5" nextobjectid="11">
  <tileset firstgid="1" source="level_01_final_test.tsx"/>
  <layer id="1" name="Tile Layer 1" width="20" height="20">
   <data encoding="csv">
-5,6,6,6,6,6,6,8,2,2,2,2,5,6,6,6,6,6,6,8,
-41,66,96,96,96,96,96,98,2,2,2,2,95,96,96,96,96,96,63,26,
-41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
-41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
-41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
-41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
-41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
+5,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,8,
+41,66,96,96,96,96,96,97,97,97,97,97,97,96,96,96,96,96,63,26,
 41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
 41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
 41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
@@ -22,7 +17,22 @@
 41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
 41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
 41,12,7,7,7,7,7,8,1,1,1,1,5,7,7,7,7,7,9,26,
+95,97,97,97,97,97,97,98,1,1,1,1,95,97,97,97,97,97,97,98,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
+41,12,7,7,7,7,7,8,1,1,1,1,5,7,7,7,7,7,9,26,
 95,97,97,97,97,97,97,98,1,1,1,1,95,97,97,97,97,97,97,98
 </data>
  </layer>
+ <objectgroup id="3" name="Doorway">
+  <object id="5" name="Doorway" type="Doorway" x="383" y="705" width="191" height="13"/>
+ </objectgroup>
+ <objectgroup id="4" name="Wall">
+  <object id="6" name="Wall" type="Wall" x="577" y="622" width="382" height="95"/>
+  <object id="7" name="Wall" type="Wall" x="3" y="621.5" width="382" height="95"/>
+  <object id="8" name="Wall" type="Wall" x="863" y="0" width="94" height="630"/>
+  <object id="9" name="Wall" type="Wall" x="1" y="1" width="94" height="630"/>
+  <object id="10" name="Wall" type="Wall" x="61" y="1" width="868" height="94"/>
+ </objectgroup>
 </map>

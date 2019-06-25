@@ -44,9 +44,12 @@ class Game:
                             self.environments.get_level_door_list()
         );
 
+        self.environments.set_players(self.player_one, self.player_two);
+
         self.enemy_list = [];
         self.box_list = [];
 
+        '''
         self.enemy_list.append(
                     Slime_Enemy(
                         game_display, self.player_one,
@@ -59,6 +62,7 @@ class Game:
         );
 
         self.box = Box(675, 290, game_display, 'resources/art/boxes/box_01.png');
+        '''
 
 
     def main_loop(self):
@@ -194,18 +198,9 @@ class Game:
         game_display.fill((0, 0, 100));
 
         self.environments.update_environment();
-
-        ''' ENVIRONMENT SHIT
-        if(self.player_one.player_switch_rooms or
-                self.player_two.player_switch_rooms):
-            self.switch_rooms();
-
-        self.camera_list[self.current_room_number].update_map();
-        '''
-
         self.player_one.update_player();
         self.player_two.update_player();
-        self.box.update();
+        #self.box.update();
 
         for enemy in self.enemy_list:
             enemy.update_enemy();
@@ -215,11 +210,10 @@ class Game:
         clock.tick(FPS);
 
 
-
-
     def load_resources(self):
         #self.setup_joysticks();
         u = 0;
+
 
     def setup_joysticks(self):
         joystick_list = [];

@@ -1,41 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="5" nextobjectid="10">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="4" nextobjectid="18">
  <tileset firstgid="1" source="level_01_final_test.tsx"/>
  <layer id="1" name="Tile Layer 1" width="20" height="20">
   <data encoding="csv">
-5,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,8,
-23,66,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,63,26,
-23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
-23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
-23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
-23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
-23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
-23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
-23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
-23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,41,26,
-23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,23,26,
-23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,23,26,
-23,26,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,23,26,
-23,12,6,6,6,6,6,8,20,19,19,20,5,6,6,6,6,6,9,26,
-97,97,97,97,97,97,97,98,20,19,19,20,95,97,97,97,97,97,97,98,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+5,6,6,6,6,6,6,8,2,2,2,2,5,6,6,6,6,6,6,8,
+41,66,96,96,96,96,96,98,2,2,2,2,95,96,96,96,96,96,63,26,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,95,98,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,5,8,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
+41,12,7,7,7,7,7,8,1,1,1,1,5,7,7,7,7,7,9,26,
+95,97,97,97,97,97,97,98,1,1,1,1,95,97,97,97,97,97,97,98,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
+41,26,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,41,26,
+41,12,7,7,7,7,7,8,1,1,1,1,5,7,7,7,7,7,9,26,
+95,97,97,97,97,97,97,98,1,1,1,1,95,97,97,97,97,97,97,98
 </data>
  </layer>
- <objectgroup id="2" name="Wall">
-  <object id="1" name="Wall" type="Wall" x="576" y="624" width="384" height="94"/>
-  <object id="2" name="Wall" type="Wall" x="1" y="625" width="384" height="94"/>
-  <object id="3" name="Wall" type="Wall" x="-7" y="1" width="102" height="628"/>
-  <object id="5" name="Wall" type="Wall" x="865" y="1" width="102" height="628"/>
-  <object id="6" name="Wall" type="Wall" x="87" y="2" width="781" height="93"/>
+ <objectgroup id="2" name="Doorway" offsetx="1" offsety="0">
+  <object id="1" name="Doorway" type="Doorway" x="382" y="1" width="194" height="18"/>
+  <object id="4" name="Doorway" type="Doorway" x="382" y="701" width="194" height="18"/>
+  <object id="17" name="Doorway" type="Doorway" x="940" y="285" width="20" height="196"/>
  </objectgroup>
- <objectgroup id="3" name="Doorway">
-  <object id="7" name="Doorway_01" type="Doorway" x="363" y="712" width="230" height="5"/>
- </objectgroup>
- <objectgroup id="4" name="Box">
-  <object id="9" name="Box" type="Box" x="750" y="351" width="23" height="27"/>
+ <objectgroup id="3" name="Wall">
+  <object id="6" name="Wall" type="Wall" x="576" y="621" width="385" height="94"/>
+  <object id="8" name="Wall" type="Wall" x="0.5" y="623" width="385" height="94"/>
+  <object id="9" name="Wall" type="Wall" x="864" y="0" width="95" height="286"/>
+  <object id="11" name="Wall" type="Wall" x="0.5" y="0.5" width="95" height="643"/>
+  <object id="12" name="Wall" type="Wall" x="577" y="0" width="296" height="95"/>
+  <object id="13" name="Wall" type="Wall" x="88" y="0.5" width="296" height="95"/>
+  <object id="15" name="Wall" type="Wall" x="863.5" y="481" width="95" height="286"/>
  </objectgroup>
 </map>

@@ -51,8 +51,6 @@ class Player:
         if(doorway != None):
             self.player_switch_rooms = True;
 
-            print(doorway);
-
         if(len(self.bullet_list) != 0):
             for bullet in self.bullet_list:
                 if(bullet.location[0] > self.screen_size[0] or bullet.location[0] < 0):
@@ -157,11 +155,19 @@ class Player:
                 if(self.location[0] >= doorway.x and
                    self.location[0] <= doorway.x + doorway.width):
                     return doorway;
+
             elif(self.location[1] >= doorway.y - 70 and
                  self.location[1] <= doorway.y + 20):
                 if(self.location[0] >= doorway.x and
                    self.location[0] <= doorway.x + doorway.width):
                     return doorway;
+
+            elif(self.location[0] >= doorway.x - 50 and
+                 self.location[0] <= doorway.x + 20):
+                if(self.location[1] <= doorway.y + doorway.height and
+                   self.location[1] >= doorway.y):
+                    return doorway;
+
         return None;
 
 
