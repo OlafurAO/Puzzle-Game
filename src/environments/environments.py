@@ -20,8 +20,9 @@
 
 import os;
 
-from map import *;
-from slime_enemy import Slime_Enemy;
+from src.environments.map import *;
+from src.enemies.slime_enemy import Slime_Enemy;
+
 
 class Environments:
     def __init__(self, game_display, screen_size, player_one, player_two):

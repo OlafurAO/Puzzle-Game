@@ -1,4 +1,4 @@
-from spritesheet import Sprite_Sheet;
+from src.spritesheets.spritesheet import Sprite_Sheet;
 from math import sqrt;
 import pygame;
 

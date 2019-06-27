@@ -1,7 +1,10 @@
-from player import Player;
-from environments import Environments;
-from box import Box;
 import pygame;
+
+from src.gamepad.gamepad_controller import Gamepad_Controller;
+from src.player.player import Player;
+from src.environments.environments import Environments;
+from src.objects.box import Box;
+
 
 pygame.init();
 
@@ -19,7 +22,7 @@ FPS = 50;
 
 class Game:
     def __init__(self):
-        self.joysticks = self.setup_joysticks();
+        self.gamepad_setup();
         self.load_resources();
 
         self.player_one = None;
@@ -64,15 +67,19 @@ class Game:
                 if(event.type == pygame.QUIT):
                     game_running = False;
 
+                if(self.gamepad_count != 0):
+                    self.gamepad_controller.gamepad_input_controller(event, self.player_one, self.player_two);
+
+                '''
                 ###########################################
                 #############Gamepad controls
-                if(len(self.joysticks) != 0):
+                if(len(self.gamepads) != 0):
 
                     #Button input
                     if(event.type == pygame.JOYBUTTONDOWN):
 
                         #Player one gamepad controls
-                        if(self.joysticks[event.joy].get_id() == 0):
+                        if(self.gamepads[event.joy].get_id() == 0):
                             if(event.button == 0):
                                 self.player_one.player_attack();
                                 print('B');
@@ -85,7 +92,7 @@ class Game:
                                 print('select');
 
                         #Player two gamepad controls
-                        elif(self.joysticks[event.joy].get_id() == 1):
+                        elif(self.gamepads[event.joy].get_id() == 1):
                             if(event.button == 0):
                                 self.player_two.player_attack();
                                 print('B');
@@ -99,10 +106,10 @@ class Game:
 
                     #D-pad movement
                     if(event.type == pygame.JOYAXISMOTION):
-                        axis = self.joysticks[event.joy].get_axis(event.axis);
+                        axis = self.gamepads[event.joy].get_axis(event.axis);
 
                         #Player 1 D-pad controls
-                        if(self.joysticks[event.joy].get_id() == 0):
+                        if(self.gamepads[event.joy].get_id() == 0):
                             if(event.axis == 1):
                                 if(axis == 0.999969482421875):
                                     self.player_one.move_controller_y(1);
@@ -119,7 +126,7 @@ class Game:
                                     self.player_one.move_controller_x(0);
 
                         #Player 2 D-pad controls
-                        elif(self.joysticks[event.joy].get_id() == 1):
+                        elif(self.gamepads[event.joy].get_id() == 1):
                             if(event.axis == 1):
                                 if(axis == 0.999969482421875):
                                     self.player_two.move_controller_y(1);
@@ -134,7 +141,7 @@ class Game:
                                     self.player_two.move_controller_x(-1);
                                 else:
                                     self.player_two.move_controller_x(0);
-
+                '''
                 ###########################################
                 ##############Keyboard controls
                 if(event.type == pygame.KEYDOWN):
@@ -206,17 +213,10 @@ class Game:
         u = 0;
 
 
-    def setup_joysticks(self):
-        joystick_list = [];
-        for i in range(0, pygame.joystick.get_count()):
-            joystick_list.append(pygame.joystick.Joystick(i));
+    def gamepad_setup(self):
+        self.gamepad_controller = Gamepad_Controller();
+        self.gamepad_count = self.gamepad_controller.get_gamepad_count();
 
-        for i in joystick_list:
-            i.init();
-            print('Detected gamepad: ' + i.get_name(), i.get_id());
-            print('Initializing ' + i.get_name());
-
-        return joystick_list;
 
 
 def main():

@@ -1,0 +1,208 @@
+#Controller as in this class controls the gamepads
+import pygame;
+
+class Gamepad_Controller:
+    def __init__(self):
+        self.gamepad_list = self.gamepad_setup();
+
+
+    def gamepad_input_controller(self, event, player_one, player_two):
+        if(event.type == pygame.JOYBUTTONDOWN):
+            self.button_input_handler(event, player_one, player_two);
+
+        elif(event.type == pygame.JOYAXISMOTION):
+            # Check if the axis is on a D-pad on an older controller
+            if(self.gamepad_list[event.joy].get_numhats() == 0):
+                self.dpad_input_handler(event, player_one, player_two);
+            else: # Analog stick on modern controllers
+                self.analog_stick_input_handler(event, player_one, player_two);
+
+
+        # D-pad movement on modern controllers
+        elif(event.type == pygame.JOYHATMOTION):
+            self.hat_input_handler(event, player_one, player_two);
+
+
+    def button_input_handler(self, event, player_one, player_two):
+        # Player one gamepad controls
+        if (self.gamepad_list[event.joy].get_id() == 0):
+            if (event.button == 0): # B button
+                player_one.player_attack();
+            elif (event.button == 1): # A Button
+                #box.move(self.player_one.location);
+                u = 0;
+
+            elif (event.button == 9):
+                print('start');
+            elif (event.button == 8):
+                print('select');
+
+        # Player two gamepad controls
+        elif (self.gamepad_list[event.joy].get_id() == 1):
+            if (event.button == 0): # B button
+                player_two.player_attack();
+            elif (event.button == 1): # A button
+                #box.move(self.player_two.location);
+                u = 0;
+
+            elif (event.button == 9):
+                print('start');
+            elif (event.button == 8):
+                print('select');
+
+
+    def dpad_input_handler(self, event, player_one, player_two):
+        # D-pad movement
+        axis = self.gamepad_list[event.joy].get_axis(event.axis);
+
+        # Player 1 D-pad controls
+        if (self.gamepad_list[event.joy].get_id() == 0):
+            if (event.axis == 1):
+                if (axis == 0.999969482421875):
+                    player_one.move_controller_y(1);
+                elif (axis == -1.0):
+                    player_one.move_controller_y(-1);
+                else:
+                    player_one.move_controller_y(0);
+            else:
+                if (axis == 0.999969482421875):
+                    player_one.move_controller_x(1);
+                elif (axis == -1.0):
+                    player_one.move_controller_x(-1);
+                else:
+                    player_one.move_controller_x(0);
+
+        # Player 2 D-pad controls
+        elif (self.gamepad_list[event.joy].get_id() == 1):
+            if (event.axis == 1):
+                if (axis == 0.999969482421875):
+                    player_two.move_controller_y(1);
+                elif (axis == -1.0):
+                    player_two.move_controller_y(-1);
+                else:
+                    player_two.move_controller_y(0);
+            else:
+                if (axis == 0.999969482421875):
+                    player_two.move_controller_x(1);
+                elif (axis == -1.0):
+                    player_two.move_controller_x(-1);
+                else:
+                    player_two.move_controller_x(0);
+
+
+    def analog_stick_input_handler(self, event, player_one, player_two):
+        axis = self.gamepad_list[event.joy].get_axis(event.axis);
+
+        # Player 1 analog stick controls
+        if (self.gamepad_list[event.joy].get_id() == 0):
+            # Left analog stick
+            if(event.axis == 0):
+                if(-1.0 <= axis <= -0.5):
+                    player_one.move_controller_x(-1);
+                elif(0.5 <= axis <= 1.0):
+                    player_one.move_controller_x(1);
+                else:
+                    player_one.move_controller_x(0);
+
+            elif(event.axis == 1):
+                if(-1.0 <= axis <= -0.8):
+                    player_one.move_controller_y(-1);
+                elif(0.8 <= axis <= 1.0):
+                    player_one.move_controller_y(1);
+                else:
+                    player_one.move_controller_y(0);
+
+            # Right analog stick
+            elif(event.axis == 2):
+                if(axis == -1.0):
+                    print('LEFT');
+                elif(axis > 0.9):
+                    print('RIGHT');
+            elif(event.axis == 3):
+                if(axis == -1.0):
+                    print('UP');
+                elif(axis > 0.9):
+                    print('DOWN');
+
+        # Player 2 analog controls
+        elif(self.gamepad_list[event.joy].get_id() == 1):
+            # Left analog stick
+            if(event.axis == 0):
+                if (-1.0 <= axis <= -0.5):
+                    player_two.move_controller_x(-1);
+                elif (0.5 <= axis <= 1.0):
+                    player_two.move_controller_x(1);
+                else:
+                    player_two.move_controller_x(0);
+
+            elif (event.axis == 1):
+                if (-1.0 <= axis <= -0.8):
+                    player_two.move_controller_y(-1);
+                elif (0.8 <= axis <= 1.0):
+                    player_two.move_controller_y(1);
+                else:
+                    player_two.move_controller_y(0);
+                print(axis)
+
+            # Right analog stick
+            elif(event.axis == 2):
+                if(axis == -1.0):
+                    print('LEFT');
+                elif(axis > 0.9):
+                    print('RIGHT');
+            elif(event.axis == 3):
+                if(axis == -1.0):
+                    print('UP');
+                elif(axis > 0.9):
+                    print('DOWN');
+
+
+    def hat_input_handler(self, event, player_one, player_two):
+        axis = self.gamepad_list[event.joy].get_hat(0);
+
+        if (self.gamepad_list[event.joy].get_id() == 0):
+            player_one.move_controller_y(-axis[1]);
+            player_one.move_controller_x(axis[0]);
+        elif (self.gamepad_list[event.joy].get_id() == 1):
+            player_two.move_controller_y(-axis[1]);
+            player_two.move_controller_x(axis[0])
+
+
+    def gamepad_setup(self):
+        gamepad_list = [];
+        for i in range(0, pygame.joystick.get_count()):
+            gamepad_list.append(pygame.joystick.Joystick(i));
+
+        for i in gamepad_list:
+            i.init();
+
+            if(i.get_init()):
+                self.print_gamepad_info(i);
+            else:
+                print('Gamepad initialization failed!');
+
+        return gamepad_list;
+
+
+    def print_gamepad_info(self, gamepad):
+        print('------------------------------------------------');
+        print('Detected gamepad: ' + gamepad.get_name());
+        print('------------------------------------------------');
+        print('Gamepad ID: ' + str(gamepad.get_id()));
+        print('Num of buttons: ' + str(gamepad.get_numbuttons()));
+        print('Num of D-pads: ' + str(gamepad.get_numhats()));
+        print('Axes: ' + str(gamepad.get_numaxes()));
+        print('------------------------------------------------');
+        print();
+
+
+    def disable_gamepads(self):
+        pygame.joystick.quit();
+
+
+    def get_gamepad_list(self):
+        return self.gamepad_list;
+
+
+    def get_gamepad_count(self):
+        return len(self.gamepad_list);
