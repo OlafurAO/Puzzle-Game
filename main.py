@@ -19,7 +19,7 @@ FPS = 50;
 
 class Game:
     def __init__(self):
-        self.joystick_list = self.setup_joysticks();
+        self.joysticks = self.setup_joysticks();
         self.load_resources();
 
         self.player_one = None;
@@ -66,13 +66,13 @@ class Game:
 
                 ###########################################
                 #############Gamepad controls
-                if(len(self.joystick_list) != 0):
+                if(len(self.joysticks) != 0):
 
                     #Button input
                     if(event.type == pygame.JOYBUTTONDOWN):
 
                         #Player one gamepad controls
-                        if(self.joystick_list[event.joy].get_id() == 0):
+                        if(self.joysticks[event.joy].get_id() == 0):
                             if(event.button == 0):
                                 self.player_one.player_attack();
                                 print('B');
@@ -85,7 +85,7 @@ class Game:
                                 print('select');
 
                         #Player two gamepad controls
-                        elif(self.joystick_list[event.joy].get_id() == 1):
+                        elif(self.joysticks[event.joy].get_id() == 1):
                             if(event.button == 0):
                                 self.player_two.player_attack();
                                 print('B');
@@ -99,10 +99,10 @@ class Game:
 
                     #D-pad movement
                     if(event.type == pygame.JOYAXISMOTION):
-                        axis = self.joystick_list[event.joy].get_axis(event.axis);
+                        axis = self.joysticks[event.joy].get_axis(event.axis);
 
                         #Player 1 D-pad controls
-                        if(self.joystick_list[event.joy].get_id() == 0):
+                        if(self.joysticks[event.joy].get_id() == 0):
                             if(event.axis == 1):
                                 if(axis == 0.999969482421875):
                                     self.player_one.move_controller_y(1);
@@ -119,7 +119,7 @@ class Game:
                                     self.player_one.move_controller_x(0);
 
                         #Player 2 D-pad controls
-                        elif(self.joystick_list[event.joy].get_id() == 1):
+                        elif(self.joysticks[event.joy].get_id() == 1):
                             if(event.axis == 1):
                                 if(axis == 0.999969482421875):
                                     self.player_two.move_controller_y(1);

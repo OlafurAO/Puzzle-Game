@@ -2,6 +2,7 @@ from spritesheet import Sprite_Sheet;
 from math import sqrt;
 import pygame;
 
+# SFX initialization
 pygame.mixer.pre_init(44100, 16, 2, 4096);
 pygame.init();
 pygame.mixer.set_num_channels(10)
@@ -12,7 +13,7 @@ channels:
     -9: 
 '''
 
-#Load the sound effects used by this enemy
+# SFX files
 enemy_hit_sfx = pygame.mixer.Sound('resources/sfx/enemy_hit_01.wav');
 enemy_multiply_sfx = pygame.mixer.Sound('resources/sfx/enemy_multiply_01.wav');
 enemy_death_sfx = pygame.mixer.Sound('resources/sfx/enemy_death_01.wav');
@@ -69,6 +70,7 @@ class Slime_Enemy:
         self.enemy_health = health;
         self.enemy_speed = 5;
 
+        # The room this slime is in
         self.room_number = room_number;
 
         #The direction from which the slime gets hit so he knows
@@ -78,7 +80,6 @@ class Slime_Enemy:
 
     def update_enemy(self):
         if(self.enemy_dead):
-            del self;
             return;
  
         if not(self.enemy_dying):
@@ -130,7 +131,7 @@ class Slime_Enemy:
                     else:
                         if(target_player.location[1] - 50 <= self.location[1] and
                            target_player.location[1] + 20 >= self.location[1]):
-                            target_player.take_damage(1);
+                            target_player.player_take_damage(1);
 
                 elif(self.enemy_health > 5):
                     if(target_player.location[0] + 45 < self.location[0]):
@@ -140,7 +141,7 @@ class Slime_Enemy:
                     else:
                         if(target_player.location[1] - 50 <= self.location[1] and
                            target_player.location[1] + 20 >= self.location[1]):
-                            target_player.take_damage(1);
+                            target_player.player_take_damage(1);
                 else:
                     if(target_player.location[0] + 50 < self.location[0]):
                         self.location[0] -= self.enemy_speed;
@@ -149,7 +150,7 @@ class Slime_Enemy:
                     else:
                         if(target_player.location[1] - 50 <= self.location[1] and
                            target_player.location[1] + 20 >= self.location[1]):
-                            target_player.take_damage(1);
+                            target_player.player_take_damage(1);
 
                 if(self.enemy_health > 10):
                     if(target_player.location[1] - 25 < self.location[1]):
@@ -159,7 +160,7 @@ class Slime_Enemy:
                     else:
                         if(target_player.location[0] + 35 > self.location[0] and
                            target_player.location[0] - 80 < self.location[0]):
-                            target_player.take_damage(1);
+                            target_player.player_take_damage(1);
                 elif(self.enemy_health > 5):
                     if(target_player.location[1] < self.location[1]):
                         self.location[1] -= self.enemy_speed;

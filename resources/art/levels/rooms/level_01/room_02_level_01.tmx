@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="5" nextobjectid="21">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="5" nextobjectid="23">
  <tileset firstgid="1" source="level_01_final_test.tsx"/>
  <layer id="1" name="Tile Layer 1" width="20" height="20">
   <data encoding="csv">
@@ -29,6 +29,8 @@
   <object id="1" name="Doorway" type="Doorway" x="382" y="1" width="194" height="18"/>
   <object id="4" name="Doorway" type="Doorway" x="382" y="701" width="194" height="18"/>
   <object id="17" name="Doorway" type="Doorway" x="940" y="285" width="20" height="196"/>
+  <object id="21" name="Door_Enemy" type="Door" x="385" y="73" width="192" height="20"/>
+  <object id="22" name="Door_Enemy" type="Door" x="864" y="288" width="14" height="191"/>
  </objectgroup>
  <objectgroup id="3" name="Wall">
   <object id="6" name="Wall" type="Wall" x="576" y="621" width="385" height="94"/>
@@ -40,7 +42,7 @@
   <object id="15" name="Wall" type="Wall" x="863.5" y="481" width="95" height="286"/>
  </objectgroup>
  <objectgroup id="4" name="Enemy">
-  <object id="18" name="Slime" type="Enemy" x="671" y="159" width="27" height="23"/>
-  <object id="19" name="Slime" type="Enemy" x="176" y="164" width="24" height="14"/>
+  <object id="18" name="Green_Slime" type="Enemy" x="671" y="159" width="27" height="23"/>
+  <object id="19" name="Green_Slime" type="Enemy" x="176" y="164" width="24" height="14"/>
  </objectgroup>
 </map>

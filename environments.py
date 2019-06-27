@@ -1,14 +1,23 @@
-'''
+'''INFO
+    ########################################
     ////////TILED MAP INFO
+    ########################################
         -Tile Width: 48px
         -Tile Height: 48px
 
         Object names:
             -Walls: "Wall"
-            -Doors: "Doorway"
+            -Doorways: "Doorway"
+            -Doors:
+                -Doors opened by defeating enemies: "Door_Enemy"
+                -Doors opened by pressing button: "Door_Button"
+
+        Enemy names:
+            -Slimes:
+                -Green slime: "Green_Slime"
+    #######################################
 '''
 
-import pygame;
 import os;
 
 from map import *;
@@ -28,27 +37,57 @@ class Environments:
         # Takes care of displaying the map and scrolling the room
         self.camera = None;
 
-        #Keeps track of the
-        self.level_one = None;
-
         self.level_number = 0;
         self.current_room_number = 0;
         self.number_of_rooms = 0;
 
 
     def update_environment(self):
-        if (self.player_one.player_switch_rooms or \
+        # Checks if one of the players has entered a doorway
+        if(self.player_one.player_switch_rooms or
            self.player_two.player_switch_rooms):
             self.switch_rooms();
 
+        self.update_enemies();
+        self.update_doors();
+
         self.draw_environment();
+
+
+    def update_enemies(self):
+        # Removes an enemy from the list if he has been killed by a player.
+        # This code is an unnecessarily complicated mess because you cant delete
+        # list elements in a traditional for loop (for i in enemy_list)
+        new_enemy_list = self.enemy_list[self.current_room_number];
+
+        for enemy in range(len(self.enemy_list[self.current_room_number])):
+            if (self.enemy_list[self.current_room_number][enemy].enemy_dead):
+                del new_enemy_list[enemy];
+                break;  # The loop needs to be broken immediately or we get an index error
+
+        self.enemy_list[self.current_room_number] = new_enemy_list;
+
+
+    def update_doors(self):
+        # If all enemies in the room are dead, this code checks if any doors
+        # in the room had a "kill enemies" condition and opens it
+        if(len(self.enemy_list[self.current_room_number]) == 0):
+            for door in self.level_one_doors[self.current_room_number]:
+                if(door.get_condition() == 'ENEMY'):
+                    door.open_door();
 
 
     def draw_environment(self):
         self.camera_list[self.current_room_number].update_map();
 
+        # Update all the enemies in the current room
         for enemy in self.enemy_list[self.current_room_number]:
             enemy.update_enemy();
+
+        # Draw all the doors in the current room
+        for door in self.level_one_doors[self.current_room_number]:
+            if not(door.is_door_open()):
+                door.draw_door();
 
 
     def set_players(self, one, two):
@@ -64,27 +103,34 @@ class Environments:
         self.player_one.player_switch_rooms = False;
         self.player_two.player_switch_rooms = False;
 
-        doorway = self.player_one.player_entered_door();
-
+        # Get the doorway that player one has entered (if any)
+        doorway = self.player_one.player_entered_doorway();
+        # If player one hasn't entered a doorway, check if player two has
         if(doorway == None):
-            doorway = self.player_two.player_entered_door();
+            doorway = self.player_two.player_entered_doorway();
 
         for i in self.level_door_connection:
+            # Check if the current doorway is in the tuple i
             if(doorway.id in i):
-                if(doorway.id == i[0]):
-                    for door in range(len(self.level_one_doors)):
-                        for k in range(len(self.level_one_doors[door])):
-                            if(self.level_one_doors[door][k].id == i[1]):
+                if(doorway.id == i[0]):  # Check if the current doorway is the first element in the tuple
+                    # Find the door object that corresponds to the id of
+                    # the door which the current door is connected to
+                    for door in range(len(self.level_one_doorways)):
+                        for k in range(len(self.level_one_doorways[door])):
+                            # Check if the id of [door][k] matches the id of the door connected
+                            # to the current door. If so, we've found our door object
+                            if(self.level_one_doorways[door][k].id == i[1]):
                                 self.current_room_number = door;
-                                self.change_room_and_player_position(self.level_one_doors[door][k]);
+                                self.change_room_and_player_position(self.level_one_doorways[door][k]);
                                 return;
 
+                # Same shit here, only this time the current door is the second element in the tuple
                 else:
-                    for door in range(len(self.level_one_doors)):
-                        for k in range(len(self.level_one_doors[door])):
-                            if(self.level_one_doors[door][k].id == i[0]):
+                    for door in range(len(self.level_one_doorways)):
+                        for k in range(len(self.level_one_doorways[door])):
+                            if(self.level_one_doorways[door][k].id == i[0]):
                                 self.current_room_number = door;
-                                self.change_room_and_player_position(self.level_one_doors[door][k]);
+                                self.change_room_and_player_position(self.level_one_doorways[door][k]);
                                 return;
 
 
@@ -92,6 +138,8 @@ class Environments:
         self.player_one.set_player_current_room(self.current_room_number);
         self.player_two.set_player_current_room(self.current_room_number);
 
+        # This set of if statements repositions the players in the middle
+        # of the doorway they came through, according to the doorway's direction.
         if(doorway.direction == 'DOWN'):
             self.player_one.location[0] = doorway.x + doorway.width / 2 + 20;
             self.player_one.location[1] = doorway.y - 100;
@@ -126,8 +174,6 @@ class Environments:
             self.player_one.current_x_direction = -1;
             self.player_two.current_x_direction = -1;
 
-        #TODO: left and right
-
 
     # This function decides the layout of the rooms
     # and will most likely be in its own class later
@@ -136,53 +182,52 @@ class Environments:
         current_room_number = 0;
         room_counter = 0;
 
-        while(room_counter < 4):
-            for current_door in self.level_one_doors[current_room_number]:
-                for next_room in range(current_room_number + 1, self.number_of_rooms):
-                    for next_door in self.level_one_doors[next_room]:
-                        if(current_door.direction == 'UP'):
-                            if(next_door.direction == 'DOWN'):
-                                if not(self.door_already_linked(current_door, next_door)):
-                                    self.link_doors(current_door, next_door);
-                                    room_counter += 1;
+        if(self.level_number == 0):
+            while(room_counter < 4):
+                # Loop through every door in the current room
+                for current_door in self.level_one_doorways[current_room_number]:
+                    for next_room in range(current_room_number + 1, self.number_of_rooms):
+                        # Loop through every door in the next room
+                        for next_door in self.level_one_doorways[next_room]:
+                            # This set of if statements checks the direction of the current door
+                            # and links the next door to it if it fits
+                            if(current_door.direction == 'UP'):
+                                if(next_door.direction == 'DOWN'):
+                                    # Checks if either of the doors have already been linked
+                                    # to another door
+                                    if not(self.is_door_already_linked(current_door, next_door)):
+                                        self.link_doors(current_door, next_door);
+                                        room_counter += 1;
 
-                        elif(current_door.direction == 'DOWN'):
-                            if(next_door.direction == 'UP'):
-                                if not(self.door_already_linked(current_door, next_door)):
-                                    self.link_doors(current_door, next_door);
-                                    room_counter += 1;
+                            elif(current_door.direction == 'DOWN'):
+                                if(next_door.direction == 'UP'):
+                                    if not(self.is_door_already_linked(current_door, next_door)):
+                                        self.link_doors(current_door, next_door);
+                                        room_counter += 1;
 
-                        elif(current_door.direction == 'LEFT'):
-                            if(next_door.direction == 'RIGHT'):
-                                if not(self.door_already_linked(current_door, next_door)):
-                                    self.link_doors(current_door, next_door);
-                                    room_counter += 1;
+                            elif(current_door.direction == 'LEFT'):
+                                if(next_door.direction == 'RIGHT'):
+                                    if not(self.is_door_already_linked(current_door, next_door)):
+                                        self.link_doors(current_door, next_door);
+                                        room_counter += 1;
 
-                        elif(current_door.direction == 'RIGHT'):
-                            if(next_door.direction == 'LEFT'):
-                                if not(self.door_already_linked(current_door, next_door)):
-                                    self.link_doors(current_door, next_door);
-                                    room_counter += 1;
+                            elif(current_door.direction == 'RIGHT'):
+                                if(next_door.direction == 'LEFT'):
+                                    if not(self.is_door_already_linked(current_door, next_door)):
+                                        self.link_doors(current_door, next_door);
+                                        room_counter += 1;
 
-            current_room_number += 1;
+                current_room_number += 1;
 
-            if(current_room_number >= self.number_of_rooms):
-                break;
-
-        #print(self.level_door_connection);
+                if(current_room_number >= self.number_of_rooms):
+                    break;
 
 
-    #Helper function for the generate_level function
     def link_doors(self, current_door, next_door):
-        if((current_door.id, next_door.id) not in self.level_door_connection and
-           (next_door.id, current_door.id) not in self.level_door_connection):
-            self.level_door_connection.append((current_door.id, next_door.id));
-            current_door.linked = True;
-            next_door.linked = True;
-
-
-    def door_already_linked(self, current_door, next_door):
-        return current_door.linked or next_door.linked;
+        # Links the two doors together, creating a connection between them
+        self.level_door_connection.append((current_door.id, next_door.id));
+        current_door.linked = True;
+        next_door.linked = True;
 
 
     def load_levels(self):
@@ -194,12 +239,11 @@ class Environments:
         self.level_one = []
         self.camera_list = [];
 
-        # Load the files for the rooms in level 1
+        # Load the .tmx files for the rooms in level 1
         for filename in os.listdir('resources/art/levels/rooms/level_01'):
             if('room' in filename):
                 self.level_one.append(Map('resources/art/levels/rooms/level_01/' + str(filename)));
                 self.number_of_rooms += 1;
-                #print(filename);
 
         # Initialize a camera object for each room, makes
         # the level scroll if the room is big enough
@@ -212,35 +256,69 @@ class Environments:
 
 
     def load_level_one_obstacles(self):
+        # These lists of lists keep track of the objects for each room.
         self.level_one_walls = [[] for i in range(len(self.level_one))];
+        self.level_one_doorways = [[] for i in range(len(self.level_one))];
         self.level_one_doors = [[] for i in range(len(self.level_one))];
 
-        door_id = 0;
+        doorway_id = 0;  # Give each doorway a unique id
+        door_id = 0;     # Give each door a unique id
 
         # Loops through the objects in the map and adds them by
         # type corresponding to their names
         #TODO: add more objects like boxes, coins or stuff like that
-        #TODO: also give the doors their own class so it's easier to connect them
         for room in range(len(self.level_one)):
             for tile_object in self.level_one[room].tmxdata.objects:
                 if(tile_object.type == 'Wall'):
                     self.level_one_walls[room].append(
-                            Obstacle(self, tile_object.name, tile_object.x, tile_object.y,
-                                     tile_object.width, tile_object.height));
+                            Obstacle(
+                                self, tile_object.name, tile_object.x, tile_object.y,
+                                tile_object.width, tile_object.height
+                            )
+                    );
 
                 elif(tile_object.type == 'Doorway'):
+                    # Get the direction of the doorway, to make it easier
+                    # to link it to other doors
                     direction = self.get_door_direction(tile_object);
-                    #print(direction)
 
-                    self.level_one_doors[room].append(
-                            Doorway(self, door_id, tile_object.name, direction,
-                                    False, tile_object.x, tile_object.y,
-                                    tile_object.width, tile_object.height));
+                    self.level_one_doorways[room].append(
+                            Doorway(
+                                self, doorway_id, tile_object.name, direction,
+                                False, tile_object.x, tile_object.y,
+                                tile_object.width, tile_object.height
+                            )
+                    );
 
+                    doorway_id += 1;
+
+                elif(tile_object.type == "Door"):
+                    self.create_door(tile_object, door_id, room);
                     door_id += 1;
 
 
+    def create_door(self, door, door_id, room):
+        # Get the direction of the door, to determine how it should
+        # be displayed
+        direction = self.get_door_direction(door);
+
+        # The condition that has to be met for the door to open
+        condition = '';
+
+        if(door.name == 'Door_Enemy'):
+            condition = 'ENEMY';
+
+        self.level_one_doors[room].append(
+                Door(
+                    self, door_id, direction, condition, door.x,
+                    door.y, door.width, door.height
+                )
+        );
+
+
     def load_enemies(self):
+        # Keeps track of the enemies of the level and
+        # in which rooms they are
         self.enemy_list = [[] for i in range(len(self.level_one))];
 
         for room in range(len(self.level_one)):
@@ -250,7 +328,7 @@ class Environments:
 
 
     def spawn_enemy(self, enemy, room):
-        if(enemy.name == 'Slime'):
+        if(enemy.name == 'Green_Slime'):
             self.enemy_list[room].append(
                 Slime_Enemy(
                     self.game_display, self.player_one,
@@ -280,4 +358,8 @@ class Environments:
 
 
     def get_level_door_list(self):
-        return self.level_one_doors;
+        return self.level_one_doorways;
+
+
+    def is_door_already_linked(self, current_door, next_door):
+        return current_door.linked or next_door.linked;
