@@ -70,78 +70,6 @@ class Game:
                 if(self.gamepad_count != 0):
                     self.gamepad_controller.gamepad_input_controller(event, self.player_one, self.player_two);
 
-                '''
-                ###########################################
-                #############Gamepad controls
-                if(len(self.gamepads) != 0):
-
-                    #Button input
-                    if(event.type == pygame.JOYBUTTONDOWN):
-
-                        #Player one gamepad controls
-                        if(self.gamepads[event.joy].get_id() == 0):
-                            if(event.button == 0):
-                                self.player_one.player_attack();
-                                print('B');
-                            elif(event.button == 1):
-                                self.box.move(self.player_one.location);
-                                print('A');
-                            elif(event.button == 9):
-                                print('start');
-                            elif(event.button == 8):
-                                print('select');
-
-                        #Player two gamepad controls
-                        elif(self.gamepads[event.joy].get_id() == 1):
-                            if(event.button == 0):
-                                self.player_two.player_attack();
-                                print('B');
-                            elif(event.button == 1):
-                                self.box.move(self.player_two.location);
-                                print('A');
-                            elif(event.button == 9):
-                                print('start');
-                            elif(event.button == 8):
-                                print('select');
-
-                    #D-pad movement
-                    if(event.type == pygame.JOYAXISMOTION):
-                        axis = self.gamepads[event.joy].get_axis(event.axis);
-
-                        #Player 1 D-pad controls
-                        if(self.gamepads[event.joy].get_id() == 0):
-                            if(event.axis == 1):
-                                if(axis == 0.999969482421875):
-                                    self.player_one.move_controller_y(1);
-                                elif(axis == -1.0):
-                                    self.player_one.move_controller_y(-1);
-                                else:
-                                    self.player_one.move_controller_y(0);
-                            else:
-                                if(axis == 0.999969482421875):
-                                    self.player_one.move_controller_x(1);
-                                elif(axis == -1.0):
-                                    self.player_one.move_controller_x(-1);
-                                else:
-                                    self.player_one.move_controller_x(0);
-
-                        #Player 2 D-pad controls
-                        elif(self.gamepads[event.joy].get_id() == 1):
-                            if(event.axis == 1):
-                                if(axis == 0.999969482421875):
-                                    self.player_two.move_controller_y(1);
-                                elif(axis == -1.0):
-                                    self.player_two.move_controller_y(-1);
-                                else:
-                                    self.player_two.move_controller_y(0);
-                            else:
-                                if (axis == 0.999969482421875):
-                                    self.player_two.move_controller_x(1);
-                                elif (axis == -1.0):
-                                    self.player_two.move_controller_x(-1);
-                                else:
-                                    self.player_two.move_controller_x(0);
-                '''
                 ###########################################
                 ##############Keyboard controls
                 if(event.type == pygame.KEYDOWN):
@@ -191,6 +119,8 @@ class Game:
 
             self.render_screen();
 
+        self.gamepad_controller.disable_gamepads();
+
 
     def render_screen(self):
         game_display.fill((0, 0, 100));
@@ -216,7 +146,6 @@ class Game:
     def gamepad_setup(self):
         self.gamepad_controller = Gamepad_Controller();
         self.gamepad_count = self.gamepad_controller.get_gamepad_count();
-
 
 
 def main():

@@ -208,9 +208,14 @@ class Player:
         # so this checks whether or not a player's bullet is already
         # on the screen
         if(len(self.bullet_list) == 0):
-            self.bullet_list.append(Bullet(self.game_display, self.screen_size,
-                                           self.location[0], self.location[1],
-                                           self.current_x_direction));
+            self.bullet_list.append(
+                    Bullet(
+                        self.game_display, self.screen_size,
+                        self, self.location[0], self.location[1],
+                        self.current_x_direction
+                    )
+            );
+
             # pew pew
             pygame.mixer.Channel(1).play(player_bullet_sfx);
 
@@ -229,8 +234,9 @@ class Player:
 
 
 class Bullet:
-    def __init__(self, game_display, screen_size, location_x, location_y, direction):
+    def __init__(self, game_display, screen_size, owner, location_x, location_y, direction):
         self.game_display = game_display;
+        self.owner = owner; # Player who shot the bullet
         self.location = [location_x, location_y];
         self.direction = direction;
 
