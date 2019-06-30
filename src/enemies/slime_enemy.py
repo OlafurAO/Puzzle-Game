@@ -1,17 +1,11 @@
-from src.spritesheets.spritesheet import Sprite_Sheet;
-from math import sqrt;
 import pygame;
+from math import sqrt;
 
-# SFX initialization
-pygame.mixer.pre_init(44100, 16, 2, 4096);
-pygame.init();
-pygame.mixer.set_num_channels(10)
+from src.spritesheets.spritesheet import Sprite_Sheet;
+from src.audio.sound_controller import Sound_Controller;
 
-'''
-channels:
-    -1: 
-    -9: 
-'''
+sound_controller = Sound_Controller();
+
 
 # SFX files
 enemy_hit_sfx = pygame.mixer.Sound('resources/sfx/enemy_hit_01.wav');
@@ -38,8 +32,8 @@ class Slime_Enemy:
         self.enemy_sheet = Sprite_Sheet(self.enemy_sprite, col, rows);
         self.enemy_hit_sheet = Sprite_Sheet(self.enemy_hit_sprite, col, rows);
 
-        #Determines the size of the slime. When he multiplies he creates a new slime and
-        #Can directly initialize the new slime to his size
+        # Determines the size of the slime. When he multiplies he creates a new slime and
+        # Can directly initialize the new slime to his size
         self.size_x = size_x;
         self.size_y = size_y;
 
@@ -47,8 +41,8 @@ class Slime_Enemy:
         self.col = col;
         self.rows = rows;
 
-        #The current index of the spritesheet frame the slime is supposed
-        #to display
+        # The current index of the spritesheet frame the slime
+        # is supposed to display
         self.cell_index = cell_index;
         #Used for calculating the rate of which the slime should switch frames
         self.cell_counter = 0;
@@ -297,11 +291,12 @@ class Slime_Enemy:
 
             self.hit_direction = direction;
 
-            pygame.mixer.Channel(8).play(enemy_hit_sfx);
+            sound_controller.play_sfx(11, enemy_hit_sfx);
 
             if(self.enemy_health == 0):
-                pygame.mixer.Channel(6).play(enemy_multiply_sfx);
-                pygame.mixer.Channel(9).play(enemy_death_sfx);
+                sound_controller.play_sfx(12, enemy_death_sfx);
+                sound_controller.play_sfx(13, enemy_multiply_sfx);
+
                 self.enemy_dying = True;
                 self.enemy_death_counter = 5;
 
@@ -351,4 +346,4 @@ class Slime_Enemy:
         self.enemy_hit_sprite = pygame.transform.scale(self.enemy_hit_sprite, (self.size_x, self.size_y));
         self.enemy_hit_sheet = Sprite_Sheet(self.enemy_hit_sprite, self.col, self.rows);
 
-        pygame.mixer.Channel(7).play(enemy_multiply_sfx);
+        sound_controller.play_sfx(13, enemy_multiply_sfx);

@@ -1,9 +1,16 @@
 import pygame;
 
 from src.gamepad.gamepad_controller import Gamepad_Controller;
+from src.audio.sound_controller import Sound_Controller;
 from src.player.player import Player;
 from src.environments.environments import Environments;
 from src.objects.box import Box;
+
+
+##################################### Used for audio tests
+from src.audio.sound_controller import Sound_Controller;
+sound_controller = Sound_Controller();
+########################################################
 
 
 pygame.init();
@@ -33,7 +40,7 @@ class Game:
 
         self.player_one = Player(
                             game_display, screen_size,
-                            'resources/art/players/player_1.png',
+                            'resources/art/players/player_1.png', 1,
                             screen_size[0] / 2 + 60, screen_size[1]/2,
                             0, self.environments.get_level_wall_list(),
                             self.environments.get_level_door_list()
@@ -41,7 +48,7 @@ class Game:
 
         self.player_two = Player(
                             game_display, screen_size,
-                            'resources/art/players/player_2.png',
+                            'resources/art/players/player_2.png', 2,
                             screen_size[0] / 2 - 110, screen_size[1]/2,
                             0, self.environments.get_level_wall_list(),
                             self.environments.get_level_door_list()
@@ -115,7 +122,23 @@ class Game:
                         self.player_two.move_controller_x(0);
                     if(event.key == pygame.K_LEFT):
                         self.player_two.move_controller_x(0);
+
+                    ###############################################
+                    ####################Audio tests
+                    if(event.key == pygame.K_y):
+                        sound_controller.play_music(
+                            'resources/music/Best VGM 153 - Mega Man 2 - Dr. Wily Stage 1  2.mp3'
+                        );
+                    elif(event.key == pygame.K_u):
+                        sound_controller.pause_music();
+                    elif(event.key == pygame.K_i):
+                        sound_controller.resume_music();
+                    elif(event.key == pygame.K_o):
+                        sound_controller.stop_music();
+                    ##############################################
                 ###############################################
+
+
 
             self.render_screen();
 
@@ -130,8 +153,8 @@ class Game:
         self.player_two.update_player();
         #self.box.update();
 
-        for enemy in self.enemy_list:
-            enemy.update_enemy();
+        #for enemy in self.enemy_list:
+         #   enemy.update_enemy();
 
         pygame.display.update();
 

@@ -183,6 +183,7 @@ class Environments:
         current_room_number = 0;
         room_counter = 0;
 
+        # Shut up, it works
         if(self.level_number == 0):
             while(room_counter < 4):
                 # Loop through every door in the current room

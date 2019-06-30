@@ -1,6 +1,6 @@
 ﻿WEEKLY GOALS LINK: https://docs.google.com/document/d/190f7qD39Ix92jLLfpFUXEQ-AiKm8LJUmuyIWYkunlwE/edit?usp=sharing
 
--collect 5 meddalions/gems/whatever to open boss door
+-collect 5 medallions/gems/whatever to open boss door
 -box puzzles
 -combat puzzles?
 
@@ -31,12 +31,13 @@ Pygame
 ACTUAL STUFF:
     Inventory:
 	-1 item slot Passive/active
+	-Maybe 2 weapon slots and 2 item slots
   	
     Player stats/info:
 	-Keep in player class
 
     Slimes:
-	-DIfferent colors do different shit
+	-Different colors do different shit
 	-Mixed color bois
 		-When multiplying the colors split
 
@@ -47,7 +48,10 @@ ACTUAL STUFF:
 	-Blue shoots in all directions at once, low frequency
 		-Mixed blue/red shoot in all directions high frequency
 
-	-Yellow 
+	-Yellow
+
+	-BOSS IDEAS
+	    -Boss that shuffles your inventory
 
     
 

@@ -1,9 +1,9 @@
 import pygame;
 
-# SFX initialization
-pygame.mixer.pre_init(44100, 16, 2, 4096);
-pygame.init();
-pygame.mixer.set_num_channels(10);
+from src.audio.sound_controller import Sound_Controller;
+
+
+sound_controller = Sound_Controller();
 
 # SFX files
 player_hit_sfx = pygame.mixer.Sound('resources/sfx/player_hit_01.wav');
@@ -15,7 +15,7 @@ player_bullet_sfx = pygame.mixer.Sound('resources/sfx/player_bullet_01.wav');
 # TODO: New player models?
 
 class Player:
-    def __init__(self, game_display, screen_size, player_img, location_x, location_y, current_room, wall_list, door_list):
+    def __init__(self, game_display, screen_size, player_img, player_num, location_x, location_y, current_room, wall_list, door_list):
         self.game_display = game_display;
         self.screen_size = screen_size;
 
@@ -24,6 +24,9 @@ class Player:
         self.player_sprite_left = pygame.transform.flip(self.player_sprite_right, True, False).convert_alpha();
         self.player_sprite_right = pygame.transform.scale(self.player_sprite_right, (70, 70));
         self.player_sprite_left = pygame.transform.scale(self.player_sprite_left, (70, 70));
+
+        # Number of the player
+        self.player_num = player_num;
 
         self.location = [location_x, location_y];
         self.current_room = current_room;
@@ -217,7 +220,11 @@ class Player:
             );
 
             # pew pew
-            pygame.mixer.Channel(1).play(player_bullet_sfx);
+            if(self.get_player_num() == 1):
+                sound_controller.play_sfx(2, player_bullet_sfx);
+            elif(self.get_player_num() == 2):
+                sound_controller.play_sfx(3, player_bullet_sfx);
+
 
 
     def player_take_damage(self, damage):
@@ -226,11 +233,18 @@ class Player:
             self.player_damage_cooldown = 40;
             self.health += damage;
 
-            pygame.mixer.Channel(2).play(player_hit_02_sfx);
+            if(self.get_player_num() == 1):
+                sound_controller.play_sfx(4, player_hit_02_sfx);
+            elif(self.get_player_num() == 2):
+                sound_controller.play_sfx(5, player_hit_02_sfx);
 
 
     def set_player_current_room(self, room):
         self.current_room = room;
+
+
+    def get_player_num(self):
+        return self.player_num;
 
 
 class Bullet:
