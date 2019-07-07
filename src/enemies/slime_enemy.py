@@ -1,10 +1,15 @@
 import pygame;
+import threading;
 from math import sqrt;
 
-from src.spritesheets.spritesheet import Sprite_Sheet;
+
+from src.display.visual_controller import Visual_Controller;
+from src.display.spritesheet import Sprite_Sheet;
 from src.audio.sound_controller import Sound_Controller;
 
 sound_controller = Sound_Controller();
+visual_controller = threading.Thread(target=Visual_Controller());
+visual_controller.start();
 
 
 # SFX files
@@ -61,8 +66,10 @@ class Slime_Enemy:
         self.enemy_dead = False;
         self.enemy_aggroed = False;
 
-        self.enemy_health = health;
+        self.enemy_health = 1;
+        #self.enemy_health = health;
         self.enemy_speed = 5;
+        self.enemy_xp = 5;
 
         # The room this slime is in
         self.room_number = room_number;
@@ -73,6 +80,8 @@ class Slime_Enemy:
 
 
     def update_enemy(self):
+        # Find a better spot for this
+        # visual_controller.update_visuals();
         if(self.enemy_dead):
             return;
  
@@ -92,6 +101,16 @@ class Slime_Enemy:
             if(self.enemy_death_counter == 0):
                 self.enemy_dying = False;
                 self.enemy_dead = True;
+
+                visual_controller.play_xp_gained(self.game_display, self.get_enemy_xp(), self.location);
+                '''
+                threading.Thread(
+                    target=visual_controller.play_xp_gained(
+                        self.game_display, self.get_enemy_xp(),
+                        self.location
+                    )
+                ).start();
+                '''
 
 
     def draw_enemy(self):
@@ -210,12 +229,12 @@ class Slime_Enemy:
                             if(bullet_list_one[i].location[1] >= self.location[1] and
                                bullet_list_one[i].location[1] <= self.location[1] + self.size_y - 110):
                                 del bullet_list_one[i];
-                                self.damage_enemy(1, 1);
+                                self.damage_enemy(1, 1, self.player_one);
                         else:
                             if(bullet_list_one[i].location[1] >= self.location[1] and
                                bullet_list_one[i].location[1] <= self.location[1] + 50):
                                 del bullet_list_one[i];
-                                self.damage_enemy(1, 1);
+                                self.damage_enemy(1, 1, self.player_one);
                 else:
                     if(bullet_list_one[i].location[0] <= self.location[0] + 120 and
                        bullet_list_one[i].location[0] >= self.location[0]):
@@ -224,12 +243,12 @@ class Slime_Enemy:
                             if(bullet_list_one[i].location[1] >= self.location[1] and
                                bullet_list_one[i].location[1] <= self.location[1] + self.size_y - 110):
                                 del bullet_list_one[i];
-                                self.damage_enemy(1, -1);
+                                self.damage_enemy(1, -1, self.player_one);
                         else:
                             if(bullet_list_one[i].location[1] >= self.location[1] and
                                bullet_list_one[i].location[1] <= self.location[1] + 40):
                                 del bullet_list_one[i];
-                                self.damage_enemy(1, -1);
+                                self.damage_enemy(1, -1, self.player_one);
 
         bullet_list_two = self.player_two.bullet_list;
 
@@ -242,12 +261,12 @@ class Slime_Enemy:
                             if(bullet_list_two[i].location[1] >= self.location[1] and
                                bullet_list_two[i].location[1] <= self.location[1] + self.size_y - 110):
                                 del bullet_list_two[i];
-                                self.damage_enemy(1, 1);
+                                self.damage_enemy(1, 1, self.player_two);
                         else:
                             if(bullet_list_two[i].location[1] >= self.location[1] and
                                bullet_list_two[i].location[1] <= self.location[1] + 50):
                                 del bullet_list_two[i];
-                                self.damage_enemy(1, 1);
+                                self.damage_enemy(1, 1, self.player_two);
                 else:
                     if(bullet_list_two[i].location[0] <= self.location[0] + 120 and
                        bullet_list_two[i].location[0] >= self.location[0]):
@@ -256,12 +275,12 @@ class Slime_Enemy:
                             if(bullet_list_two[i].location[1] >= self.location[1] and
                                bullet_list_two[i].location[1] <= self.location[1] + self.size_y - 110):
                                 del bullet_list_two[i];
-                                self.damage_enemy(1, -1);
+                                self.damage_enemy(1, -1, self.player_two);
                         else:
                             if(bullet_list_two[i].location[1] >= self.location[1] and
                                bullet_list_two[i].location[1] <= self.location[1] + 40):
                                 del bullet_list_two[i];
-                                self.damage_enemy(1, -1);
+                                self.damage_enemy(1, -1, self.player_two);
 
 
     def enemy_idle_animation(self):
@@ -280,8 +299,11 @@ class Slime_Enemy:
         self.enemy_hit_sheet.draw(self.game_display, self.cell_index, self.location[0], self.location[1], 1);
         self.location[0] += 15 * self.hit_direction;
 
+        x_location = self.location[0];
+        y_location = self.location[1];
 
-    def damage_enemy(self, damage, direction):
+
+    def damage_enemy(self, damage, direction, player):
         if not(self.enemy_aggroed):
             self.enemy_aggroed = True;
 
@@ -296,6 +318,9 @@ class Slime_Enemy:
             if(self.enemy_health == 0):
                 sound_controller.play_sfx(12, enemy_death_sfx);
                 sound_controller.play_sfx(13, enemy_multiply_sfx);
+
+                player.add_to_kill_list(self);
+                player.gain_xp(self.get_enemy_xp());
 
                 self.enemy_dying = True;
                 self.enemy_death_counter = 5;
@@ -347,3 +372,7 @@ class Slime_Enemy:
         self.enemy_hit_sheet = Sprite_Sheet(self.enemy_hit_sprite, self.col, self.rows);
 
         sound_controller.play_sfx(13, enemy_multiply_sfx);
+
+
+    def get_enemy_xp(self):
+        return self.enemy_xp;
