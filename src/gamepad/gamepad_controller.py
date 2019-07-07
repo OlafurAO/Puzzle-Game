@@ -1,7 +1,6 @@
-#Controller as in this class controls the gamepads
 import pygame;
 
-
+#Controller as in this class controls the gamepads
 class Gamepad_Controller:
     def __init__(self):
         self.gamepad_types = [];

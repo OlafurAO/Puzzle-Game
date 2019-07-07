@@ -7,7 +7,7 @@ from src.environments.environments import Environments;
 from src.objects.box import Box;
 
 
-##################################### Used for audio tests
+################################### Used for audio tests
 from src.audio.sound_controller import Sound_Controller;
 sound_controller = Sound_Controller();
 ########################################################
@@ -137,8 +137,6 @@ class Game:
                         sound_controller.stop_music();
                     ##############################################
                 ###############################################
-
-
 
             self.render_screen();
 
