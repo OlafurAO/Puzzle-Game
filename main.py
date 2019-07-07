@@ -127,7 +127,8 @@ class Game:
                     ####################Audio tests
                     if(event.key == pygame.K_y):
                         sound_controller.play_music(
-                            'resources/music/Best VGM 153 - Mega Man 2 - Dr. Wily Stage 1  2.mp3'
+                            'resources/music/Best VGM 153 - Mega Man 2 - '
+                            'Dr. Wily Stage 1  2.mp3'
                         );
                     elif(event.key == pygame.K_u):
                         sound_controller.pause_music();

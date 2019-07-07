@@ -1,5 +1,7 @@
 import pygame;
+import math;
 
+from src.display.visual_controller import Visual_Controller;
 from src.audio.sound_controller import Sound_Controller;
 
 
@@ -41,9 +43,11 @@ class Player:
 
         # Keeps track of the player's bullets
         self.bullet_list = [];
+        self.kill_list = [];
 
         self.health = 10;
         self.speed = 10;
+        self.xp = 0;
 
         self.player_moving = False;
         self.player_switch_rooms = False;
@@ -51,6 +55,11 @@ class Player:
         # Used so the player has recovery time when damaged so he
         # doesn't get  annihilated immediately
         self.player_damage_cooldown = 0;
+
+        # Used to see where the player is aiming
+        self.reticule = Reticule(game_display, location_x, location_y, self.location);
+        self.player_width = 40;
+        self.player_height = 40;
 
 
     def update_player(self):
@@ -70,6 +79,8 @@ class Player:
         self.update_bullets();
 
         self.draw_player();
+
+        self.reticule.update_reticule();
 
 
     def update_bullets(self):
@@ -102,13 +113,17 @@ class Player:
                 # If the player is colliding with an obstacle on the x-axis,
                 # he cant move in that direction
                 if not(self.player_obstacle_collision_x()):
-                    self.location[0] += self.speed * self.move_direction_x;
+                    move_offset = self.speed * self.move_direction_x;
+                    self.reticule.reposition_reticule_x(move_offset);
+                    self.location[0] += move_offset;
 
             if(self.move_direction_y != 0):
                 # If the player is colliding with an obstacle on the x-axis,
                 # he cant move in that direction
                 if not(self.player_obstacle_collision_y()):
-                    self.location[1] += self.speed * self.move_direction_y;
+                    move_offset = self.speed * self.move_direction_y;
+                    self.reticule.reposition_reticule_y(move_offset);
+                    self.location[1] += move_offset;
 
 
     # TODO: redo this function and make it better
@@ -202,11 +217,21 @@ class Player:
 
     def move_controller_y(self, y_direction):
         self.move_direction_y = y_direction;
-
         self.player_moving = True;
 
 
+    def move_aiming_reticule_x(self, direction):
+        self.reticule.move_reticule_x(direction);
+
+
+    def move_aiming_reticule_y(self, direction):
+        self.reticule.move_reticule_y(direction);
+
+
     def player_attack(self):
+        bullet_angle = self.reticule.get_reticule_angle(self.player_width, self.player_height);
+        print(bullet_angle);
+
         # As of now, the player can only shoot one bullet at a time
         # so this checks whether or not a player's bullet is already
         # on the screen
@@ -214,8 +239,8 @@ class Player:
             self.bullet_list.append(
                     Bullet(
                         self.game_display, self.screen_size,
-                        self, self.location[0], self.location[1],
-                        self.current_x_direction
+                        self, bullet_angle, self.location[0],
+                        self.location[1], self.current_x_direction
                     )
             );
 
@@ -224,7 +249,6 @@ class Player:
                 sound_controller.play_sfx(2, player_bullet_sfx);
             elif(self.get_player_num() == 2):
                 sound_controller.play_sfx(3, player_bullet_sfx);
-
 
 
     def player_take_damage(self, damage):
@@ -239,6 +263,15 @@ class Player:
                 sound_controller.play_sfx(5, player_hit_02_sfx);
 
 
+    def add_to_kill_list(self, enemy):
+        self.kill_list.append(enemy);
+
+
+    def gain_xp(self, xp):
+        self.xp += xp;
+        print(self.xp);
+
+
     def set_player_current_room(self, room):
         self.current_room = room;
 
@@ -248,14 +281,16 @@ class Player:
 
 
 class Bullet:
-    def __init__(self, game_display, screen_size, owner, location_x, location_y, direction):
+    def __init__(self, game_display, screen_size, owner, bullet_angle, location_x, location_y, direction):
         self.game_display = game_display;
-        self.owner = owner; # Player who shot the bullet
+        self.owner = owner; # Player who shot the bullet, can be used to keep track of kills
+        self.bullet_angle = bullet_angle;
         self.location = [location_x, location_y];
         self.direction = direction;
 
         self.speed = 15;
 
+        '''
         #Inital x-location is changed depending on which way the player is facing,
         #so that it doesn't spawn inside of the player sprite
         if(direction == 1):
@@ -264,6 +299,7 @@ class Bullet:
             self.location[0] -= 5;
 
         self.location[1] += 20;
+        '''
 
 
     def update_bullet(self):
@@ -273,3 +309,74 @@ class Bullet:
 
     def draw_bullet(self):
         pygame.draw.rect(self.game_display, (255, 255, 255), [self.location[0], self.location[1], 15, 15]);
+
+
+class Reticule:
+    def __init__(self, game_display, location_x, location_y, player_location):
+        self.game_display = game_display;
+        self.location = [location_x + 20, location_y - 50];
+        self.player_location = player_location;
+
+        self.sensitivity = 10;
+
+        self.x_direction = 0;
+        self.y_direction = 0;
+
+
+    def update_reticule(self):
+        if(self.x_direction != 0):
+            self.move_reticule_x(self.x_direction);
+
+        if(self.y_direction != 0):
+            self.move_reticule_y(self.y_direction);
+
+        self.draw_reticule();
+
+
+    def draw_reticule(self):
+        pygame.draw.rect(self.game_display, (255, 0, 0), [self.location[0], self.location[1], 10, 10]);
+
+
+    def move_reticule_x(self, direction):
+        if(direction == 1):
+            if(self.location[0] < self.player_location[0] + 100):
+                self.location[0] += self.sensitivity * direction;
+        elif(direction == -1):
+            if (self.location[0] > self.player_location[0] - 60):
+                self.location[0] += self.sensitivity * direction;
+
+        self.x_direction = direction;
+
+
+    def move_reticule_y(self, direction):
+        if(direction == 1):
+            if(self.location[1] < self.player_location[1] + 100):
+                self.location[1] += self.sensitivity * direction;
+        elif(direction == -1):
+            if(self.location[1] > self.player_location[1] - 60):
+                self.location[1] += self.sensitivity * direction;
+
+        self.y_direction = direction;
+
+
+    def reposition_reticule_x(self, move_offset):
+        self.location[0] += move_offset;
+
+
+    def reposition_reticule_y(self, move_offset):
+        self.location[1] += move_offset;
+
+
+    def get_reticule_position(self):
+        return self.location;
+
+
+    def get_reticule_angle(self, player_width, player_height):
+        player_x = self.player_location[0] + player_width / 2;
+        player_y = self.player_location[1] + player_height / 2;
+
+        delta_x = player_x - self.location[0];
+        delta_y = player_y - self.location[1];
+
+        return math.atan2(delta_x, delta_y);
+

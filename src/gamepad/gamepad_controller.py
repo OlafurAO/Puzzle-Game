@@ -112,9 +112,9 @@ class Gamepad_Controller:
                     player_one.move_controller_x(0);
 
             elif(event.axis == 1):
-                if(-1.0 <= axis <= -0.8):
+                if(-1.0 <= axis <= -0.7):
                     player_one.move_controller_y(-1);
-                elif(0.8 <= axis <= 1.0):
+                elif(0.4 <= axis <= 1.0):
                     player_one.move_controller_y(1);
                 else:
                     player_one.move_controller_y(0);
@@ -122,14 +122,24 @@ class Gamepad_Controller:
             # Right analog stick
             elif(event.axis == 2):
                 if(axis == -1.0):
+                    player_one.move_aiming_reticule_x(-1);
                     print('R-LEFT');
                 elif(axis > 0.9):
+                    player_one.move_aiming_reticule_x(1);
                     print('R-RIGHT');
+                else:
+                    player_one.move_aiming_reticule_x(0);
+
             elif(event.axis == 3):
-                if(axis == -1.0):
+                if(-1.0 <= axis <= -0.5):
+                    player_one.move_aiming_reticule_y(-1);
                     print('R-UP');
                 elif(axis > 0.9):
+                    player_one.move_aiming_reticule_y(1);
                     print('R-DOWN');
+                else:
+                    player_one.move_aiming_reticule_y(0);
+                print(axis);
 
         # Player 2 analog controls
         elif(self.gamepad_list[event.joy].get_id() == 1):
@@ -143,9 +153,9 @@ class Gamepad_Controller:
                     player_two.move_controller_x(0);
 
             elif (event.axis == 1):
-                if (-1.0 <= axis <= -0.8):
+                if (-1.0 <= axis <= -0.7):
                     player_two.move_controller_y(-1);
-                elif (0.8 <= axis <= 1.0):
+                elif (0.4 <= axis <= 1.0):
                     player_two.move_controller_y(1);
                 else:
                     player_two.move_controller_y(0);
