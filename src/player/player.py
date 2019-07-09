@@ -40,6 +40,7 @@ class Player:
         self.move_direction_x = 0;
         self.move_direction_y = 0;
         self.current_x_direction = 1;
+        self.current_aim_direction = 1;
 
         # Keeps track of the player's bullets
         self.bullet_list = [];
@@ -87,7 +88,8 @@ class Player:
         # Takes care of deleting bullet objects when they've gone offscreen
         if (len(self.bullet_list) != 0):
             for bullet in self.bullet_list:
-                if (bullet.location[0] > self.screen_size[0] or bullet.location[0] < 0):
+                if (bullet.location[0] > self.screen_size[0] or bullet.location[0] < 0 or
+                    bullet.location[1] > self.screen_size[1] or bullet.location[1] < 0):
                     del self.bullet_list[self.bullet_list.index(bullet)];
                     break;
                 else:
@@ -100,9 +102,9 @@ class Player:
             pygame.draw.rect(self.game_display, (255, 0, 0), [self.location[0], self.location[1], 50, 50]);
         else:
             #The direction of the player determines which spritesheet to use
-            if(self.current_x_direction == 1):
+            if(self.current_aim_direction == 1):
                 self.game_display.blit(self.player_sprite_right, (self.location[0] - 10, self.location[1] - 10));
-            elif(self.current_x_direction == -1):
+            elif(self.current_aim_direction == -1):
                 self.game_display.blit(self.player_sprite_left, (self.location[0] - 10, self.location[1] - 10));
 
 
@@ -223,6 +225,11 @@ class Player:
     def mouse_move_aiming_reticule(self, mouse_position):
         self.reticule.mouse_move_reticule(mouse_position);
 
+        if(mouse_position[0] < self.location[0] + 20):
+            self.current_aim_direction = -1;
+        elif(mouse_position[0] > self.location[0] + 20):
+            self.current_aim_direction = 1;
+
 
     def gamepad_move_aiming_reticule_x(self, direction):
         self.reticule.gamepad_move_reticule_x(direction);
@@ -233,13 +240,12 @@ class Player:
 
 
     def player_attack(self):
-        bullet_angle = self.reticule.get_reticule_angle(self.player_width, self.player_height);
-        print(bullet_angle);
-
         # As of now, the player can only shoot one bullet at a time
         # so this checks whether or not a player's bullet is already
         # on the screen
         if(len(self.bullet_list) == 0):
+            bullet_angle = self.reticule.get_reticule_angle(self.player_width, self.player_height);
+
             self.bullet_list.append(
                     Bullet(
                         self.game_display, self.screen_size,
@@ -292,22 +298,11 @@ class Bullet:
         self.location = [location_x, location_y];
         self.direction = direction;
 
-        self.speed = 15;
-
-        '''
-        #Inital x-location is changed depending on which way the player is facing,
-        #so that it doesn't spawn inside of the player sprite
-        if(direction == 1):
-            self.location[0] += 45;
-        else:
-            self.location[0] -= 5;
-
-        self.location[1] += 20;
-        '''
+        self.speed = 30;
 
 
     def update_bullet(self):
-        self.location[0] += self.speed * self.direction;
+        self.move_bullet();
         self.draw_bullet();
 
 
@@ -315,6 +310,12 @@ class Bullet:
         pygame.draw.rect(self.game_display, (255, 255, 255), [self.location[0], self.location[1], 15, 15]);
 
 
+    def move_bullet(self):
+        self.location[0] += self.speed * math.cos(self.bullet_angle);
+        self.location[1] += self.speed * math.sin(self.bullet_angle);
+
+
+# Keeps track of which direction the player is pointing their weapon
 class Reticule:
     def __init__(self, game_display, location_x, location_y, player_location):
         self.game_display = game_display;
@@ -383,8 +384,7 @@ class Reticule:
         player_x = self.player_location[0] + player_width / 2;
         player_y = self.player_location[1] + player_height / 2;
 
-        delta_x = player_x - self.location[0];
-        delta_y = player_y - self.location[1];
+        delta_x = self.location[0] - player_x;
+        delta_y = self.location[1] - player_y;
 
-        return math.atan2(delta_x, delta_y);
-
+        return math.atan2(delta_y, delta_x);

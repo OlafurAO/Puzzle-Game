@@ -19,6 +19,9 @@ class Input_Controller:
         # Mouse input
         if(event.type == pygame.MOUSEMOTION):
             self.move_mouse(player_one); # Only player one may use a mouse at this time
+        elif(event.type == pygame.MOUSEBUTTONDOWN):
+            self.click_mouse(event.button, player_one);
+
 
 
     def press_key(self, event_key, player_one, player_two):
@@ -72,6 +75,15 @@ class Input_Controller:
 
     def move_mouse(self, player_one):
         player_one.mouse_move_aiming_reticule(pygame.mouse.get_pos());
+
+
+    def click_mouse(self, event_button, player_one):
+        if(event_button == 1):
+            player_one.player_attack();
+        if(event_button == 2):
+            print('middle click');
+        if(event_button == 3):
+            print('right click')
 
 
     ###############################################################

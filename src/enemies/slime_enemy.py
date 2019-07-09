@@ -65,7 +65,7 @@ class Slime_Enemy:
         self.enemy_aggroed = False;
 
         #self.enemy_health = 1;
-        self.enemy_health = health;
+        self.enemy_health = 9;
         self.enemy_speed = 5;
         self.enemy_xp = 5;
 
@@ -116,7 +116,7 @@ class Slime_Enemy:
             self.location[0] += 15 * self.hit_direction;
 
             if(self.enemy_hurt_counter == 0):
-                if(self.enemy_health % 5 == 0):
+                if(self.enemy_health % 3 == 0):
                     self.multiply_enemy();
                     self.hit_direction = 0;
         else:
@@ -306,7 +306,7 @@ class Slime_Enemy:
             self.enemy_health -= 1;
             self.enemy_hurt_counter = 5;
 
-            self.hit_direction = direction;
+            self.hit_direction = -direction;
 
             sound_controller.play_sfx(11, enemy_hit_sfx);
 
@@ -322,7 +322,7 @@ class Slime_Enemy:
 
 
     def multiply_enemy(self):
-        if(self.enemy_health == 10):
+        if(self.enemy_health == 6):
             self.size_x = 150;
             self.size_y = 150;
 
@@ -342,7 +342,7 @@ class Slime_Enemy:
                     )
             );
 
-        elif (self.enemy_health == 5):
+        elif (self.enemy_health == 3):
             self.size_x = 100;
             self.size_y = 100;
 
