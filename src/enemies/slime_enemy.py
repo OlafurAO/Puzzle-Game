@@ -15,6 +15,8 @@ enemy_hit_sfx = pygame.mixer.Sound('resources/sfx/enemy_hit_01.wav');
 enemy_multiply_sfx = pygame.mixer.Sound('resources/sfx/enemy_multiply_01.wav');
 enemy_death_sfx = pygame.mixer.Sound('resources/sfx/enemy_death_01.wav');
 
+# TODO: Fix hitboxes for bullets (check_for_player_bullets) and add obstacle collision
+
 class Slime_Enemy:
     def __init__(self, game_display, player_one, player_two, enemy_list, x_location, y_location,
                  health, size_x, size_y, enemy_sprite, enemy_hit_sprite, col, rows, cell_index, room_number):
