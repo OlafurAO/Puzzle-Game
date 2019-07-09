@@ -1,33 +1,102 @@
 import pygame;
 
-#Controller as in this class controls the gamepads
-class Gamepad_Controller:
+# Controller as in this class controls the gamepads
+class Input_Controller:
     def __init__(self):
         self.gamepad_types = [];
         self.gamepad_list = self.gamepad_setup();
 
 
+    #############################################################
+    #######################Keyboard input handling
+    def keyboard_and_mouse_input_controller(self, event, player_one, player_two):
+        # Keyboard input
+        if(event.type == pygame.KEYDOWN):
+            self.press_key(event.key, player_one, player_two);
+        elif(event.type == pygame.KEYUP):
+            self.release_key(event.key, player_one, player_two);
+
+        # Mouse input
+        if(event.type == pygame.MOUSEMOTION):
+            self.move_mouse(player_one); # Only player one may use a mouse at this time
+
+
+    def press_key(self, event_key, player_one, player_two):
+        # Player one input
+        if(event_key == pygame.K_w):
+            player_one.move_controller_y(-1);
+        elif(event_key == pygame.K_s):
+            player_one.move_controller_y(1);
+
+        if(event_key == pygame.K_d):
+            player_one.move_controller_x(1);
+        elif(event_key == pygame.K_a):
+            player_one.move_controller_x(-1);
+
+        if(event_key == pygame.K_k):
+            player_one.player_attack();
+
+        # Player two input
+        if(event_key == pygame.K_UP):
+            player_two.move_controller_y(-1);
+        elif(event_key == pygame.K_DOWN):
+            player_two.move_controller_y(1);
+        if(event_key == pygame.K_RIGHT):
+            player_two.move_controller_x(1);
+        elif(event_key == pygame.K_LEFT):
+            player_two.move_controller_x(-1);
+
+        # if(event_key == pygame.K_p):
+        #    box.move(self.player_one.location)
+
+
+    def release_key(self, event_key, player_one, player_two):
+        if(event_key == pygame.K_w):
+            player_one.move_controller_y(0);
+        if(event_key == pygame.K_s):
+            player_one.move_controller_y(0);
+        if(event_key == pygame.K_d):
+            player_one.move_controller_x(0);
+        if(event_key == pygame.K_a):
+            player_one.move_controller_x(0);
+
+        if(event_key == pygame.K_UP):
+            player_two.move_controller_y(0);
+        if(event_key == pygame.K_DOWN):
+            player_two.move_controller_y(0);
+        if(event_key == pygame.K_RIGHT):
+            player_two.move_controller_x(0);
+        if(event_key == pygame.K_LEFT):
+            player_two.move_controller_x(0);
+
+
+    def move_mouse(self, player_one):
+        player_one.mouse_move_aiming_reticule(pygame.mouse.get_pos());
+
+
+    ###############################################################
+    ########################Gamepad input handling
     def gamepad_input_controller(self, event, player_one, player_two):
         if(event.type == pygame.JOYBUTTONDOWN):
-            self.button_input_handler(event, player_one, player_two);
+            self.gamepad_button_input_handler(event, player_one, player_two);
 
         elif(event.type == pygame.JOYAXISMOTION):
             # Check if the axis is on the D-pad on an older controller
             if(self.gamepad_list[event.joy].get_numhats() == 0):
-                self.dpad_input_handler(event, player_one, player_two);
+                self.gamepad_dpad_input_handler(event, player_one, player_two);
             else: # Analog stick on modern controllers
-                self.analog_stick_input_handler(event, player_one, player_two);
+                self.gamepad_analog_stick_input_handler(event, player_one, player_two);
 
         # D-pad input on modern controllers
         elif(event.type == pygame.JOYHATMOTION):
-            self.hat_input_handler(event, player_one, player_two);
+            self.gamepad_hat_input_handler(event, player_one, player_two);
 
 
-    def button_input_handler(self, event, player_one, player_two):
+    def gamepad_button_input_handler(self, event, player_one, player_two):
         # Print which button was pressed
         print(self.gamepad_types[event.joy].get_type_button(event.button));
 
-        # Player one gamepad controls
+        # Player one input controls
         if (self.gamepad_list[event.joy].get_id() == 0):
             if (event.button == 0): # B button
                 player_one.player_attack();
@@ -42,7 +111,7 @@ class Gamepad_Controller:
                 # Select button
                 u = 0;
 
-        # Player two gamepad controls
+        # Player two input controls
         elif (self.gamepad_list[event.joy].get_id() == 1):
             if (event.button == 0): # B button
                 player_two.player_attack();
@@ -58,7 +127,7 @@ class Gamepad_Controller:
                 u = 0;
 
 
-    def dpad_input_handler(self, event, player_one, player_two):
+    def gamepad_dpad_input_handler(self, event, player_one, player_two):
         # D-pad movement
         axis = self.gamepad_list[event.joy].get_axis(event.axis);
 
@@ -97,7 +166,7 @@ class Gamepad_Controller:
                     player_two.move_controller_x(0);
 
 
-    def analog_stick_input_handler(self, event, player_one, player_two):
+    def gamepad_analog_stick_input_handler(self, event, player_one, player_two):
         axis = self.gamepad_list[event.joy].get_axis(event.axis);
 
         # Player 1 analog stick controls
@@ -122,23 +191,23 @@ class Gamepad_Controller:
             # Right analog stick
             elif(event.axis == 2):
                 if(axis == -1.0):
-                    player_one.move_aiming_reticule_x(-1);
+                    player_one.gamepad_move_aiming_reticule_x(-1);
                     print('R-LEFT');
                 elif(axis > 0.9):
-                    player_one.move_aiming_reticule_x(1);
+                    player_one.gamepad_move_aiming_reticule_x(1);
                     print('R-RIGHT');
                 else:
-                    player_one.move_aiming_reticule_x(0);
+                    player_one.gamepad_move_aiming_reticule_x(0);
 
             elif(event.axis == 3):
                 if(-1.0 <= axis <= -0.5):
-                    player_one.move_aiming_reticule_y(-1);
+                    player_one.gamepad_move_aiming_reticule_y(-1);
                     print('R-UP');
                 elif(axis > 0.9):
-                    player_one.move_aiming_reticule_y(1);
+                    player_one.gamepad_move_aiming_reticule_y(1);
                     print('R-DOWN');
                 else:
-                    player_one.move_aiming_reticule_y(0);
+                    player_one.gamepad_move_aiming_reticule_y(0);
                 print(axis);
 
         # Player 2 analog controls
@@ -173,7 +242,7 @@ class Gamepad_Controller:
                     print('R-DOWN');
 
 
-    def hat_input_handler(self, event, player_one, player_two):
+    def gamepad_hat_input_handler(self, event, player_one, player_two):
         axis = self.gamepad_list[event.joy].get_hat(0);
 
         if (self.gamepad_list[event.joy].get_id() == 0):
@@ -181,22 +250,29 @@ class Gamepad_Controller:
             player_one.move_controller_x(axis[0]);
         elif (self.gamepad_list[event.joy].get_id() == 1):
             player_two.move_controller_y(-axis[1]);
-            player_two.move_controller_x(axis[0])
+            player_two.move_controller_x(axis[0]);
+    #################################################################
 
 
     def gamepad_setup(self):
         gamepad_list = [];
-        for i in range(0, pygame.joystick.get_count()):
-            gamepad_list.append(pygame.joystick.Joystick(i));
+        for gamepad in range(0, pygame.joystick.get_count()):
+            gamepad_list.append(pygame.joystick.Joystick(gamepad));
 
-        for i in gamepad_list:
-            i.init();
+        for gamepad in gamepad_list:
+            gamepad.init();
 
-            if(i.get_init()):
-                self.gamepad_types.append(Gamepad_Type(i.get_name(), i.get_numbuttons()));
-                gamepad_name = self.gamepad_types[i.get_id()].get_gamepad_type();
+            if(gamepad.get_init()):
+                self.gamepad_types.append(
+                    Gamepad_Type(
+                        gamepad.get_name(),
+                        gamepad.get_numbuttons()
+                    )
+                );
 
-                self.print_gamepad_info(i, gamepad_name);
+                gamepad_name = self.gamepad_types[gamepad.get_id()].get_gamepad_type();
+                self.print_gamepad_info(gamepad, gamepad_name);
+
             else:
                 print('Gamepad initialization failed!');
 
@@ -206,7 +282,7 @@ class Gamepad_Controller:
     def print_gamepad_info(self, gamepad, gamepad_name):
         print(gamepad.get_name());
         print('------------------------------------------------');
-        print('Detected gamepad: ' + gamepad_name + ' controller');
+        print('Detected input: ' + gamepad_name + ' controller');
         print('------------------------------------------------');
         print('Gamepad ID: ' + str(gamepad.get_id()));
         print('Num of buttons: ' + str(gamepad.get_numbuttons()));

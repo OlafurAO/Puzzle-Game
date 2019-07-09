@@ -8,9 +8,7 @@ from src.display.spritesheet import Sprite_Sheet;
 from src.audio.sound_controller import Sound_Controller;
 
 sound_controller = Sound_Controller();
-visual_controller = threading.Thread(target=Visual_Controller());
-visual_controller.start();
-
+visual_controller = Visual_Controller();
 
 # SFX files
 enemy_hit_sfx = pygame.mixer.Sound('resources/sfx/enemy_hit_01.wav');
@@ -66,8 +64,8 @@ class Slime_Enemy:
         self.enemy_dead = False;
         self.enemy_aggroed = False;
 
-        self.enemy_health = 1;
-        #self.enemy_health = health;
+        #self.enemy_health = 1;
+        self.enemy_health = health;
         self.enemy_speed = 5;
         self.enemy_xp = 5;
 
@@ -102,15 +100,12 @@ class Slime_Enemy:
                 self.enemy_dying = False;
                 self.enemy_dead = True;
 
-                visual_controller.play_xp_gained(self.game_display, self.get_enemy_xp(), self.location);
-                '''
                 threading.Thread(
                     target=visual_controller.play_xp_gained(
                         self.game_display, self.get_enemy_xp(),
                         self.location
                     )
                 ).start();
-                '''
 
 
     def draw_enemy(self):

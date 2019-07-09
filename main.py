@@ -1,6 +1,6 @@
 import pygame;
 
-from src.gamepad.gamepad_controller import Gamepad_Controller;
+from src.input.input_controller import Input_Controller;
 from src.audio.sound_controller import Sound_Controller;
 from src.player.player import Player;
 from src.environments.environments import Environments;
@@ -74,55 +74,14 @@ class Game:
                 if(event.type == pygame.QUIT):
                     game_running = False;
 
+                # Gamepad input
                 if(self.gamepad_count != 0):
-                    self.gamepad_controller.gamepad_input_controller(event, self.player_one, self.player_two);
+                    self.input_controller.gamepad_input_controller(event, self.player_one, self.player_two);
 
-                ###########################################
-                ##############Keyboard controls
+                # Keyboard input
+                self.input_controller.keyboard_and_mouse_input_controller(event, self.player_one, self.player_two);
+
                 if(event.type == pygame.KEYDOWN):
-                    if(event.key == pygame.K_w):
-                        self.player_one.move_controller_y(-1);
-                    elif(event.key == pygame.K_s):
-                        self.player_one.move_controller_y(1);
-                    if(event.key == pygame.K_d):
-                        self.player_one.move_controller_x(1);
-                    elif(event.key == pygame.K_a):
-                        self.player_one.move_controller_x(-1);
-                    if(event.key == pygame.K_p):
-                        self.box.move(self.player_one.location)
-
-                    if(event.key == pygame.K_UP):
-                        self.player_two.move_controller_y(-1);
-                    elif(event.key == pygame.K_DOWN):
-                        self.player_two.move_controller_y(1);
-                    if(event.key == pygame.K_RIGHT):
-                        self.player_two.move_controller_x(1);
-                    elif(event.key == pygame.K_LEFT):
-                        self.player_two.move_controller_x(-1);
-
-                    if(event.key == pygame.K_k):
-                        self.player_one.player_attack();
-
-
-                elif(event.type == pygame.KEYUP):
-                    if(event.key == pygame.K_w):
-                        self.player_one.move_controller_y(0);
-                    if(event.key == pygame.K_s):
-                        self.player_one.move_controller_y(0);
-                    if(event.key == pygame.K_d):
-                        self.player_one.move_controller_x(0);
-                    if(event.key == pygame.K_a):
-                        self.player_one.move_controller_x(0);
-
-                    if(event.key == pygame.K_UP):
-                        self.player_two.move_controller_y(0);
-                    if(event.key == pygame.K_DOWN):
-                        self.player_two.move_controller_y(0);
-                    if(event.key == pygame.K_RIGHT):
-                        self.player_two.move_controller_x(0);
-                    if(event.key == pygame.K_LEFT):
-                        self.player_two.move_controller_x(0);
-
                     ###############################################
                     ####################Audio tests
                     if(event.key == pygame.K_y):
@@ -137,11 +96,12 @@ class Game:
                     elif(event.key == pygame.K_o):
                         sound_controller.stop_music();
                     ##############################################
+
                 ###############################################
 
             self.render_screen();
 
-        self.gamepad_controller.disable_gamepads();
+        self.input_controller.disable_gamepads();
 
 
     def render_screen(self):
@@ -166,8 +126,8 @@ class Game:
 
 
     def gamepad_setup(self):
-        self.gamepad_controller = Gamepad_Controller();
-        self.gamepad_count = self.gamepad_controller.get_gamepad_count();
+        self.input_controller = Input_Controller();
+        self.gamepad_count = self.input_controller.get_gamepad_count();
 
 
 def main():

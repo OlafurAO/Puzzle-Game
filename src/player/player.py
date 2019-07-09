@@ -220,12 +220,16 @@ class Player:
         self.player_moving = True;
 
 
-    def move_aiming_reticule_x(self, direction):
-        self.reticule.move_reticule_x(direction);
+    def mouse_move_aiming_reticule(self, mouse_position):
+        self.reticule.mouse_move_reticule(mouse_position);
 
 
-    def move_aiming_reticule_y(self, direction):
-        self.reticule.move_reticule_y(direction);
+    def gamepad_move_aiming_reticule_x(self, direction):
+        self.reticule.gamepad_move_reticule_x(direction);
+
+
+    def gamepad_move_aiming_reticule_y(self, direction):
+        self.reticule.gamepad_move_reticule_y(direction);
 
 
     def player_attack(self):
@@ -325,10 +329,10 @@ class Reticule:
 
     def update_reticule(self):
         if(self.x_direction != 0):
-            self.move_reticule_x(self.x_direction);
+            self.gamepad_move_reticule_x(self.x_direction);
 
         if(self.y_direction != 0):
-            self.move_reticule_y(self.y_direction);
+            self.gamepad_move_reticule_y(self.y_direction);
 
         self.draw_reticule();
 
@@ -337,7 +341,11 @@ class Reticule:
         pygame.draw.rect(self.game_display, (255, 0, 0), [self.location[0], self.location[1], 10, 10]);
 
 
-    def move_reticule_x(self, direction):
+    def mouse_move_reticule(self, mouse_position):
+        self.location = list(mouse_position);
+
+
+    def gamepad_move_reticule_x(self, direction):
         if(direction == 1):
             if(self.location[0] < self.player_location[0] + 100):
                 self.location[0] += self.sensitivity * direction;
@@ -348,7 +356,7 @@ class Reticule:
         self.x_direction = direction;
 
 
-    def move_reticule_y(self, direction):
+    def gamepad_move_reticule_y(self, direction):
         if(direction == 1):
             if(self.location[1] < self.player_location[1] + 100):
                 self.location[1] += self.sensitivity * direction;

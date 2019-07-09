@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8489c1eb-fbe9-4299-aa61-439f18584a49" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Puzzle-Game.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Puzzle-Game.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/gamepad/gamepad_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/gamepad/gamepad_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/enemies/slime_enemy.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/enemies/slime_enemy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/gamepad/gamepad_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/input/input_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/player/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/player/player.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,12 +20,63 @@
     <window id="1">
       <content type="file-editors">
         <state>
-          <leaf>
-            <file pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/src/gamepad/gamepad_controller.py">
+          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+            <file pinned="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/src/display/visual_controller.py">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="-2574">
-                    <caret line="84" column="41" lean-forward="true" selection-start-line="84" selection-start-column="41" selection-end-line="84" selection-end-column="41" />
+                  <state relative-caret-position="26">
+                    <caret line="11" selection-start-line="11" selection-end-line="11" />
+                    <folding>
+                      <element signature="e#0#14#0" expanded="true" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file pinned="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/src/audio/sound_controller.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="-542" />
+                </provider>
+              </entry>
+            </file>
+            <file pinned="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/main.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="588">
+                    <caret line="89" column="53" lean-forward="true" selection-start-line="89" selection-start-column="53" selection-end-line="89" selection-end-column="53" />
+                    <folding>
+                      <element signature="e#0#14#0" expanded="true" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/src/player/player.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="442">
+                    <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+                    <folding>
+                      <element signature="e#0#14#0" expanded="true" />
+                      <element signature="e#740#2296#0" />
+                      <element signature="e#2336#2850#0" />
+                      <element signature="e#2891#3299#0" />
+                      <element signature="e#3337#3962#0" />
+                      <element signature="e#4000#4945#0" />
+                      <element signature="e#5049#6428#0" />
+                      <element signature="e#6482#7711#0" />
+                      <element signature="e#7760#8749#0" />
+                      <element signature="e#10387#10788#0" />
+                      <element signature="e#10838#10867#0" />
+                      <element signature="e#10905#10943#0" />
+                      <element signature="e#10999#11024#0" />
+                      <element signature="e#11065#11088#0" />
+                      <element signature="e#11220#11816#0" />
+                      <element signature="e#11856#11932#0" />
+                      <element signature="e#11970#12069#0" />
+                      <element signature="e#12451#12664#0" />
+                    </folding>
                   </state>
                 </provider>
               </entry>
@@ -32,19 +88,63 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/main.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/enemies/slime_enemy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="19" column="13" lean-forward="true" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+            <state relative-caret-position="-44">
+              <caret line="124" lean-forward="true" selection-start-line="124" selection-end-line="124" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
+                <element signature="e#4027#4583#0" />
+                <element signature="e#4626#7709#0" />
+                <element signature="e#7756#8956#0" />
+                <element signature="e#9007#12929#0" />
+                <element signature="e#12976#13289#0" />
+                <element signature="e#13337#13570#0" />
+                <element signature="e#13636#14280#0" />
+                <element signature="e#14321#16465#0" />
+                <element signature="e#16504#16525#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/input/input_controller.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="420">
+              <caret line="307" column="35" selection-start-line="307" selection-start-column="35" selection-end-line="307" selection-end-column="35" />
+              <folding>
+                <element signature="e#407#791#0" />
+                <element signature="e#871#1763#0" />
+                <element signature="e#1827#2502#0" />
+                <element signature="e#529#1225#0" />
+                <element signature="e#1311#2411#0" />
+                <element signature="e#2495#3935#0" />
+                <element signature="e#6837#7207#0" />
+                <element signature="e#7317#7875#0" />
+                <element signature="e#7943#8492#0" />
+                <element signature="e#8535#8558#0" />
+                <element signature="e#8601#8626#0" />
+                <element signature="e#8670#8700#0" />
+                <element signature="e#8906#9026#0" />
+                <element signature="e#9097#9627#0" />
+                <element signature="e#9676#10507#0" />
+                <element signature="e#10550#10567#0" />
+                <element signature="e#10620#10655#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>move</find>
+      <find>move_re</find>
+      <find>thread</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -53,7 +153,10 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/gamepad/gamepad_controller.py" />
+        <option value="$PROJECT_DIR$/src/enemies/slime_enemy.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/src/player/player.py" />
+        <option value="$PROJECT_DIR$/src/input/input_controller.py" />
       </list>
     </option>
   </component>
@@ -68,11 +171,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="87" />
-    <option name="y" value="-13" />
-    <option name="width" value="1200" />
-    <option name="height" value="870" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="width" value="800" />
+    <option name="height" value="1160" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -96,7 +197,19 @@
               <item name="Puzzle-Game" type="b2602c69:ProjectViewProjectNode" />
               <item name="Puzzle-Game" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="gamepad" type="462c0819:PsiDirectoryNode" />
+              <item name="enemies" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Puzzle-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Puzzle-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="input" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Puzzle-Game" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Puzzle-Game" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="player" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -106,7 +219,8 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Python" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -163,13 +277,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="1176" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.11470216" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11470216" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.25503355" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32981783" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.25503355" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -184,19 +299,99 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/gamepad/gamepad_controller.py">
+    <entry file="file://$PROJECT_DIR$/src/audio/sound_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2574">
-          <caret line="84" column="41" lean-forward="true" selection-start-line="84" selection-start-column="41" selection-end-line="84" selection-end-column="41" />
+        <state relative-caret-position="-542" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/display/visual_controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="26">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="19" column="13" lean-forward="true" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+        <state relative-caret-position="588">
+          <caret line="89" column="53" lean-forward="true" selection-start-line="89" selection-start-column="53" selection-end-line="89" selection-end-column="53" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/enemies/slime_enemy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-44">
+          <caret line="124" lean-forward="true" selection-start-line="124" selection-end-line="124" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+            <element signature="e#4027#4583#0" />
+            <element signature="e#4626#7709#0" />
+            <element signature="e#7756#8956#0" />
+            <element signature="e#9007#12929#0" />
+            <element signature="e#12976#13289#0" />
+            <element signature="e#13337#13570#0" />
+            <element signature="e#13636#14280#0" />
+            <element signature="e#14321#16465#0" />
+            <element signature="e#16504#16525#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/player/player.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+            <element signature="e#740#2296#0" />
+            <element signature="e#2336#2850#0" />
+            <element signature="e#2891#3299#0" />
+            <element signature="e#3337#3962#0" />
+            <element signature="e#4000#4945#0" />
+            <element signature="e#5049#6428#0" />
+            <element signature="e#6482#7711#0" />
+            <element signature="e#7760#8749#0" />
+            <element signature="e#10387#10788#0" />
+            <element signature="e#10838#10867#0" />
+            <element signature="e#10905#10943#0" />
+            <element signature="e#10999#11024#0" />
+            <element signature="e#11065#11088#0" />
+            <element signature="e#11220#11816#0" />
+            <element signature="e#11856#11932#0" />
+            <element signature="e#11970#12069#0" />
+            <element signature="e#12451#12664#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/input/input_controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="307" column="35" selection-start-line="307" selection-start-column="35" selection-end-line="307" selection-end-column="35" />
+          <folding>
+            <element signature="e#407#791#0" />
+            <element signature="e#871#1763#0" />
+            <element signature="e#1827#2502#0" />
+            <element signature="e#529#1225#0" />
+            <element signature="e#1311#2411#0" />
+            <element signature="e#2495#3935#0" />
+            <element signature="e#6837#7207#0" />
+            <element signature="e#7317#7875#0" />
+            <element signature="e#7943#8492#0" />
+            <element signature="e#8535#8558#0" />
+            <element signature="e#8601#8626#0" />
+            <element signature="e#8670#8700#0" />
+            <element signature="e#8906#9026#0" />
+            <element signature="e#9097#9627#0" />
+            <element signature="e#9676#10507#0" />
+            <element signature="e#10550#10567#0" />
+            <element signature="e#10620#10655#0" />
           </folding>
         </state>
       </provider>
