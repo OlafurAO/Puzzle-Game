@@ -16,6 +16,7 @@ enemy_multiply_sfx = pygame.mixer.Sound('resources/sfx/enemy_multiply_01.wav');
 enemy_death_sfx = pygame.mixer.Sound('resources/sfx/enemy_death_01.wav');
 
 # TODO: Fix hitboxes for bullets (check_for_player_bullets) and add obstacle collision
+# TODO: Make update_enemy function less cluttered
 
 class Slime_Enemy:
     def __init__(self, game_display, player_one, player_two, enemy_list, x_location, y_location,
@@ -42,6 +43,10 @@ class Slime_Enemy:
         self.size_x = size_x;
         self.size_y = size_y;
 
+        # Used to detect collision
+        self.rect = pygame.Rect(self.location[0], self.location[1], self.size_x, self.size_y);
+        pygame.sprite.Group.add(self);
+
         #The number of columns and rows in the spritesheets
         self.col = col;
         self.rows = rows;
@@ -49,16 +54,16 @@ class Slime_Enemy:
         # The current index of the spritesheet frame the slime
         # is supposed to display
         self.cell_index = cell_index;
-        #Used for calculating the rate of which the slime should switch frames
+        # Used for calculating the rate of which the slime should switch frames
         self.cell_counter = 0;
 
-        #Used so the enemy as a bit of recovery time
+        # Used so the enemy as a bit of recovery time
         self.enemy_hurt_counter = 0;
-        #Determines for how long the enemy should chase the player
+        # Determines for how long the enemy should chase the player
         self.target_player_counter = 50;
-        #Determines for how long the enemy should rest
+        # Determines for how long the enemy should rest
         self.target_player_cooldown = 0;
-        #Used so the enemy can have a little animation before he dies
+        # Used so the enemy can have a little animation before he dies
         self.enemy_death_counter = 0;
 
         self.enemy_moving = False;
@@ -74,8 +79,8 @@ class Slime_Enemy:
         # The room this slime is in
         self.room_number = room_number;
 
-        #The direction from which the slime gets hit so he knows
-        #which direction to get knocked back
+        # The direction from which the slime gets hit so he knows
+        # which direction to get knocked back
         self.hit_direction = 0;
 
 
@@ -94,6 +99,9 @@ class Slime_Enemy:
 
             self.draw_enemy();
             self.cell_counter += 1;
+
+            self.rect = pygame.Rect(self.location[0], self.location[1], self.size_x, self.size_y)
+
         else:
             self.enemy_death_animation();
             self.enemy_death_counter -= 1;
@@ -217,6 +225,15 @@ class Slime_Enemy:
     def check_for_player_bullets(self):
         bullet_list_one = self.player_one.bullet_list;
 
+        for bullet in range(len(bullet_list_one)):
+            #if(pygame.sprite.spritecollide(bullet, self.enemy_sprite, dokill = False)):
+            #    print('yea')
+            if(pygame.sprite.collide_rect(bullet_list_one[bullet], self)):
+                self.damage_enemy(bullet_list_one[bullet].get_damage(), bullet_list_one[bullet].get_direction(), bullet_list_one[bullet].get_owner());
+                del bullet_list_one[bullet]
+
+        '''
+
         if(len(bullet_list_one) > 0):
             for i in range(0, len(bullet_list_one)):
                 if(bullet_list_one[i].direction == 1):
@@ -278,6 +295,7 @@ class Slime_Enemy:
                                bullet_list_two[i].location[1] <= self.location[1] + 40):
                                 del bullet_list_two[i];
                                 self.damage_enemy(1, -1, self.player_two);
+        '''
 
 
     def enemy_idle_animation(self):

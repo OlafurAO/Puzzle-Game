@@ -30,7 +30,6 @@ class Visual_Controller:
 
 
     def play_xp_gained(self, game_display, xp, location):
-        print('thread started')
         self.xp_text = self.xp_font.render(str(xp), True, (0, 0, 0))
         self.game_display = game_display;
         self.xp_location = location;

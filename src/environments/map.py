@@ -56,7 +56,7 @@ class Obstacle(pygame.sprite.Sprite):
         #self.groups = game.walls;
         #pygame.sprite.Sprite.__init__(self, self.groups);
 
-        pygame.sprite.Sprite.__init__(self);
+        #pygame.sprite.Sprite.__init__(self);
 
         #self.name is the name and self.game is my game haha just a little programming joke
         self.game = game;

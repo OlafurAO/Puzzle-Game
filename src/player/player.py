@@ -59,8 +59,10 @@ class Player:
 
         # Used to see where the player is aiming
         self.reticule = Reticule(game_display, location_x, location_y, self.location);
-        self.player_width = 40;
-        self.player_height = 40;
+        self.player_width = 50;
+        self.player_height = 50;
+
+        self.rect = pygame.Rect(self.location[0], self.location[1], self.player_width, self.player_height);
 
 
     def update_player(self):
@@ -82,6 +84,7 @@ class Player:
         self.draw_player();
 
         self.reticule.update_reticule();
+        self.rect = pygame.Rect(self.location[0], self.location[1], self.player_width, self.player_height);
 
 
     def update_bullets(self):
@@ -109,78 +112,44 @@ class Player:
 
 
     def move_player(self):
-        # The player can't move for a bit after he's damaged
         if(self.player_damage_cooldown < 30):
             if(self.move_direction_x != 0):
-                # If the player is colliding with an obstacle on the x-axis,
-                # he cant move in that direction
-                if not(self.player_obstacle_collision_x()):
-                    move_offset = self.speed * self.move_direction_x;
-                    self.reticule.reposition_reticule_x(move_offset);
-                    self.location[0] += move_offset;
+                move_offset = self.speed * self.move_direction_x;
+                self.location[0] += move_offset;
+
+                if(self.player_obstacle_collision(self.move_direction_x, 'X')):
+                    self.location[0] -= move_offset;
 
             if(self.move_direction_y != 0):
-                # If the player is colliding with an obstacle on the x-axis,
-                # he cant move in that direction
-                if not(self.player_obstacle_collision_y()):
-                    move_offset = self.speed * self.move_direction_y;
-                    self.reticule.reposition_reticule_y(move_offset);
-                    self.location[1] += move_offset;
+                move_offset = self.speed * self.move_direction_y;
+                self.location[1] += move_offset;
+
+                if(self.player_obstacle_collision(self.move_direction_y, 'Y')):
+                    self.location[1] -= move_offset;
 
 
-    # TODO: redo this function and make it better
-    def player_obstacle_collision_x(self):
-        # So the player can't move beyond the edge of the screen
-        if(self.location[0] >= self.screen_size[0] - 10 or
-           self.location[0] <= 10):
-            return True;
-
+    def player_obstacle_collision(self, player_move_direction, axis):
         for wall in self.level_wall_list[self.current_room]:
-            # If the player is moving to the right and there is a wall in the way,
-            # there is a collision and the function returns true
-            # wall.x is in the center of the wall instead of the top left corner,
-            # which is the reason for (wall.width / 2).
-            if(self.move_direction_x == 1):
-                if(self.location[0] < wall.x):
-                    if(self.location[0] >= wall.x - 60 and
-                       self.location[0] <= wall.x + (wall.width / 2)):
-                        if(wall.y <= self.location[1] <= wall.y + wall.height):
+            if(axis == 'X'):
+                if(player_move_direction == 1):
+                    if(wall.x > self.location[0]):
+                        if(pygame.sprite.collide_rect(wall, self)):
                             return True;
 
-            # If the player is moving to the left and there is a wall to his left
-            # there is a collision and the function returns true
-            elif(self.move_direction_x == -1):
-                if(self.location[0] > wall.x):
-                    if(self.location[0] <= wall.x + (wall.width + 10) and
-                       self.location[0] >= wall.x - (wall.width / 2 + 10)):
-                        if(wall.y <= self.location[1] <= wall.y + wall.height):
+                elif(player_move_direction == -1):
+                    if(wall.x < self.location[0]):
+                        if(pygame.sprite.collide_rect(wall, self)):
                             return True;
 
-
-    def player_obstacle_collision_y(self):
-        # So the player cant move beyond the edge of the screen
-        if(self.move_direction_y == -1):
-            if(self.location[1] <= 10):
-                return True;
-        elif(self.move_direction_y == 1):
-            if(self.location[1] >= self.screen_size[1] - 30):
-                return True;
-
-        # If the player is moving up and there is a wall above him,
-        # there is a collision and the function returns true
-        for wall in self.level_wall_list[self.current_room]:
-            if(self.move_direction_y == -1):
-                if(self.location[1] > wall.y):
-                    if(self.location[1] <= wall.y + (wall.height + 10) and
-                       self.location[1] >= wall.y - (wall.height / 2 + 10)):
-                        if(wall.x - 50 <= self.location[0] <= wall.x + wall.width):
+            elif(axis == 'Y'):
+                if(player_move_direction == 1):
+                    if(wall.y > self.location[1]):
+                        if (pygame.sprite.collide_rect(wall, self)):
                             return True;
 
-            elif(self.move_direction_y == 1):
-                if(self.location[1] < wall.y):
-                    if(self.location[1] <= wall.y + (wall.height + 10) and
-                       self.location[1] >= wall.y - (wall.height / 2 + 10)):
-                        if(wall.x - 50 <= self.location[0] <= wall.x + wall.width):
+                elif(player_move_direction == -1):
+                    if(wall.y < self.location[1]):
+                        if (pygame.sprite.collide_rect(wall, self)):
                             return True;
 
 
@@ -250,7 +219,7 @@ class Player:
                     Bullet(
                         self.game_display, self.screen_size,
                         self, bullet_angle, self.location[0],
-                        self.location[1], self.current_x_direction
+                        self.location[1], -self.current_aim_direction
                     )
             );
 
@@ -298,21 +267,53 @@ class Bullet:
         self.location = [location_x, location_y];
         self.direction = direction;
 
+        self.damage = 1;
         self.speed = 30;
+
+        self.bullet_width = 15;
+        self.bullet_height = 15;
+
+        #Inital location of the bullet is changed depending on which way the player is facing,
+        #so that it doesn't spawn inside of the player sprite
+        if(direction == 1):
+            self.location[0] += 45;
+        else:
+            self.location[0] -= 5;
+
+        self.location[1] += 20;
+
+        self.rect = pygame.Rect(self.location[0], self.location[1], self.bullet_width, self.bullet_height);
 
 
     def update_bullet(self):
         self.move_bullet();
         self.draw_bullet();
+        self.update_rect();
+
+
+    def update_rect(self):
+        self.rect = pygame.Rect(self.location[0], self.location[1], self.bullet_width, self.bullet_height);
 
 
     def draw_bullet(self):
-        pygame.draw.rect(self.game_display, (255, 255, 255), [self.location[0], self.location[1], 15, 15]);
+        pygame.draw.rect(self.game_display, (255, 255, 255), [self.location[0], self.location[1], self.bullet_width, self.bullet_height]);
 
 
     def move_bullet(self):
         self.location[0] += self.speed * math.cos(self.bullet_angle);
         self.location[1] += self.speed * math.sin(self.bullet_angle);
+
+
+    def get_damage(self):
+        return self.damage;
+
+
+    def get_owner(self):
+        return self.owner;
+
+
+    def get_direction(self):
+        return self.direction;
 
 
 # Keeps track of which direction the player is pointing their weapon
