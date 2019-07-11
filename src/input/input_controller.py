@@ -74,6 +74,7 @@ class Input_Controller:
 
 
     def move_mouse(self, player_one):
+        # TODO: Activate aiming reticule
         player_one.mouse_move_aiming_reticule(pygame.mouse.get_pos());
 
 
@@ -89,6 +90,7 @@ class Input_Controller:
     ###############################################################
     ########################Gamepad input handling
     def gamepad_input_controller(self, event, player_one, player_two):
+        # TODO: deactivate aiming reticule
         if(event.type == pygame.JOYBUTTONDOWN):
             self.gamepad_button_input_handler(event, player_one, player_two);
 

@@ -12,7 +12,6 @@ player_hit_sfx = pygame.mixer.Sound('resources/sfx/player_hit_01.wav');
 player_hit_02_sfx = pygame.mixer.Sound('resources/sfx/player_hit_02.wav');
 player_bullet_sfx = pygame.mixer.Sound('resources/sfx/player_bullet_01.wav');
 
-# TODO: player wall collision doesn't work very well, probably best to delete it and start over
 # TODO: implement player health
 # TODO: New player models?
 
@@ -62,7 +61,7 @@ class Player:
         self.player_width = 50;
         self.player_height = 50;
 
-        self.rect = pygame.Rect(self.location[0], self.location[1], self.player_width, self.player_height);
+        self.update_rect();
 
 
     def update_player(self):
@@ -84,6 +83,10 @@ class Player:
         self.draw_player();
 
         self.reticule.update_reticule();
+        self.rect = pygame.Rect(self.location[0], self.location[1], self.player_width, self.player_height);
+
+
+    def update_rect(self):
         self.rect = pygame.Rect(self.location[0], self.location[1], self.player_width, self.player_height);
 
 
@@ -116,16 +119,20 @@ class Player:
             if(self.move_direction_x != 0):
                 move_offset = self.speed * self.move_direction_x;
                 self.location[0] += move_offset;
+                self.update_rect();
 
                 if(self.player_obstacle_collision(self.move_direction_x, 'X')):
                     self.location[0] -= move_offset;
+                    self.update_rect();
 
             if(self.move_direction_y != 0):
                 move_offset = self.speed * self.move_direction_y;
                 self.location[1] += move_offset;
+                self.update_rect();
 
                 if(self.player_obstacle_collision(self.move_direction_y, 'Y')):
                     self.location[1] -= move_offset;
+                    self.update_rect();
 
 
     def player_obstacle_collision(self, player_move_direction, axis):
@@ -137,19 +144,19 @@ class Player:
                             return True;
 
                 elif(player_move_direction == -1):
-                    if(wall.x < self.location[0]):
+                    if(wall.x + wall.width < self.location[0] + self.player_width):
                         if(pygame.sprite.collide_rect(wall, self)):
                             return True;
 
             elif(axis == 'Y'):
                 if(player_move_direction == 1):
                     if(wall.y > self.location[1]):
-                        if (pygame.sprite.collide_rect(wall, self)):
+                        if(pygame.sprite.collide_rect(wall, self)):
                             return True;
 
                 elif(player_move_direction == -1):
-                    if(wall.y < self.location[1]):
-                        if (pygame.sprite.collide_rect(wall, self)):
+                    if(wall.y + wall.height < self.location[1] + self.player_height):
+                        if(pygame.sprite.collide_rect(wall, self)):
                             return True;
 
 
@@ -248,7 +255,7 @@ class Player:
 
     def gain_xp(self, xp):
         self.xp += xp;
-        print(self.xp);
+        #print(self.xp);
 
 
     def set_player_current_room(self, room):
@@ -268,7 +275,7 @@ class Bullet:
         self.direction = direction;
 
         self.damage = 1;
-        self.speed = 30;
+        self.speed = 20;
 
         self.bullet_width = 15;
         self.bullet_height = 15;
