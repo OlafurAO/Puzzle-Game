@@ -16,11 +16,12 @@ enemy_multiply_sfx = pygame.mixer.Sound('resources/sfx/enemy_multiply_01.wav');
 enemy_death_sfx = pygame.mixer.Sound('resources/sfx/enemy_death_01.wav');
 
 # TODO: Add obstacle collision
+# TODO: Polish AI
 # TODO: Fix multiplication function
 
 class Slime_Enemy:
     def __init__(self, game_display, player_one, player_two, enemy_list, x_location, y_location,
-                 health, size_x, size_y, enemy_sprite, enemy_hit_sprite, col, rows, cell_index, room_number):
+                 health, size_x, size_y, level_wall_list, enemy_sprite, enemy_hit_sprite, col, rows, cell_index, room_number):
         self.game_display = game_display;
         self.location = [x_location, y_location];
         self.player_one = player_one;
@@ -42,9 +43,14 @@ class Slime_Enemy:
         # Can directly initialize the new slime to his size
         self.size_x = size_x;
         self.size_y = size_y;
+        self.enemy_width = 50;
+        self.enemy_height = 50;
+
+
+        self.level_wall_list = level_wall_list;
 
         # Used to detect collision
-        self.rect = pygame.Rect(self.location[0], self.location[1], self.size_x, self.size_y);
+        self.rect = pygame.Rect(self.location[0], self.location[1], self.enemy_width, self.enemy_width);
         pygame.sprite.Group.add(self);
 
         # The number of columns and rows in the spritesheets
@@ -74,10 +80,11 @@ class Slime_Enemy:
         #self.enemy_health = 1;
         self.enemy_health = 9;
         self.enemy_speed = 5;
+        self.enemy_damage = 1;
         self.enemy_xp = 5;
 
         # The room this slime is in
-        self.room_number = room_number;
+        self.current_room = room_number;
 
         # The direction from which the slime gets hit so he knows
         # which direction to get knocked back
@@ -109,7 +116,7 @@ class Slime_Enemy:
 
 
     def update_rect(self):
-        self.rect = pygame.Rect(self.location[0], self.location[1], self.size_x, self.size_y);
+        self.rect = pygame.Rect(self.location[0], self.location[1], self.enemy_width, self.enemy_width);
 
 
     def draw_enemy(self):
@@ -117,7 +124,8 @@ class Slime_Enemy:
             self.enemy_hit_sheet.draw(self.game_display, self.cell_index - 1, self.location[0], self.location[1], 1);
             self.enemy_hurt_counter -= 1;
 
-            self.location[0] += 15 * self.hit_direction;
+            if not(self.enemy_obstacle_collision(self.hit_direction, 'X')):
+                self.location[0] += 5 * self.hit_direction;
 
             if(self.enemy_hurt_counter == 0):
                 if((self.enemy_health == 6 or self.enemy_health == 3) and self.enemy_health != 0):
@@ -135,54 +143,24 @@ class Slime_Enemy:
                 return;
 
             if(self.target_player_counter > 0):
-                if(self.enemy_health > 10):
-                    if(target_player.location[0] + 35 < self.location[0]):
-                        self.location[0] -= self.enemy_speed;
-                    elif(target_player.location[0] - 80 > self.location[0]):
-                        self.location[0] += self.enemy_speed;
-                    else:
-                        if(target_player.location[1] - 50 <= self.location[1] and
-                           target_player.location[1] + 20 >= self.location[1]):
-                            target_player.player_take_damage(1);
+                if not(self.enemy_player_collision(target_player)):
+                    if(target_player.location[0] >= self.location[0]):
+                        if not(self.enemy_obstacle_collision(1, 'X')):
+                            self.location[0] += self.enemy_speed;
 
-                elif(self.enemy_health > 5):
-                    if(target_player.location[0] + 45 < self.location[0]):
-                        self.location[0] -= self.enemy_speed;
-                    elif(target_player.location[0] - 70 > self.location[0]):
-                        self.location[0] += self.enemy_speed;
-                    else:
-                        if(target_player.location[1] - 50 <= self.location[1] and
-                           target_player.location[1] + 20 >= self.location[1]):
-                            target_player.player_take_damage(1);
-                else:
-                    if(target_player.location[0] + 50 < self.location[0]):
-                        self.location[0] -= self.enemy_speed;
-                    elif(target_player.location[0] - 50 > self.location[0]):
-                        self.location[0] += self.enemy_speed;
-                    else:
-                        if(target_player.location[1] - 50 <= self.location[1] and
-                           target_player.location[1] + 20 >= self.location[1]):
-                            target_player.player_take_damage(1);
+                    elif(target_player.location[0] <= self.location[0]):
+                        if not(self.enemy_obstacle_collision(-1, 'X')):
+                            self.location[0] -= self.enemy_speed;
 
-                if(self.enemy_health > 10):
-                    if(target_player.location[1] - 25 < self.location[1]):
-                        self.location[1] -= self.enemy_speed;
-                    elif(target_player.location[1] - 25 > self.location[1]):
-                        self.location[1] += self.enemy_speed;
-                    else:
-                        if(target_player.location[0] + 35 > self.location[0] and
-                           target_player.location[0] - 80 < self.location[0]):
-                            target_player.player_take_damage(1);
-                elif(self.enemy_health > 5):
-                    if(target_player.location[1] < self.location[1]):
-                        self.location[1] -= self.enemy_speed;
-                    elif(target_player.location[1] > self.location[1]):
-                        self.location[1] += self.enemy_speed;
+                    if(target_player.location[1] >= self.location[1]):
+                        if not(self.enemy_obstacle_collision(1, 'Y')):
+                            self.location[1] += self.enemy_speed;
+
+                    elif(target_player.location[1] <= self.location[1]):
+                        if not(self.enemy_obstacle_collision(-1, 'Y')):
+                            self.location[1] -= self.enemy_speed;
                 else:
-                    if(target_player.location[1] + 15 < self.location[1]):
-                        self.location[1] -= self.enemy_speed;
-                    elif(target_player.location[1] + 15 > self.location[1]):
-                        self.location[1] += self.enemy_speed;
+                    target_player.player_take_damage(self.enemy_damage);
 
 
     def find_player_distance(self):
@@ -225,6 +203,35 @@ class Slime_Enemy:
                                   bullet_list_one[bullet].get_direction(),
                                   bullet_list_one[bullet].get_owner());
                 del bullet_list_one[bullet];
+
+
+    def enemy_obstacle_collision(self, enemy_move_direction, axis):
+        for wall in self.level_wall_list[self.current_room]:
+            if(axis == 'X'):
+                if(enemy_move_direction == 1):
+                    if(wall.x > self.location[0] + self.enemy_width):
+                        if(pygame.sprite.collide_rect(wall, self)):
+                            return True;
+
+                elif(enemy_move_direction == -1):
+                    if(wall.x + wall.width < self.location[0]):
+                        if(pygame.sprite.collide_rect(wall, self)):
+                            return True;
+
+            elif(axis == 'Y'):
+                if(enemy_move_direction == 1):
+                    if(wall.y > self.location[1] + self.enemy_height):
+                        if(pygame.sprite.collide_rect(wall, self)):
+                            return True;
+
+                elif(enemy_move_direction == -1):
+                    if(wall.y + wall.height < self.location[1]):
+                        if(pygame.sprite.collide_rect(wall, self)):
+                            return True;
+
+
+    def enemy_player_collision(self, player):
+        return pygame.sprite.collide_rect(player, self);
 
 
     def kill_enemy(self):
@@ -296,16 +303,17 @@ class Slime_Enemy:
                 self.location[0] -= 20;
                 self.location[1] += 20;
 
-                self.enemy_list[self.room_number].append(
+                self.enemy_list[self.current_room].append(
                         Slime_Enemy(
                             self.game_display, self.player_one, self.player_two, self.enemy_list,
                             self.location[0] + 60, self.location[1], self.enemy_health,
-                            self.size_x, self.size_y,
+                            self.size_x, self.size_y, self.level_wall_list,
                             'resources/art/enemies/blob_01_spritesheet.png',
                             'resources/art/enemies/blob_01_hit_spritesheet.png',
-                            self.col, self.rows, self.cell_index - 1, self.room_number
+                            self.col, self.rows, self.cell_index - 1, self.current_room
                         )
                 );
+
 
             elif(self.enemy_health == 3 and self.size_x == 150):
                 self.size_x = 100;
@@ -317,16 +325,17 @@ class Slime_Enemy:
                 self.location[0] -= 20;
                 self.location[1] += 20;
 
-                self.enemy_list[self.room_number].append(
+                self.enemy_list[self.current_room].append(
                         Slime_Enemy(
                             self.game_display, self.player_one, self.player_two, self.enemy_list,
                             self.location[0] + 60, self.location[1], self.enemy_health,
-                            self.size_x, self.size_y,
+                            self.size_x, self.size_y, self.level_wall_list,
                             'resources/art/enemies/blob_01_spritesheet.png',
                             'resources/art/enemies/blob_01_hit_spritesheet.png',
-                            self.col, self.rows, self.cell_index - 1, self.room_number
+                            self.col, self.rows, self.cell_index - 1, self.current_room
                         )
                 );
+
 
             self.enemy_hit_sprite = pygame.transform.scale(self.enemy_hit_sprite, (self.size_x, self.size_y));
             self.enemy_hit_sheet = Sprite_Sheet(self.enemy_hit_sprite, self.col, self.rows);
