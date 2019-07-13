@@ -335,7 +335,7 @@ class Environments:
                 Slime_Enemy(
                     self.game_display, self.player_one,
                     self.player_two, self.enemy_list,
-                    enemy.x, enemy.y, 15, 200, 200,
+                    enemy.x, enemy.y, 15, 200, 200, self.get_level_wall_list(),
                     'resources/art/enemies/blob_01_spritesheet.png',
                     'resources/art/enemies/blob_01_hit_spritesheet.png',
                     2, 2, 0, room
