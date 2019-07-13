@@ -12,8 +12,8 @@ player_hit_sfx = pygame.mixer.Sound('resources/sfx/player_hit_01.wav');
 player_hit_02_sfx = pygame.mixer.Sound('resources/sfx/player_hit_02.wav');
 player_bullet_sfx = pygame.mixer.Sound('resources/sfx/player_bullet_01.wav');
 
-# TODO: player wall collision doesn't work very well, probably best to delete it and start over
-# TODO: implement player health
+# TODO: Player wall collision doesn't work very well, probably best to delete it and start over
+# TODO: Implement player health
 # TODO: New player models?
 
 class Player:

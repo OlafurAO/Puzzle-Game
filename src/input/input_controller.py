@@ -12,19 +12,18 @@ class Input_Controller:
     def keyboard_and_mouse_input_controller(self, event, player_one, player_two):
         # Keyboard input
         if(event.type == pygame.KEYDOWN):
-            self.press_key(event.key, player_one, player_two);
+            self.keyboard_press_key(event.key, player_one, player_two);
         elif(event.type == pygame.KEYUP):
-            self.release_key(event.key, player_one, player_two);
+            self.keyboard_release_key(event.key, player_one, player_two);
 
         # Mouse input
         if(event.type == pygame.MOUSEMOTION):
-            self.move_mouse(player_one); # Only player one may use a mouse at this time
+            self.mouse_move_mouse(player_one); # Only player one may use a mouse at this time
         elif(event.type == pygame.MOUSEBUTTONDOWN):
-            self.click_mouse(event.button, player_one);
+            self.mouse_click_mouse(event.button, player_one);
 
 
-
-    def press_key(self, event_key, player_one, player_two):
+    def keyboard_press_key(self, event_key, player_one, player_two):
         # Player one input
         if(event_key == pygame.K_w):
             player_one.move_controller_y(-1);
@@ -53,7 +52,7 @@ class Input_Controller:
         #    box.move(self.player_one.location)
 
 
-    def release_key(self, event_key, player_one, player_two):
+    def keyboard_release_key(self, event_key, player_one, player_two):
         if(event_key == pygame.K_w):
             player_one.move_controller_y(0);
         if(event_key == pygame.K_s):
@@ -73,11 +72,11 @@ class Input_Controller:
             player_two.move_controller_x(0);
 
 
-    def move_mouse(self, player_one):
+    def mouse_move_mouse(self, player_one):
         player_one.mouse_move_aiming_reticule(pygame.mouse.get_pos());
 
 
-    def click_mouse(self, event_button, player_one):
+    def mouse_click_mouse(self, event_button, player_one):
         if(event_button == 1):
             player_one.player_attack();
         if(event_button == 2):
@@ -204,23 +203,18 @@ class Input_Controller:
             elif(event.axis == 2):
                 if(axis == -1.0):
                     player_one.gamepad_move_aiming_reticule_x(-1);
-                    print('R-LEFT');
                 elif(axis > 0.9):
                     player_one.gamepad_move_aiming_reticule_x(1);
-                    print('R-RIGHT');
                 else:
                     player_one.gamepad_move_aiming_reticule_x(0);
 
             elif(event.axis == 3):
                 if(-1.0 <= axis <= -0.5):
                     player_one.gamepad_move_aiming_reticule_y(-1);
-                    print('R-UP');
                 elif(axis > 0.9):
                     player_one.gamepad_move_aiming_reticule_y(1);
-                    print('R-DOWN');
                 else:
                     player_one.gamepad_move_aiming_reticule_y(0);
-                print(axis);
 
         # Player 2 analog controls
         elif(self.gamepad_list[event.joy].get_id() == 1):
