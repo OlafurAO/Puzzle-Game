@@ -37,8 +37,3 @@ class Visual_Controller:
 
 
         self.draw_xp_gained();
-
-
-    # Overloaded function
-    #def display_xp_gained(self, xp, location):
-    #    text = font.render('YOU ARE DEAD', True, (255, 0, 0));

@@ -46,7 +46,6 @@ class Slime_Enemy:
         self.enemy_width = 50;
         self.enemy_height = 50;
 
-
         self.level_wall_list = level_wall_list;
 
         # Used to detect collision
@@ -125,7 +124,7 @@ class Slime_Enemy:
             self.enemy_hurt_counter -= 1;
 
             if not(self.enemy_obstacle_collision(self.hit_direction, 'X')):
-                self.location[0] += 5 * self.hit_direction;
+                self.location[0] += 15 * self.hit_direction;
 
             if(self.enemy_hurt_counter == 0):
                 if((self.enemy_health == 6 or self.enemy_health == 3) and self.enemy_health != 0):
