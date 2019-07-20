@@ -10,7 +10,10 @@
             -Doorways: "Doorway"
             -Doors:
                 -Doors opened by defeating enemies: "Door_Enemy"
-                -Doors opened by pressing button: "Door_Button"
+                -Doors opened by pressing switch: "Door_<switch type>_<switch id>"
+            -Switches:
+                -Switches that can be pressed by player: "Light_Switch_01"
+                -Switched that need to be pressed with boxes: "Heavy_Switch_01"
 
         Enemy names:
             -Slimes:
@@ -22,6 +25,7 @@ import os;
 
 from src.environments.map import *;
 from src.enemies.slime_enemy import Slime_Enemy;
+from src.environments.objects.box import Box;
 
 
 class Environments:
@@ -51,6 +55,7 @@ class Environments:
 
         self.update_enemies();
         self.update_doors();
+        self.update_boxes();
 
         self.draw_environment();
 
@@ -78,6 +83,17 @@ class Environments:
                     door.open_door();
 
 
+    def update_boxes(self):
+        if(self.player_one.is_player_interacting()):
+            self.player_one.disable_interaction();
+            for box in self.level_one_boxes[self.current_room_number]:
+                if(self.interaction_collision(box, self.player_one)):
+                    box.move(self.player_one.get_player_location());
+
+        for box in self.level_one_boxes[self.current_room_number]:
+            box.update_box();
+
+
     def draw_environment(self):
         self.camera_list[self.current_room_number].update_map();
 
@@ -89,6 +105,12 @@ class Environments:
         for door in self.level_one_doors[self.current_room_number]:
             if not(door.is_door_open()):
                 door.draw_door();
+
+        for switch in self.level_one_switches[self.current_room_number]:
+            switch.draw_switch();
+
+        for box in self.level_one_boxes[self.current_room_number]:
+            box.draw_box();
 
 
     def set_players(self, one, two):
@@ -262,6 +284,8 @@ class Environments:
         self.level_one_walls = [[] for i in range(len(self.level_one))];
         self.level_one_doorways = [[] for i in range(len(self.level_one))];
         self.level_one_doors = [[] for i in range(len(self.level_one))];
+        self.level_one_switches = [[] for i in range(len(self.level_one))];
+        self.level_one_boxes = [[] for i in range(len(self.level_one))];
 
         doorway_id = 0;  # Give each doorway a unique id
         door_id = 0;     # Give each door a unique id
@@ -298,6 +322,12 @@ class Environments:
                     self.create_door(tile_object, door_id, room);
                     door_id += 1;
 
+                elif(tile_object.type == 'Switch'):
+                    self.create_switch(tile_object, room);
+
+                elif(tile_object.type == 'Box'):
+                    self.create_box(tile_object, room);
+
 
     def create_door(self, door, door_id, room):
         # Get the direction of the door, to determine how it should
@@ -310,11 +340,38 @@ class Environments:
         if(door.name == 'Door_Enemy'):
             condition = 'ENEMY';
 
+        elif('Door_Heavy' in door.name):
+            condition = 'HEAVY_' + door.name[-2:];
+
+        elif('Door Light' in door.name):
+            condition = 'LIGHT_' + door.name[-2:];
+
+
         self.level_one_doors[room].append(
                 Door(
                     self, door_id, direction, condition, door.x,
                     door.y, door.width, door.height
                 )
+        );
+
+
+    def create_switch(self, tile_object, room):
+        self.level_one_switches[room].append(
+            Switch(
+                self.game_display, tile_object.type,
+                tile_object.x, tile_object.y,
+                tile_object.width, tile_object.height
+            )
+        );
+
+
+    def create_box(self, tile_object, room):
+        self.level_one_boxes[room].append(
+            Box(
+                self.game_display, self.level_one_walls[room],
+                tile_object.x, tile_object.y,
+                'resources/art/boxes/box_01.png'
+            )
         );
 
 
@@ -363,5 +420,16 @@ class Environments:
         return self.level_one_doorways;
 
 
+
+    def get_level_obstacle_list(self):
+        return self.level_one_boxes;
+
+
     def is_door_already_linked(self, current_door, next_door):
         return current_door.linked or next_door.linked;
+
+
+    # Is the player close enough to an object
+    # to be able to interact with it?
+    def interaction_collision(self, object, player):
+        return pygame.sprite.collide_rect(object, player);

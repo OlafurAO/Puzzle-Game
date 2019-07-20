@@ -17,7 +17,7 @@ player_bullet_sfx = pygame.mixer.Sound('resources/sfx/player_bullet_01.wav');
 # TODO: New player models?
 
 class Player:
-    def __init__(self, game_display, screen_size, player_img, player_num, location_x, location_y, current_room, wall_list, door_list):
+    def __init__(self, game_display, screen_size, player_img, player_num, location_x, location_y, current_room, wall_list, obstacle_list, door_list):
         self.game_display = game_display;
         self.screen_size = screen_size;
 
@@ -35,6 +35,7 @@ class Player:
 
         # Lists of objects the player can collide with
         self.level_wall_list = wall_list;
+        self.level_obstacle_list = obstacle_list;
         self.level_door_list = door_list;
 
         self.move_direction_x = 0;
@@ -52,6 +53,7 @@ class Player:
 
         self.player_moving = False;
         self.player_switch_rooms = False;
+        self.player_interact = False;  # Is the player interacting with the environment?
 
         # Used so the player has recovery time when damaged so he
         # doesn't get  annihilated immediately
@@ -84,11 +86,13 @@ class Player:
         self.draw_player();
 
         self.reticule.update_reticule();
-        self.rect = pygame.Rect(self.location[0], self.location[1], self.player_width, self.player_height);
+        self.rect = pygame.Rect(self.location[0], self.location[1],
+                                self.player_width, self.player_height);
 
 
     def update_rect(self):
-        self.rect = pygame.Rect(self.location[0], self.location[1], self.player_width, self.player_height);
+        self.rect = pygame.Rect(self.location[0], self.location[1],
+                                self.player_width, self.player_height);
 
 
     def update_bullets(self):
@@ -122,7 +126,8 @@ class Player:
                 self.location[0] += move_offset;
                 self.update_rect();
 
-                if(self.player_obstacle_collision(self.move_direction_x, 'X')):
+                if(self.player_wall_collision(self.move_direction_x, 'X') or
+                   self.player_obstacle_collision(self.move_direction_x, 'X')):
                     self.location[0] -= move_offset;
                     self.update_rect();
 
@@ -131,12 +136,13 @@ class Player:
                 self.location[1] += move_offset;
                 self.update_rect();
 
-                if(self.player_obstacle_collision(self.move_direction_y, 'Y')):
+                if(self.player_wall_collision(self.move_direction_y, 'Y') or
+                   self.player_obstacle_collision(self.move_direction_y, 'Y')):
                     self.location[1] -= move_offset;
                     self.update_rect();
 
 
-    def player_obstacle_collision(self, player_move_direction, axis):
+    def player_wall_collision(self, player_move_direction, axis):
         for wall in self.level_wall_list[self.current_room]:
             if(axis == 'X'):
                 if(player_move_direction == 1):
@@ -158,6 +164,31 @@ class Player:
                 elif(player_move_direction == -1):
                     if(wall.y + wall.height < self.location[1] + self.player_height):
                         if(pygame.sprite.collide_rect(wall, self)):
+                            return True;
+
+
+    def player_obstacle_collision(self, player_move_direction, axis):
+        for obst in self.level_obstacle_list[self.current_room]:
+            if (axis == 'X'):
+                if (player_move_direction == 1):
+                    if (obst.X_location > self.location[0]):
+                        if (pygame.sprite.collide_rect(obst, self)):
+                            return True;
+
+                elif (player_move_direction == -1):
+                    if (obst.X_location + obst.width < self.location[0] + self.player_width):
+                        if (pygame.sprite.collide_rect(obst, self)):
+                            return True;
+
+            elif (axis == 'Y'):
+                if (player_move_direction == 1):
+                    if (obst.Y_location > self.location[1]):
+                        if (pygame.sprite.collide_rect(obst, self)):
+                            return True;
+
+                elif (player_move_direction == -1):
+                    if (obst.Y_location + obst.height < self.location[1] + self.player_height):
+                        if (pygame.sprite.collide_rect(obst, self)):
                             return True;
 
 
@@ -259,12 +290,30 @@ class Player:
         #print(self.xp);
 
 
+    # The player attempts to interact with the
+    # environment, like pushing a box
+    def interact_with_environment(self):
+        self.player_interact = True;
+
+
+    def disable_interaction(self):
+        self.player_interact = False;
+
+
     def set_player_current_room(self, room):
         self.current_room = room;
 
 
+    def get_player_location(self):
+        return self.location;
+
+
     def get_player_num(self):
         return self.player_num;
+
+
+    def is_player_interacting(self):
+        return self.player_interact;
 
 
 class Bullet:

@@ -1,11 +1,8 @@
 import pygame;
 
 from src.input.input_controller import Input_Controller;
-from src.audio.sound_controller import Sound_Controller;
 from src.player.player import Player;
 from src.environments.environments import Environments;
-from src.objects.box import Box;
-
 
 ################################### Used for audio tests
 from src.audio.sound_controller import Sound_Controller;
@@ -43,6 +40,7 @@ class Game:
                             'resources/art/players/player_1.png', 1,
                             screen_size[0] / 2 + 60, screen_size[1]/2,
                             0, self.environments.get_level_wall_list(),
+                            self.environments.get_level_obstacle_list(),
                             self.environments.get_level_door_list()
         );
 
@@ -51,6 +49,7 @@ class Game:
                             'resources/art/players/player_2.png', 2,
                             screen_size[0] / 2 - 110, screen_size[1]/2,
                             0, self.environments.get_level_wall_list(),
+                            self.environments.get_level_obstacle_list(),
                             self.environments.get_level_door_list()
         );
 

@@ -125,6 +125,7 @@ class Slime_Enemy:
 
             if not(self.enemy_obstacle_collision(self.hit_direction, 'X')):
                 self.location[0] += 15 * self.hit_direction;
+                self.update_rect();
 
             if(self.enemy_hurt_counter == 0):
                 if((self.enemy_health == 6 or self.enemy_health == 3) and self.enemy_health != 0):
@@ -260,7 +261,9 @@ class Slime_Enemy:
 
     def enemy_death_animation(self):
         self.enemy_hit_sheet.draw(self.game_display, self.cell_index, self.location[0], self.location[1], 1);
-        self.location[0] += 15 * self.hit_direction;
+
+        if not(self.enemy_obstacle_collision(self.hit_direction, 'X')):
+            self.location[0] += 15 * self.hit_direction;
 
         x_location = self.location[0];
         y_location = self.location[1];

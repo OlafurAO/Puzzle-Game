@@ -62,6 +62,9 @@ class Input_Controller:
         if(event_key == pygame.K_a):
             player_one.move_controller_x(0);
 
+        if(event_key == pygame.K_e):
+            player_one.interact_with_environment();
+
         if(event_key == pygame.K_UP):
             player_two.move_controller_y(0);
         if(event_key == pygame.K_DOWN):
@@ -72,12 +75,10 @@ class Input_Controller:
             player_two.move_controller_x(0);
 
 
-<<<<<<< HEAD
+
+
     def mouse_move_mouse(self, player_one):
-=======
-    def move_mouse(self, player_one):
         # TODO: Activate aiming reticule
->>>>>>> 95eaf14138cb28b054fa99e38056356bd5bd9314
         player_one.mouse_move_aiming_reticule(pygame.mouse.get_pos());
 
 

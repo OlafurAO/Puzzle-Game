@@ -96,6 +96,7 @@ class Doorway:
         self.rect.x = x;
         self.rect.y = y;
 
+
 class Door:
     def __init__(self, game, id, direction, condition, x, y, w, h):
         self.game = game;
@@ -141,3 +142,26 @@ class Door:
 
     def is_door_open(self):
         return self.is_open;
+
+
+# A switch or a button the player can press
+class Switch:
+    def __init__(self, game_display, type, x_location, y_location, width, height):
+        self.game_display = game_display;
+        self.type = type;
+        self.x_location = x_location;
+        self.y_location = y_location;
+        self.width = width;
+        self.height = height;
+
+        self.rect = pygame.Rect(x_location, y_location, width, height);
+
+
+    def draw_switch(self):
+        pygame.draw.rect(self.game_display, (0, 0, 0), [
+                self.x_location, self.y_location,
+                self.width, self.height]);
+
+
+    def is_switch_pressed(self):
+        u = 0;
