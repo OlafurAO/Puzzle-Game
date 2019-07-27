@@ -20,8 +20,8 @@ class Box:
         self.Y_location = Y_location
 
         #speed and size of the box when kicked
-        self.width = 93;
-        self.height = 93;
+        self.width = 95;
+        self.height = 95;
 
         self.speed = 10
 
@@ -63,16 +63,12 @@ class Box:
                 self.isMoving = False;
                 return True;
 
-
-
     #move the box
     def move(self, playerLocation):
         #checks if box is on the right
-        if (playerLocation[0] + 60 > self.X_location and playerLocation[0] + 60 < self.X_location + 50 and
-        ((playerLocation[1] + 90 > self.Y_location) and (playerLocation[1] < self.Y_location + 50) or
-        (playerLocation[1]  <  self.Y_location + 50) and (playerLocation[1] > self.Y_location))):
+        if(playerLocation[0] < self.X_location):
             self.isMoving = True
-            self.direction == 'RIGHT'
+            self.direction = 'RIGHT'
 
         #checks if box is on top of player/ should be moved up
         elif(playerLocation[1] < self.Y_location + self.width):
@@ -80,18 +76,12 @@ class Box:
             self.direction = 'UP'
 
         #checks if box is on the bottom of the player/ should be modved down
-        elif (playerLocation[1] < self.Y_location and playerLocation[1] > self.Y_location - 90 and
-        ((playerLocation[0] + 60 > self.X_location) and
-        (playerLocation[0] - 100 < self.X_location))):
-            print('C')
+        elif(playerLocation[1] > self.Y_location):
             self.isMoving = True
             self.direction = 'DOWN'
 
         #checks if a box should be moved to the left, and if it is on the left
-        elif (playerLocation[1] > self.Y_location and playerLocation[1] < self.Y_location + 90
-        and ((playerLocation[0] + 25 > self.X_location)
-        and (playerLocation[0] - 25 < self.X_location + 50))):
-            print('D')
+        elif (playerLocation[0] < self.X_location):
             self.isMoving = True
             self.direction = 'LEFT'
 

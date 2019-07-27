@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="6" nextobjectid="14">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="48" tileheight="48" infinite="0" nextlayerid="6" nextobjectid="14">
  <tileset firstgid="1" source="level_01_final_test.tsx"/>
  <layer id="1" name="Tile Layer 1" width="20" height="20">
   <data encoding="csv">
@@ -40,6 +40,6 @@
   <object id="11" name="Heavy_Switch_01" type="Switch" x="770" y="95" width="94" height="94"/>
  </objectgroup>
  <objectgroup id="5" name="Object">
-  <object id="13" name="Box" type="Box" x="771" y="289" width="93" height="93"/>
+  <object id="13" name="Box" type="Box" x="650" y="280" width="93" height="93"/>
  </objectgroup>
 </map>

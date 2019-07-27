@@ -75,6 +75,8 @@ class Player:
         doorway = self.player_entered_doorway();
         if(doorway != None):
             self.player_switch_rooms = True;
+        if(self.is_player_interacting()):
+            self.player_interact = False;
 
         # Controls the player's recovery time after being
         # hit by an enemy
@@ -93,7 +95,6 @@ class Player:
     def update_rect(self):
         self.rect = pygame.Rect(self.location[0], self.location[1],
                                 self.player_width, self.player_height);
-
 
     def update_bullets(self):
         # Takes care of deleting bullet objects when they've gone offscreen

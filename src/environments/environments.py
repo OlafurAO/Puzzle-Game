@@ -21,6 +21,7 @@
     #######################################
 '''
 
+import pygame;
 import os;
 
 from src.environments.map import *;
@@ -87,8 +88,18 @@ class Environments:
         if(self.player_one.is_player_interacting()):
             self.player_one.disable_interaction();
             for box in self.level_one_boxes[self.current_room_number]:
-                if(self.interaction_collision(box, self.player_one)):
+                player_move_offset_x = self.player_one.move_direction_x * 10;
+                player_move_offset_y = self.player_one.move_direction_y * 10;
+                self.player_one.location[0] += player_move_offset_x;
+                self.player_one.location[1] += player_move_offset_y;
+                self.player_one.update_rect();
+
+                if(self.interaction_collision(self.player_one, box)):
                     box.move(self.player_one.get_player_location());
+
+                self.player_one.location[0] -= player_move_offset_x;
+                self.player_one.location[1] -= player_move_offset_y;
+                self.player_one.update_rect();
 
         for box in self.level_one_boxes[self.current_room_number]:
             box.update_box();
