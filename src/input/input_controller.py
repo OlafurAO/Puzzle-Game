@@ -208,6 +208,7 @@ class Input_Controller:
 
             # Right analog stick
             elif(event.axis == 2):
+                print('y1')
                 if(axis == -1.0):
                     player_one.gamepad_move_aiming_reticule_x(-1);
                 elif(axis > 0.9):
@@ -216,6 +217,7 @@ class Input_Controller:
                     player_one.gamepad_move_aiming_reticule_x(0);
 
             elif(event.axis == 3):
+                print('y2')
                 if(-1.0 <= axis <= -0.5):
                     player_one.gamepad_move_aiming_reticule_y(-1);
                 elif(axis > 0.9):
@@ -344,12 +346,13 @@ class Gamepad_Type:
     def initialize_button_list(self):
         if(self.type == 'XBOX'):
             return [
-                'X', 'A', 'B', 'Y',
+                'A', 'B', 'X', 'Y',
                 'LB', 'RB', 'LT', 'RT',
                 'Back', 'Start',
                 'Left stick', 'Right stick',
                 'Guide'
             ];
+
         elif(self.type == 'DUALSHOCK'):
             return [
                 '◻', '✖', 'O', '△', # Symbols won't be used later
